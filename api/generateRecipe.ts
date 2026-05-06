@@ -1,4 +1,16 @@
 import { GoogleGenAI } from "@google/genai";
+import { db } from "./lib/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
+// Helper to create a unique ID for the recipe based on ingredients
+const createRecipeId = (input: string) => {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 100);
+};
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -9,6 +21,20 @@ export default async function handler(req: any, res: any) {
     const { ingredients } = req.body;
     if (!ingredients) {
       return res.status(400).json({ error: 'Ingredients are required' });
+    }
+
+    const recipeId = createRecipeId(ingredients);
+
+    // 1. Try to fetch from Firestore first
+    try {
+      const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
+      if (recipeDoc.exists()) {
+        console.log(`Serving cached recipe for: ${recipeId}`);
+        return res.status(200).json(recipeDoc.data());
+      }
+    } catch (dbError) {
+      console.error("Firestore read error:", dbError);
+      // Continue to AI if DB fails
     }
 
     if (!process.env.GEMINI_API_KEY) {
@@ -24,9 +50,8 @@ export default async function handler(req: any, res: any) {
 2. **NO NONSENSE:** If the user inputs non-food items (e.g., cars, humans, wood, poison), DO NOT generate a recipe.
 3. **VIOLATION OF RULE 1 OR 2:** If the input violates the rules above, you MUST return ONLY this JSON object:
    { "error": "Maaf, bahan yang diberikan tidak sesuai, tidak halal, atau tidak masuk akal. Sila masukkan bahan makanan yang sebenar." }
-4. **SPEED OPTIMIZATION:** To respond instantly, DO NOT use the web search tool unless the user explicitly asks for a specific chef (e.g., "Khairul Aming") or a highly specific authentic dish. For general ingredients (e.g., "ayam, bawang"), rely on your internal knowledge.
-5. **EXACT CHEF RECIPES:** If a specific chef or person is mentioned, use the web search tool to find their EXACT original recipe.
-6. **CUSTOMIZATION:** If the user asks to scale the recipe (e.g., "untuk 10 orang", "gandakan") or modify it (e.g., "kurang kalori", "diet"), adjust the measurements, ingredients, and portions accordingly while keeping the base recipe accurate.
+4. **EXACT CHEF RECIPES:** If a specific chef or person is mentioned, use the web search tool (if available) to find their EXACT original recipe.
+5. **CUSTOMIZATION:** If the user asks to scale the recipe (e.g., "untuk 10 orang", "gandakan") or modify it (e.g., "kurang kalori", "diet"), adjust the measurements, ingredients, and portions accordingly while keeping the base recipe accurate.
 
 **Analyze the user's input first to determine its type:**
 1.  **Is it a request for a specific, named dish or chef?** (e.g., "resepi rotiboy", "Nasi Lemak Khairul Aming").
@@ -53,7 +78,7 @@ export default async function handler(req: any, res: any) {
 
 ### **Scenario C: If the user requests a COLLECTION or CHEF'S RECIPES**
 1.  **Return a Comprehensive List:** Instead of a full recipe, return a large, comprehensive list of 15-25 distinct recipe titles and short descriptions. Provide as many relevant recipes as possible.
-2.  **Use Web Search:** Use search to find popular recipes by that chef or in that category to ensure accuracy and variety.
+2.  **Use Web Search:** Use search (if available) to find popular recipes by that chef or in that category to ensure accuracy and variety.
 
 ---
 
@@ -98,9 +123,14 @@ You MUST respond with ONLY a single JSON object.
 **User's Input:**
 ${ingredients}`;
 
+    // OPTIMIZATION: Only use Google Search tool if the user explicitly asks for a recipe, chef, or authentic dish.
+    // This saves Search Quota and speeds up ingredient-only requests.
+    const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
+    const tools = needsAuthenticRecipe ? [{ googleSearch: {} }] : [];
+
     const model = ai.getGenerativeModel({
       model: 'gemini-1.5-flash',
-      tools: [{googleSearch: {}}],
+      tools: tools,
     });
 
     const result = await model.generateContent(prompt);
@@ -119,6 +149,21 @@ ${ingredients}`;
       if (data.error) {
         return res.status(400).json({ error: data.error });
       }
+
+      // 2. Save to Firestore for future caching (only for single recipes)
+      if (data.recipeName) {
+        try {
+          await setDoc(doc(db, "recipes", recipeId), {
+            ...data,
+            cached_at: new Date().toISOString(),
+            original_input: ingredients
+          });
+          console.log(`Cached new recipe: ${recipeId}`);
+        } catch (dbError) {
+          console.error("Firestore write error:", dbError);
+        }
+      }
+
       res.status(200).json(data);
     } catch (e) {
       console.error("JSON parse error:", e);

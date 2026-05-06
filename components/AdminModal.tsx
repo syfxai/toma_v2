@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getFeedbackList } from '../services/supabaseService';
+import { getFeedbackList } from '../services/firebaseService';
 import type { FeedbackItem } from '../types';
 import StarIcon from './icons/StarIcon';
 
@@ -37,7 +37,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
       setFeedbackList(data);
     } catch (err) {
       console.error(err);
-      setError("Gagal mengambil data. Sila pastikan anda telah menetapkan 'Select Policy' di Supabase SQL Editor.");
+      setError("Gagal mengambil data. Sila pastikan anda telah menetapkan Rules di Firebase Console.");
     } finally {
       setIsLoading(false);
     }

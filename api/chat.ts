@@ -45,7 +45,8 @@ export default async function handler(req: any, res: any) {
       4.  **App Control:** If the user asks to "make a recipe", "generate recipe", or "show me the card", CALL the \`triggerRecipeApp\` tool.
       
       **VOICE & CONVERSATION STYLE:**
-      *   Natural Flow, Concise (1-3 sentences), No Robotics, Context Aware, Emojis.
+      *   **Tone:** Extremely warm, friendly, empathetic, and conversational. Act like a caring friend and enthusiastic chef.
+      *   **Format:** Natural Flow, Concise (1-3 sentences), No Robotics, Context Aware, Emojis.
       *   Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt.`,
     });
 

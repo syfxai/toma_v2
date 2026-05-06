@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { UiText, FeedbackData } from '../types';
-import { submitFeedback } from '../services/supabaseService';
+import { submitFeedback } from '../services/firebaseService';
 import StarIcon from './icons/StarIcon';
 import CheckIcon from './icons/CheckIcon';
 

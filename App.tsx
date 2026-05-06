@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { Language, Recipe, UiText, LanguageCode, RecipeList, RecipeSearchResult } from './types';
 import { generateRecipe, translateContent } from './services/geminiService';
-import { getGenerationCount, recordGeneration, keepAlive } from './services/supabaseService';
+import { getGenerationCount, recordGeneration, keepAlive } from './services/firebaseService';
 import { getCachedResponse, setCachedResponse } from './services/cacheService';
 import Header from './components/Header';
 import LanguageSelector from './components/LanguageToggle';
