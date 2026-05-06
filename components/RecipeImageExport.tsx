@@ -73,6 +73,60 @@ const RecipeImageExport = forwardRef<HTMLDivElement, RecipeImageExportProps>(({ 
           </ol>
       </div>
 
+      {recipe.nutrition && (
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <h2 className={`font-semibold mb-4 text-emerald-800 ${sectionTitleClasses}`}>{uiText.nutritionTitle}</h2>
+          
+          <div className="grid grid-cols-4 gap-4 mb-6">
+            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
+              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.caloriesLabel}</p>
+              <p className="text-sm font-bold">{recipe.nutrition.calories}</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
+              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.proteinLabel}</p>
+              <p className="text-sm font-bold">{recipe.nutrition.protein}</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
+              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.fatLabel}</p>
+              <p className="text-sm font-bold">{recipe.nutrition.fat}</p>
+            </div>
+            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
+              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.carbsLabel}</p>
+              <p className="text-sm font-bold">{recipe.nutrition.carbohydrates}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 text-xs">
+            {recipe.nutrition.vitamins.length > 0 && (
+              <div>
+                <p className="font-bold text-emerald-700 mb-1">{uiText.vitaminsLabel}</p>
+                <p className="text-gray-600 leading-tight">{recipe.nutrition.vitamins.join(', ')}</p>
+              </div>
+            )}
+            {recipe.nutrition.minerals.length > 0 && (
+              <div>
+                <p className="font-bold text-emerald-700 mb-1">{uiText.mineralsLabel}</p>
+                <p className="text-gray-600 leading-tight">{recipe.nutrition.minerals.join(', ')}</p>
+              </div>
+            )}
+            {recipe.nutrition.others.length > 0 && (
+              <div>
+                <p className="font-bold text-emerald-700 mb-1">{uiText.othersLabel}</p>
+                <p className="text-gray-600 leading-tight">{recipe.nutrition.others.join(', ')}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 p-3 bg-emerald-50 rounded-lg text-emerald-800 text-xs font-medium border border-emerald-100">
+             {recipe.nutrition.healthScore === 'healthy' ? uiText.healthyTip : uiText.unhealthyTip}
+          </div>
+          
+          <p className="mt-2 text-[10px] text-gray-400 italic text-center">
+            {uiText.nutritionDisclaimer}
+          </p>
+        </div>
+      )}
+
       <div className="mt-8 pt-4 text-center border-t border-gray-200">
         <h3 className="text-2xl font-bold text-emerald-700 flex items-center justify-center gap-2">
             <span>🍅</span>

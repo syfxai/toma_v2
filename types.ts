@@ -6,6 +6,17 @@ export interface Language {
   name: string;
 }
 
+export interface NutritionFacts {
+  calories: string;
+  protein: string;
+  fat: string;
+  carbohydrates: string;
+  vitamins: string[];
+  minerals: string[];
+  others: string[];
+  healthScore: 'healthy' | 'unhealthy';
+}
+
 export interface Recipe {
   recipeName: string;
   description: string;
@@ -15,6 +26,7 @@ export interface Recipe {
   servings: string;
   ingredients: string[];
   instructions: string[];
+  nutrition?: NutritionFacts;
 }
 
 export interface RecipeSearchResult {
@@ -128,6 +140,21 @@ export interface UiText {
   feedbackSuccessTitle: string;
   feedbackSuccessMessage: string;
   closeButton: string;
+
+  // Nutrition
+  nutritionTitle: string;
+  caloriesLabel: string;
+  proteinLabel: string;
+  fatLabel: string;
+  carbsLabel: string;
+  vitaminsLabel: string;
+  mineralsLabel: string;
+  othersLabel: string;
+  healthyTip: string;
+  unhealthyTip: string;
+  nutritionDisclaimer: string;
+  showNutrition: string;
+  hideNutrition: string;
 }
 
 export type ExportImageLayout = 'mobile' | 'desktop';

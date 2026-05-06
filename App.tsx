@@ -109,7 +109,22 @@ const DEFAULT_UI_TEXT_EN: UiText = {
   // Search Results
   searchResultsTitle: "Found Recipes",
   searchResultsSubtitle: "Select a recipe to view details",
-  backToResults: "Back to Results"
+  backToResults: "Back to Results",
+
+  // Nutrition EN
+  nutritionTitle: "Nutrition Facts",
+  caloriesLabel: "Calories",
+  proteinLabel: "Protein",
+  fatLabel: "Fat",
+  carbsLabel: "Carbs",
+  vitaminsLabel: "Vitamins",
+  mineralsLabel: "Minerals",
+  othersLabel: "Other Nutrients",
+  healthyTip: "Congratulations on choosing a healthy recipe!",
+  unhealthyTip: "You may want to moderate servings of this dish for better health.",
+  nutritionDisclaimer: "Nutritional values are estimates based on standard ingredients and portions.",
+  showNutrition: "View Nutrition Facts",
+  hideNutrition: "Hide Nutrition Facts"
 };
 
 const DEFAULT_UI_TEXT_MS: UiText = {
@@ -191,7 +206,22 @@ const DEFAULT_UI_TEXT_MS: UiText = {
   // Search Results
   searchResultsTitle: "Resepi Ditemui",
   searchResultsSubtitle: "Pilih resepi untuk lihat butiran",
-  backToResults: "Kembali ke Senarai"
+  backToResults: "Kembali ke Senarai",
+
+  // Nutrition MS
+  nutritionTitle: "Fakta Nutrisi",
+  caloriesLabel: "Kalori",
+  proteinLabel: "Protein",
+  fatLabel: "Lemak",
+  carbsLabel: "Karbohidrat",
+  vitaminsLabel: "Vitamin",
+  mineralsLabel: "Mineral",
+  othersLabel: "Zat Lain",
+  healthyTip: "Tahniah kerana memilih resepi sihat!",
+  unhealthyTip: "Anda boleh kurangkan hidangan seperti ini untuk kesihatan.",
+  nutritionDisclaimer: "Nilai nutrisi adalah anggaran berdasarkan ramuan dan hidangan standard.",
+  showNutrition: "Lihat Fakta Nutrisi",
+  hideNutrition: "Tutup Fakta Nutrisi"
 };
 
 const App: React.FC = () => {

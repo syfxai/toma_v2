@@ -59,6 +59,7 @@ export default async function handler(req: any, res: any) {
 
 ### **Universal Requirements (Apply to ALL scenarios):**
 *   **Practical for Home Cooks:** Instructions must be clear, step-by-step, and easy for a home cook to follow.
+*   **Nutrition Disclaimer:** When providing nutrition facts, ensure they are realistic estimates. DO NOT provide medical advice or guarantee health outcomes. Use words like "Estimated" or "Approximate".
 *   **Language:** The entire JSON output, including all keys and values, must be in **English**.
 
 **Output Format:**
@@ -73,7 +74,17 @@ You MUST respond with ONLY a single JSON object.
   "totalTime": "string (e.g., '45 minutes')",
   "servings": "string (e.g., '4 servings' or 'Makes 12 pieces')",
   "ingredients": ["string", "string", ...],
-  "instructions": ["string", "string", ...]
+  "instructions": ["string", "string", ...],
+  "nutrition": {
+    "calories": "string (e.g., '450 kcal per serving')",
+    "protein": "string (e.g., '25g')",
+    "fat": "string (e.g., '15g')",
+    "carbohydrates": "string (e.g., '50g')",
+    "vitamins": ["string (e.g., 'Vitamin C', 'Vitamin A')"],
+    "minerals": ["string (e.g., 'Iron', 'Calcium')"],
+    "others": ["string (e.g., 'Fiber', 'Antioxidants')"],
+    "healthScore": "'healthy' or 'unhealthy' (based on a balance of macronutrients and cooking methods)"
+  }
 }
 
 **Format for Scenario C (Recipe List):**
