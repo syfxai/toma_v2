@@ -1,0 +1,71 @@
+{
+  "name": "Toma - AI Recipe Generator",
+  "short_name": "Toma",
+  "description": "An AI-powered recipe generator that creates delicious, halal, and Malaysia-friendly dishes from the ingredients you have on hand.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F0FFF4",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "lang": "ms",
+  "icons": [
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "152x152",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://api.iconify.design/noto:tomato.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://picsum.photos/seed/toma1/390/844",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home Screen"
+    }
+  ]
+}

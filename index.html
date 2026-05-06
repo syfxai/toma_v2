@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toma - AI Recipe Generator</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍅%3C/text%3E%3C/svg%3E">
+    
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#059669">
+    
+    <!-- iOS Safari (WAJIB untuk iPhone/iPad) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Toma" />
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="https://api.iconify.design/noto:tomato.svg">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://api.iconify.design/noto:tomato.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://api.iconify.design/noto:tomato.svg">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://api.iconify.design/noto:tomato.svg">
+
+    <!-- Untuk Samsung/Xiaomi browser -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- SEO & Metadata -->
+    <meta name="description" content="An AI-powered recipe generator that creates delicious, halal, and Malaysia-friendly dishes from the ingredients you have on hand.">
+    <meta name="keywords" content="AI recipe generator, recipe from ingredients, halal recipes, Malaysian cuisine, masak apa hari ni, resepi AI, Syafiq Haron">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Toma - Your AI Recipe Generator">
+    <meta property="og:description" content="No idea what to cook? Let Toma create delicious, halal, and Malaysia-friendly dishes from the ingredients you have on hand.">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%23F0FFF4'/%3E%3Ctext x='50%25' y='45%25' font-family='Poppins, sans-serif' font-size='100' font-weight='bold' fill='%23047857' text-anchor='middle'%3E%3Ctspan x='50%25' dy='-0.2em'%3E🍅 Toma%3C/tspan%3E%3C/text%3E%3Ctext x='50%25' y='65%25' font-family='Poppins, sans-serif' font-size='40' fill='%23374151' text-anchor='middle'%3ENo idea what to cook? Let Toma help!%3C/text%3E%3C/svg%3E">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Toma - Your AI Recipe Generator">
+    <meta name="twitter:description" content="No idea what to cook? Let Toma create delicious, halal, and Malaysia-friendly dishes from the ingredients you have on hand.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%23F0FFF4'/%3E%3Ctext x='50%25' y='45%25' font-family='Poppins, sans-serif' font-size='100' font-weight='bold' fill='%23047857' text-anchor='middle'%3E%3Ctspan x='50%25' dy='-0.2em'%3E🍅 Toma%3C/tspan%3E%3C/text%3E%3Ctext x='50%25' y='65%25' font-family='Poppins, sans-serif' font-size='40' fill='%23374151' text-anchor='middle'%3ENo idea what to cook? Let Toma help!%3C/text%3E%3C/svg%3E">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        scroll-behavior: smooth;
+        /* Removed bg-emerald-50 so the custom background component shows through */
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fadeInUp {
+        animation: fadeInUp 0.5s ease-out forwards;
+      }
+
+      /* Background Blob Animation */
+      @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+      }
+      .animate-blob {
+        animation: blob 10s infinite alternate; 
+      }
+      .animation-delay-2000 {
+        animation-delay: 2s;
+      }
+      .animation-delay-4000 {
+        animation-delay: 4s;
+      }
+
+      /* Noise Texture Overlay */
+      .bg-noise {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1; /* Behind content, in front of blobs */
+        opacity: 0.12; 
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.2/",
+    "react": "https://aistudiocdn.com/react@^19.1.2",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.2/",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.1.2",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+    "qrcode": "https://aistudiocdn.com/qrcode@^1.5.4",
+    "pako": "https://aistudiocdn.com/pako@^2.1.0",
+    "@supabase/supabase-js": "https://aistudiocdn.com/@supabase/supabase-js@^2.45.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
