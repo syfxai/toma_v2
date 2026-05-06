@@ -12,7 +12,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase for serverless environment
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
+const getDb = () => {
+  if (!process.env.FIREBASE_API_KEY) {
+    console.warn("FIREBASE_API_KEY is missing!");
+  }
+  
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  return getFirestore(app);
+};
 
-export { db };
+export const db = getDb();

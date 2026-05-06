@@ -109,8 +109,9 @@ const IngredientInput: React.FC<IngredientInputProps> = ({
           className={`
             group relative flex-grow h-14 md:h-16 rounded-xl font-bold text-sm md:text-lg overflow-hidden transition-all duration-300
             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500
-            ${isButtonDisabled ? 'bg-gray-100 cursor-not-allowed opacity-60 border border-gray-200' : 'cursor-pointer shadow-lg hover:shadow-emerald-500/30 border border-emerald-500/20'}
-            bg-white/80
+            ${isButtonDisabled 
+              ? 'bg-gray-200 text-gray-500 cursor-not-allowed opacity-80 border border-gray-300' 
+              : 'bg-white cursor-pointer shadow-lg hover:shadow-emerald-500/30 border border-emerald-500/20'}
           `}
         >
           {/* Ready State Background */}
@@ -133,7 +134,7 @@ const IngredientInput: React.FC<IngredientInputProps> = ({
           ></div>
 
           {/* Text Layer */}
-          <span className={`relative z-10 transition-colors duration-300 flex items-center justify-center gap-2 ${isButtonDisabled ? 'text-gray-400' : 'text-white'}`}>
+          <span className={`relative z-10 transition-colors duration-300 flex items-center justify-center gap-2 ${isButtonDisabled ? 'text-gray-500' : 'text-white'}`}>
              {isLoading ? (
                <>
                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
