@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { Language, Recipe, UiText, LanguageCode, RecipeList, RecipeSearchResult } from './types';
 import { generateRecipe, translateContent } from './services/geminiService';
-import { getGenerationCount, recordGeneration, keepAlive } from './services/firebaseService';
+import { getGenerationCount, recordGeneration, keepAlive, getCachedRecipe, saveRecipeToCache } from './services/firebaseService';
 import { getCachedResponse, setCachedResponse } from './services/cacheService';
 import Header from './components/Header';
 import LanguageSelector from './components/LanguageToggle';
@@ -428,21 +428,34 @@ const App: React.FC = () => {
     if (element) element.scrollIntoView({ behavior: 'smooth' });
 
     try {
-      // Check cache first
-      const cachedData = getCachedResponse(inputIngredients);
-      let generatedData = cachedData;
+      // Check Firestore cache first (Client Side)
+      const recipeId = inputIngredients
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]/g, '-')
+          .replace(/-+/g, '-')
+          .substring(0, 100);
+
+      let generatedData = await getCachedRecipe(recipeId);
       
       if (!generatedData) {
+          // If not in cache, call API
           generatedData = await generateRecipe(inputIngredients);
-          setCachedResponse(inputIngredients, generatedData);
+          
+          // Check if it's a list or a single recipe
+          if ('results' in generatedData) {
+              setRecipeList(generatedData as RecipeList);
+              setIsLoading(false);
+              return;
+          }
+          
+          // Only cache single recipes
+          if (generatedData && (generatedData as Recipe).recipeName) {
+              saveRecipeToCache(recipeId, generatedData, inputIngredients);
+          }
           setCooldown(15); // 15 seconds cooldown after API call
-      }
-
-      // Check if it's a list or a single recipe
-      if ('results' in generatedData) {
-          setRecipeList(generatedData as RecipeList);
-          setIsLoading(false);
-          return;
+      } else {
+          console.log("Loaded recipe from global cache");
       }
 
       const generatedRecipe = generatedData as Recipe;

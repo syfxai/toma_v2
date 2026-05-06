@@ -95,5 +95,33 @@ export const getFeedbackList = async (): Promise<FeedbackItem[]> => {
   }
 };
 
+export const getCachedRecipe = async (recipeId: string): Promise<any | null> => {
+  try {
+    const { doc, getDoc } = await import('firebase/firestore');
+    const docRef = doc(db, 'recipes', recipeId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error checking recipe cache:", error);
+    return null;
+  }
+};
+
+export const saveRecipeToCache = async (recipeId: string, data: any, originalInput: string): Promise<void> => {
+  try {
+    const { doc, setDoc } = await import('firebase/firestore');
+    await setDoc(doc(db, 'recipes', recipeId), {
+      ...data,
+      cached_at: new Date().toISOString(),
+      original_input: originalInput
+    });
+  } catch (error) {
+    console.error("Error saving recipe to cache:", error);
+  }
+};
+
 // Empty function to keep interface compatibility if needed
 export const keepAlive = async (): Promise<void> => {};

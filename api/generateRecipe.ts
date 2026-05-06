@@ -1,16 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { db } from "./lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-
-// Helper to create a unique ID for the recipe based on ingredients
-const createRecipeId = (input: string) => {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]/g, '-')
-    .replace(/-+/g, '-')
-    .substring(0, 100);
-};
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -21,20 +9,6 @@ export default async function handler(req: any, res: any) {
     const { ingredients } = req.body;
     if (!ingredients) {
       return res.status(400).json({ error: 'Ingredients are required' });
-    }
-
-    const recipeId = createRecipeId(ingredients);
-
-    // 1. Try to fetch from Firestore first
-    try {
-      const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
-      if (recipeDoc.exists()) {
-        console.log(`Serving cached recipe for: ${recipeId}`);
-        return res.status(200).json(recipeDoc.data());
-      }
-    } catch (dbError) {
-      console.error("Firestore read error:", dbError);
-      // Continue to AI if DB fails
     }
 
     if (!process.env.GEMINI_API_KEY) {
@@ -148,20 +122,6 @@ ${ingredients}`;
       const data = JSON.parse(match[0]);
       if (data.error) {
         return res.status(400).json({ error: data.error });
-      }
-
-      // 2. Save to Firestore for future caching (only for single recipes)
-      if (data.recipeName) {
-        try {
-          await setDoc(doc(db, "recipes", recipeId), {
-            ...data,
-            cached_at: new Date().toISOString(),
-            original_input: ingredients
-          });
-          console.log(`Cached new recipe: ${recipeId}`);
-        } catch (dbError) {
-          console.error("Firestore write error:", dbError);
-        }
       }
 
       res.status(200).json(data);
