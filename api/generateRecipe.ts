@@ -98,14 +98,15 @@ You MUST respond with ONLY a single JSON object.
 ${ingredients}`;
 
     // OPTIMIZATION: Only use Google Search tool if the user explicitly asks for a recipe, chef, or authentic dish.
-    // This saves Search Quota and speeds up ingredient-only requests.
+    // Passing an empty tools array causes SDK errors, so we only include it when needed.
     const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
-    const tools = needsAuthenticRecipe ? [{ googleSearch: {} }] : [];
 
-    const model = ai.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      tools: tools,
-    });
+    const modelConfig: any = { model: 'gemini-1.5-flash' };
+    if (needsAuthenticRecipe) {
+      modelConfig.tools = [{ googleSearch: {} }];
+    }
+
+    const model = ai.getGenerativeModel(modelConfig);
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -130,12 +131,12 @@ ${ingredients}`;
       res.status(500).json({ error: "Failed to parse recipe data." });
     }
   } catch (error: any) {
-    console.error("Error generating recipe in API:", error);
+    console.error("Error generating recipe in API:", error?.message || error);
     
     if (error.status === 429 || error.message?.includes('429') || error.message?.includes('quota')) {
       return res.status(429).json({ error: "RATE_LIMIT_REACHED" });
     }
 
-    res.status(500).json({ error: "Could not get a recipe from the kitchen. Please try again." });
+    res.status(500).json({ error: error?.message || "Could not get a recipe from the kitchen. Please try again." });
   }
 }
