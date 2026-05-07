@@ -59,7 +59,7 @@ export default async function handler(req: any, res: any) {
       }
     });
 
-    const response = await chat.sendMessage(message);
+    const response = await chat.sendMessage({ message });
     
     // Check for candidates and text
     const text = response.text || "";
