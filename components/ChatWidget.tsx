@@ -207,7 +207,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                      latestTranscriptRef.current = '';
                      setLiveTranscript('');
                  }
-             }, 2000); // 2.0s timeout (Longer timeout to allow for pauses in noisy environments)
+             }, 1500); // 1.5s timeout (Reduced for snappier response)
         }
 
         // If browser naturally detects end (rare with noise), use it
@@ -526,13 +526,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                </div>
            ) : null}
 
-          <div className="flex items-end gap-2 bg-gray-100 rounded-3xl p-2 pl-4 border border-transparent focus-within:border-emerald-300 focus-within:ring-2 focus-within:ring-emerald-100 focus-within:bg-white transition-all">
+          <div className="flex items-end gap-2 bg-gray-50 rounded-3xl p-2 pl-4 border border-gray-200 focus-within:border-emerald-500/50 focus-within:bg-white focus-within:shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all">
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder={currentLanguage === 'ms' ? "Borak dengan Chef..." : "Chat with Chef..."}
-              className="flex-1 bg-transparent border-none focus:ring-0 p-0 text-sm max-h-24 resize-none py-2.5"
+              className="flex-1 bg-transparent border-none focus:ring-0 p-0 text-sm max-h-24 resize-none py-2.5 outline-none appearance-none"
               rows={1}
               disabled={isLiveMode}
             />

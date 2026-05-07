@@ -39,6 +39,7 @@ export default async function handler(req: any, res: any) {
       model: 'gemini-flash-latest',
       history: history || [],
       config: {
+        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
         systemInstruction: `You are Chef Toma, a world-class culinary expert with 3 Michelin stars. You are 25 years old, with a bright, warm, and highly professional PR-savvy personality.
       
       **YOUR EXPERTISE:**
@@ -60,11 +61,14 @@ export default async function handler(req: any, res: any) {
 
     const response = await chat.sendMessage(message);
     
-    if (!response.text && (!response.functionCalls || response.functionCalls.length === 0)) {
+    // Check for candidates and text
+    const text = response.text || "";
+    const functionCalls = response.functionCalls || [];
+    
+    if (!text && functionCalls.length === 0) {
       console.error("Empty response from Gemini API for chat");
       throw new Error("Maaf, Toma tidak dapat membalas sekarang.");
     }
-
     res.status(200).json({
       text: response.text || "",
       functionCalls: response.functionCalls,
