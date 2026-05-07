@@ -20,7 +20,7 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: 'No audio provided' });
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY || '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';
     if (!apiKey) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not set' });
     }
