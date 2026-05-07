@@ -36,7 +36,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const chat = ai.chats.create({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-flash-latest',
       history: history || [],
       config: {
         systemInstruction: `You are Chef Toma, a world-class culinary expert with 3 Michelin stars. You are 25 years old, with a bright, warm, and highly professional PR-savvy personality.
