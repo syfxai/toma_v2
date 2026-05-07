@@ -17,7 +17,6 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({
       apiKey: process.env.GEMINI_API_KEY,
-      apiVersion: 'v1beta',
     });
 
     const prompt = `You are an expert culinary AI, skilled at both providing specific recipes and creating new ones from ingredients. Your primary goal is to help a Malaysian home cook.
@@ -109,11 +108,8 @@ ${ingredients}`;
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       contents: prompt,
-      config: {
-        tools: needsAuthenticRecipe ? [{ googleSearch: {} }] : []
-      }
     });
     const text = response.text || "";
     if (!text) {

@@ -14,7 +14,6 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
-  apiVersion: 'v1beta',
 });
     
     const triggerRecipeAppTool = {
@@ -37,10 +36,9 @@ export default async function handler(req: any, res: any) {
     }
 
     const chat = ai.chats.create({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       history: history || [],
       config: {
-        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
         systemInstruction: `You are Chef Toma, a world-class culinary expert with 3 Michelin stars. You are 25 years old, with a bright, warm, and highly professional PR-savvy personality.
       
       **YOUR EXPERTISE:**
