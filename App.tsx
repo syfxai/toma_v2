@@ -1,5 +1,6 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Language, Recipe, UiText, LanguageCode, RecipeList, RecipeSearchResult } from './types';
 import { generateRecipe, translateContent } from './services/geminiService';
 import { getGenerationCount, recordGeneration, keepAlive, getCachedRecipe, saveRecipeToCache } from './services/firebaseService';
@@ -658,35 +659,60 @@ const App: React.FC = () => {
         </div>
 
 
-        {(isLoading || isTranslating) && <LoadingSpinner messages={isLoading ? uiText.loadingMessages : [uiText.translatingMessage]} />}
+        <AnimatePresence mode="wait">
+          {(isLoading || isTranslating) && (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <LoadingSpinner messages={isLoading ? uiText.loadingMessages : [uiText.translatingMessage]} />
+            </motion.div>
+          )}
 
-        {recipeList && !recipe && !isLoading && (
-            <RecipeListDisplay 
+          {recipeList && !recipe && !isLoading && (
+            <motion.div
+              key="list"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <RecipeListDisplay 
                 recipeList={recipeList}
                 onSelect={handleRecipeSelect}
                 uiText={uiText}
-            />
-        )}
+              />
+            </motion.div>
+          )}
 
-        {recipe && !isLoading && !isTranslating && (
-          <div id="recipe-display">
-            {recipeList && (
+          {recipe && !isLoading && !isTranslating && (
+            <motion.div
+              key="recipe"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              id="recipe-display"
+            >
+              {recipeList && (
                 <button 
-                    onClick={handleBackToResults}
-                    className="mb-4 flex items-center gap-2 text-emerald-600 font-medium hover:text-emerald-700 transition-colors px-4"
+                  onClick={handleBackToResults}
+                  className="mb-4 flex items-center gap-2 text-emerald-600 font-medium hover:text-emerald-700 transition-colors px-4"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-                    </svg>
-                    {uiText.backToResults}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                  </svg>
+                  {uiText.backToResults}
                 </button>
-            )}
-            <RecipeDisplay 
-              recipe={recipe} 
-              uiText={uiText}
-            />
-          </div>
-        )}
+              )}
+              <RecipeDisplay 
+                recipe={recipe} 
+                uiText={uiText}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
       
       {generationCount !== null && <GenerationCounter count={generationCount} uiText={uiText} />}

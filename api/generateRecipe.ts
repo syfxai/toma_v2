@@ -81,9 +81,9 @@ You MUST respond with ONLY a single JSON object.
     "protein": "string (e.g., '25g')",
     "fat": "string (e.g., '15g')",
     "carbohydrates": "string (e.g., '50g')",
-    "vitamins": ["string (e.g., 'Vitamin C', 'Vitamin A')"],
-    "minerals": ["string (e.g., 'Iron', 'Calcium')"],
-    "others": ["string (e.g., 'Fiber', 'Antioxidants')"],
+    "vitamins": ["string (e.g., 'Vitamin C (12mg)', 'Vitamin A (450µg)')"],
+    "minerals": ["string (e.g., 'Iron (2.5mg)', 'Calcium (150mg)')"],
+    "others": ["string (e.g., 'Fiber (5g)', 'Antioxidants')"],
     "healthScore": "'healthy' or 'unhealthy' (based on a balance of macronutrients and cooking methods)"
   }
 }

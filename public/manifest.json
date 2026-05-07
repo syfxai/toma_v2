@@ -61,7 +61,7 @@
   ],
   "screenshots": [
     {
-      "src": "https://picsum.photos/seed/toma1/390/844",
+      "src": "/pwa-screenshot.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
