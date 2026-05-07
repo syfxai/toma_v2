@@ -188,35 +188,32 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             }
         }
 
-        const currentText = finalTranscript || interimTranscript;
-        
-        // Clear existing silence timer whenever we hear *anything* new
         if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
 
-        if (currentText.trim().length > 0) {
-             setLiveTranscript(currentText);
-             latestTranscriptRef.current = currentText;
-
-             // MANUAL SILENCE DETECTION:
-             // If we don't get a new result/update for 2 seconds, 
-             // assume the user stopped talking and the noise is keeping the stream open.
-             silenceTimerRef.current = setTimeout(() => {
-                 if (latestTranscriptRef.current.trim()) {
-                     recognition.stop(); // Force stop
-                     handleSendMessage(latestTranscriptRef.current);
-                     latestTranscriptRef.current = '';
-                     setLiveTranscript('');
-                 }
-             }, 1500); // 1.5s timeout (Reduced for snappier response)
-        }
-
-        // If browser naturally detects end (rare with noise), use it
+        // Native end-of-speech detection (Fastest)
         if (finalTranscript.trim().length > 0) {
-            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
             recognition.stop();
             handleSendMessage(finalTranscript);
             latestTranscriptRef.current = '';
             setLiveTranscript('');
+            return;
+        }
+
+        // Interim updates
+        if (interimTranscript.trim().length > 0) {
+             setLiveTranscript(interimTranscript);
+             latestTranscriptRef.current = interimTranscript;
+
+             // Fallback: If browser refuses to send 'isFinal' (common Android Chrome bug),
+             // force send after 1.0s of silence.
+             silenceTimerRef.current = setTimeout(() => {
+                 if (latestTranscriptRef.current.trim()) {
+                     recognition.stop();
+                     handleSendMessage(latestTranscriptRef.current);
+                     latestTranscriptRef.current = '';
+                     setLiveTranscript('');
+                 }
+             }, 1000); 
         }
     };
 
