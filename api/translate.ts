@@ -17,7 +17,7 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({
       apiKey: process.env.GEMINI_API_KEY,
-      apiVersion: 'v1',
+      apiVersion: 'v1beta',
     });
     const prompt = `Translate all string values in the following JSON object to ${languageName}. The context is a food recipe, so be natural and use appropriate culinary terms for that language. Do not translate keys. Respond with only the translated JSON object, maintaining the exact same structure and keys. If a value is an array of strings, translate each string in the array.
   
@@ -29,7 +29,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         responseMimeType: 'application/json'

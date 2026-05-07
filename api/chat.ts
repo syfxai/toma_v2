@@ -14,7 +14,7 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
-  apiVersion: 'v1',
+  apiVersion: 'v1beta',
 });
     
     const triggerRecipeAppTool = {
@@ -37,7 +37,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const chat = ai.chats.create({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-1.5-flash',
       history: history || [],
       config: {
         tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
