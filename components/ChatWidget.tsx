@@ -165,7 +165,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     if (!isLiveMode || isTyping || window.speechSynthesis.speaking) return;
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        const mediaRecorder = new MediaRecorder(stream);
         mediaRecorderRef.current = mediaRecorder;
         audioChunksRef.current = [];
 
@@ -180,6 +180,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
         const dataArray = new Uint8Array(bufferLength);
 
         let silenceCounter = 0;
+        let totalFrames = 0;
 
         const updateLevel = () => {
              analyser.getByteFrequencyData(dataArray);
@@ -190,17 +191,20 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
              const avg = sum / bufferLength;
              
              // Create a dramatic scaling effect for the UI
-             setAudioLevel(Math.min(100, Math.round((avg / 80) * 100)));
+             setAudioLevel(Math.min(100, Math.round((avg / 60) * 100)));
              
-             // Volume-based Voice Activity Detection (VAD)
-             if (avg > 5) { // User is speaking
+             // Volume-based Voice Activity Detection (VAD) - Increased threshold to 15 to ignore static
+             if (avg > 15) { 
                  silenceCounter = 0;
-             } else { // Silence
+             } else { 
                  silenceCounter += 1;
              }
+             
+             totalFrames += 1;
 
              // Assuming ~60fps, 120 frames = ~2.0 seconds of silence
-             if (silenceCounter > 120) {
+             // Or forcefully stop after ~15 seconds of total recording (900 frames)
+             if (silenceCounter > 120 || totalFrames > 900) {
                  stopAndTranscribe();
                  return;
              }
@@ -217,7 +221,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
         mediaRecorder.onstop = async () => {
             setIsLiveListening(false);
-            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+            const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType });
             
             if (audioChunksRef.current.length > 0) {
                 setLiveTranscript(currentLanguage === 'ms' ? 'Menterjemah Groq...' : 'Transcribing...');
@@ -244,7 +248,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             }
         };
 
-        mediaRecorder.start();
+        mediaRecorder.start(500);
         updateLevel(); // Start visualizer & VAD
 
     }).catch(err => {
