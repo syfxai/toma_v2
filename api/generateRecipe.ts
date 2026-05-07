@@ -15,7 +15,10 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      apiVersion: 'v1',
+    });
 
     const prompt = `You are an expert culinary AI, skilled at both providing specific recipes and creating new ones from ingredients. Your primary goal is to help a Malaysian home cook.
 
@@ -101,14 +104,22 @@ ${ingredients}`;
     // Passing an empty tools array causes SDK errors, so we only include it when needed.
     const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
 
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not set in environment variables.");
+    }
+
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       contents: prompt,
       config: {
         tools: needsAuthenticRecipe ? [{ googleSearch: {} }] : []
       }
     });
     const text = response.text || "";
+    if (!text) {
+      console.error("Empty response from Gemini API");
+      throw new Error("Toma tidak dapat menjana resepi buat masa ini. Sila cuba lagi.");
+    }
     
     // Simple JSON extraction logic for the server side
     const match = text.match(/\{[\s\S]*\}/);

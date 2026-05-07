@@ -12,7 +12,10 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+  apiVersion: 'v1',
+});
     
     const triggerRecipeAppTool = {
       name: "triggerRecipeApp",
@@ -29,8 +32,12 @@ export default async function handler(req: any, res: any) {
       },
     };
 
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not set in environment variables.");
+    }
+
     const chat = ai.chats.create({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       history: history || [],
       config: {
         tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
@@ -55,8 +62,13 @@ export default async function handler(req: any, res: any) {
 
     const response = await chat.sendMessage(message);
     
+    if (!response.text && (!response.functionCalls || response.functionCalls.length === 0)) {
+      console.error("Empty response from Gemini API for chat");
+      throw new Error("Maaf, Toma tidak dapat membalas sekarang.");
+    }
+
     res.status(200).json({
-      text: response.text,
+      text: response.text || "",
       functionCalls: response.functionCalls,
     });
   } catch (error: any) {
