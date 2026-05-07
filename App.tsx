@@ -429,13 +429,13 @@ const App: React.FC = () => {
     if (element) element.scrollIntoView({ behavior: 'smooth' });
 
     try {
-      // Check Firestore cache first (Client Side)
-      const recipeId = inputIngredients
-          .toLowerCase()
-          .trim()
-          .replace(/[^a-z0-9]/g, '-')
-          .replace(/-+/g, '-')
-          .substring(0, 100);
+      // OPTIMIZATION: Smart Normalization for Cache
+      const normalized = inputIngredients.toLowerCase()
+          .split(/[\s,]+/)
+          .filter(w => w.length > 2 && !['dan', 'and', 'with', 'dengan', 'recipe', 'resepi', 'masak', 'buat'].includes(w))
+          .sort()
+          .join('-');
+      const recipeId = normalized || inputIngredients.toLowerCase().trim().replace(/[^a-z0-9]/g, '-').substring(0, 100);
 
       let generatedData = await getCachedRecipe(recipeId);
       
