@@ -21,16 +21,15 @@ export default async function handler(req: any, res: any) {
   JSON to translate:
   ${JSON.stringify(content, null, 2)}`;
 
-    const model = ai.getGenerativeModel({
+    const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
-      generationConfig: {
+      contents: prompt,
+      config: {
         responseMimeType: 'application/json'
       }
     });
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const jsonText = response.text().trim();
+    const jsonText = (response.text || "").trim();
     res.status(200).json(JSON.parse(jsonText));
   } catch (error: any) {
     console.error(`Error translating content:`, error);

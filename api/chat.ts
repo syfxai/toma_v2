@@ -29,10 +29,12 @@ export default async function handler(req: any, res: any) {
       },
     };
 
-    const model = ai.getGenerativeModel({
+    const chat = ai.chats.create({
       model: 'gemini-1.5-flash',
-      tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
-      systemInstruction: `You are Chef Toma, a world-class culinary expert with 3 Michelin stars. You are 25 years old, with a bright, warm, and highly professional PR-savvy personality.
+      history: history || [],
+      config: {
+        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+        systemInstruction: `You are Chef Toma, a world-class culinary expert with 3 Michelin stars. You are 25 years old, with a bright, warm, and highly professional PR-savvy personality.
       
       **YOUR EXPERTISE:**
       1.  **Malaysian Cuisine Authority:** You know every trick, secret, and tradition of Malaysian cooking (Malay, Chinese, Indian, Borneo, etc.).
@@ -48,18 +50,14 @@ export default async function handler(req: any, res: any) {
       *   **Tone:** Extremely warm, friendly, empathetic, and conversational. Act like a caring friend and enthusiastic chef.
       *   **Format:** Natural Flow, Concise (1-3 sentences), No Robotics, Context Aware, Emojis.
       *   Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt.`,
+      }
     });
 
-    const chat = model.startChat({
-      history: history || [],
-    });
-
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
+    const response = await chat.sendMessage(message);
     
     res.status(200).json({
-      text: response.text(),
-      functionCalls: response.functionCalls(),
+      text: response.text,
+      functionCalls: response.functionCalls,
     });
   } catch (error: any) {
     console.error("Chat API error:", error);

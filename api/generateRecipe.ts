@@ -101,16 +101,14 @@ ${ingredients}`;
     // Passing an empty tools array causes SDK errors, so we only include it when needed.
     const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
 
-    const modelConfig: any = { model: 'gemini-1.5-flash' };
-    if (needsAuthenticRecipe) {
-      modelConfig.tools = [{ googleSearch: {} }];
-    }
-
-    const model = ai.getGenerativeModel(modelConfig);
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      contents: prompt,
+      config: {
+        tools: needsAuthenticRecipe ? [{ googleSearch: {} }] : []
+      }
+    });
+    const text = response.text || "";
     
     // Simple JSON extraction logic for the server side
     const match = text.match(/\{[\s\S]*\}/);
