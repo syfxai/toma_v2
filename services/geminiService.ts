@@ -109,3 +109,23 @@ export const createChatSession = (languageName: string): any => {
     }
   };
 };
+
+export const transcribeAudio = async (audioBase64: string): Promise<string> => {
+  try {
+    const response = await fetch('/api/transcribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audioBase64 })
+    });
+
+    if (!response.ok) {
+      throw new Error("Transcription failed");
+    }
+
+    const data = await response.json();
+    return data.text;
+  } catch (error) {
+    console.error("Error transcribing audio:", error);
+    throw new Error("Failed to transcribe audio.");
+  }
+};

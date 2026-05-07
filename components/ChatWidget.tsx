@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chat, GenerateContentResponse } from "@google/genai";
-import { createChatSession } from '../services/geminiService';
+import { createChatSession, transcribeAudio } from '../services/geminiService';
 import type { LanguageCode, Language, ChatMessage } from '../types';
 import XMarkIcon from './icons/XMarkIcon';
 import SendIcon from './icons/SendIcon';
@@ -44,6 +44,23 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechRef = useRef<SpeechSynthesisUtterance | null>(null);
   const liveRecognitionRef = useRef<any>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<BlobPart[]>([]);
+
+  const blobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result.split(',')[1]);
+        } else {
+          reject(new Error("Failed to read blob"));
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
   
   // Refs for silence detection logic
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -123,118 +140,158 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       return langMap[currentLanguage] || 'ms-MY';
   };
 
+  const stopAndTranscribe = useCallback(() => {
+    if (liveRecognitionRef.current) {
+        try { liveRecognitionRef.current.abort(); } catch(e){}
+    }
+    if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+    
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stop();
+    } else {
+        // If not recording or already stopped, just clear states
+        setIsLiveListening(false);
+        setLiveTranscript('');
+    }
+  }, []);
+
   const startLiveListening = useCallback(() => {
     if (!isLiveMode || isTyping || window.speechSynthesis.speaking) return;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
+    // Start audio recording for Groq
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
 
-    if (liveRecognitionRef.current) {
-         try { liveRecognitionRef.current.abort(); } catch(e) {}
-         liveRecognitionRef.current = null;
-    }
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) audioChunksRef.current.push(e.data);
+        };
 
-    const recognition = new SpeechRecognition();
-    liveRecognitionRef.current = recognition;
-    
-    const langMap: Record<string, string> = { 'ms': 'ms-MY', 'en': 'en-US' };
-    recognition.lang = langMap[currentLanguage] || 'en-US';
-    
-    // Use continuous false so it tries to stop naturally, but we will override with timer for noise handling
-    recognition.continuous = false; 
-    recognition.interimResults = true;
-
-    recognition.onstart = () => {
-        setIsLiveListening(true);
-        setLiveTranscript('');
-        latestTranscriptRef.current = '';
-        if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current);
-    };
-
-    recognition.onend = () => {
-        setIsLiveListening(false);
-        liveRecognitionRef.current = null;
-        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-        
-        // If we are still in live mode, not typing, and not speaking,
-        // it means the engine stopped either because of silence (no speech detected)
-        // or network glitch. We should restart listening immediately.
-        if (isLiveMode && !isTyping && !window.speechSynthesis.speaking) {
-             resumeListeningTimerRef.current = setTimeout(() => {
-                 startLiveListening();
-             }, 100);
-        }
-    };
-
-    recognition.onerror = (e: any) => {
-        if (e.error === 'no-speech') {
-             // Just restart quietly
-             return;
-        }
-        if (e.error !== 'aborted') {
-             console.warn("Live mic error:", e.error);
-        }
-    };
-
-    recognition.onresult = (event: any) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                finalTranscript += event.results[i][0].transcript;
-            } else {
-                interimTranscript += event.results[i][0].transcript;
+        mediaRecorder.onstop = async () => {
+            setIsLiveListening(false);
+            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+            
+            if (audioChunksRef.current.length > 0) {
+                setLiveTranscript(currentLanguage === 'ms' ? 'Sedang memproses audio...' : 'Processing audio...');
+                setIsTyping(true);
+                try {
+                    const base64 = await blobToBase64(audioBlob);
+                    const text = await transcribeAudio(base64);
+                    if (text && text.trim()) {
+                        handleSendMessage(text);
+                        return; // success
+                    }
+                } catch(e) {
+                    console.error("Groq Transcription failed:", e);
+                } finally {
+                    setIsTyping(false);
+                    setLiveTranscript('');
+                }
             }
+
+            // Restart listening if failed or empty
+            if (isLiveMode && isOpen) {
+                resumeListeningTimerRef.current = setTimeout(() => {
+                    startLiveListening();
+                }, 500);
+            }
+        };
+
+        mediaRecorder.start();
+
+        // Start Web Speech API purely for UI subtitles (VAD)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) return;
+
+        if (liveRecognitionRef.current) {
+             try { liveRecognitionRef.current.abort(); } catch(e) {}
         }
 
-        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+        const recognition = new SpeechRecognition();
+        liveRecognitionRef.current = recognition;
+        const langMap: Record<string, string> = { 'ms': 'ms-MY', 'en': 'en-US' };
+        recognition.lang = langMap[currentLanguage] || 'en-US';
+        recognition.continuous = false; 
+        recognition.interimResults = true;
 
-        // Native end-of-speech detection (Fastest)
-        if (finalTranscript.trim().length > 0) {
-            recognition.stop();
-            handleSendMessage(finalTranscript);
-            latestTranscriptRef.current = '';
+        recognition.onstart = () => {
+            setIsLiveListening(true);
             setLiveTranscript('');
-            return;
+            latestTranscriptRef.current = '';
+            if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current);
+        };
+
+        recognition.onend = () => {
+            // Do not automatically trigger Groq onend unless we want to.
+            // But if the browser says speech ended natively, we should probably stop and transcribe.
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                stopAndTranscribe();
+            }
+        };
+
+        recognition.onerror = (e: any) => {
+            if (e.error !== 'aborted') {
+                 console.warn("Live mic error:", e.error);
+                 // If speech recognition fails (e.g. no-speech), still stop recording and try to process what we have
+                 stopAndTranscribe();
+            }
+        };
+
+        recognition.onresult = (event: any) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+
+            // If browser confidently detects end of speech
+            if (finalTranscript.trim().length > 0) {
+                stopAndTranscribe();
+                return;
+            }
+
+            // Show subtitles
+            if (interimTranscript.trim().length > 0) {
+                 setLiveTranscript(interimTranscript);
+                 latestTranscriptRef.current = interimTranscript;
+
+                 // Fallback 1.5s VAD timer
+                 silenceTimerRef.current = setTimeout(() => {
+                     if (latestTranscriptRef.current.trim()) {
+                         stopAndTranscribe();
+                     }
+                 }, 1500); 
+            }
+        };
+
+        try {
+            recognition.start();
+        } catch (e) {
+            console.error("Failed to start live mic", e);
         }
 
-        // Interim updates
-        if (interimTranscript.trim().length > 0) {
-             setLiveTranscript(interimTranscript);
-             latestTranscriptRef.current = interimTranscript;
+    }).catch(err => {
+        console.error("Mic access denied or error:", err);
+        setIsLiveMode(false);
+    });
 
-             // Fallback: If browser refuses to send 'isFinal' (common Android Chrome bug),
-             // force send after 1.0s of silence.
-             silenceTimerRef.current = setTimeout(() => {
-                 if (latestTranscriptRef.current.trim()) {
-                     recognition.stop();
-                     handleSendMessage(latestTranscriptRef.current);
-                     latestTranscriptRef.current = '';
-                     setLiveTranscript('');
-                 }
-             }, 1000); 
-        }
-    };
-
-    try {
-        recognition.start();
-    } catch (e) {
-        console.error("Failed to start live mic", e);
-        liveRecognitionRef.current = null;
-    }
   }, [isLiveMode, isTyping, currentLanguage, isOpen]);
 
-  const stopLiveListening = () => {
-    if (liveRecognitionRef.current) {
-        try { liveRecognitionRef.current.abort(); } catch(e){}
-        liveRecognitionRef.current = null;
-    }
+  const stopLiveListening = useCallback(() => {
+    stopAndTranscribe();
     setIsLiveListening(false);
     setLiveTranscript('');
     if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current);
     if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-  };
+  }, [stopAndTranscribe]);
 
   const speakText = useCallback((text: string) => {
     if (isMuted || typeof window === 'undefined' || !window.speechSynthesis) {
