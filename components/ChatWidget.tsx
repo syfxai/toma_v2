@@ -46,6 +46,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const liveRecognitionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
+  const [audioLevel, setAudioLevel] = useState<number>(0);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   const blobToBase64 = (blob: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -141,10 +144,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   };
 
   const stopAndTranscribe = useCallback(() => {
-    if (liveRecognitionRef.current) {
-        try { liveRecognitionRef.current.abort(); } catch(e){}
-    }
     if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    if (audioContextRef.current) {
+        audioContextRef.current.close().catch(() => {});
+        audioContextRef.current = null;
+    }
+    setAudioLevel(0);
     
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
         mediaRecorderRef.current.stop();
@@ -158,11 +164,52 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const startLiveListening = useCallback(() => {
     if (!isLiveMode || isTyping || window.speechSynthesis.speaking) return;
 
-    // Start audio recording for Groq
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
         mediaRecorderRef.current = mediaRecorder;
         audioChunksRef.current = [];
+
+        // Audio Visualizer & VAD Setup
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        audioContextRef.current = audioCtx;
+        const analyser = audioCtx.createAnalyser();
+        const source = audioCtx.createMediaStreamSource(stream);
+        source.connect(analyser);
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        let silenceCounter = 0;
+
+        const updateLevel = () => {
+             analyser.getByteFrequencyData(dataArray);
+             let sum = 0;
+             for (let i = 0; i < bufferLength; i++) {
+                 sum += dataArray[i];
+             }
+             const avg = sum / bufferLength;
+             
+             // Create a dramatic scaling effect for the UI
+             setAudioLevel(Math.min(100, Math.round((avg / 80) * 100)));
+             
+             // Volume-based Voice Activity Detection (VAD)
+             if (avg > 5) { // User is speaking
+                 silenceCounter = 0;
+             } else { // Silence
+                 silenceCounter += 1;
+             }
+
+             // Assuming ~60fps, 120 frames = ~2.0 seconds of silence
+             if (silenceCounter > 120) {
+                 stopAndTranscribe();
+                 return;
+             }
+             
+             animationFrameRef.current = requestAnimationFrame(updateLevel);
+        };
+        
+        setIsLiveListening(true);
+        setLiveTranscript('');
 
         mediaRecorder.ondataavailable = (e) => {
             if (e.data.size > 0) audioChunksRef.current.push(e.data);
@@ -173,7 +220,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
             
             if (audioChunksRef.current.length > 0) {
-                setLiveTranscript(currentLanguage === 'ms' ? 'Sedang memproses audio...' : 'Processing audio...');
+                setLiveTranscript(currentLanguage === 'ms' ? 'Menterjemah Groq...' : 'Transcribing...');
                 setIsTyping(true);
                 try {
                     const base64 = await blobToBase64(audioBlob);
@@ -190,7 +237,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
             }
 
-            // Restart listening if failed or empty
             if (isLiveMode && isOpen) {
                 resumeListeningTimerRef.current = setTimeout(() => {
                     startLiveListening();
@@ -199,84 +245,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
         };
 
         mediaRecorder.start();
-
-        // Start Web Speech API purely for UI subtitles (VAD)
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) return;
-
-        if (liveRecognitionRef.current) {
-             try { liveRecognitionRef.current.abort(); } catch(e) {}
-        }
-
-        const recognition = new SpeechRecognition();
-        liveRecognitionRef.current = recognition;
-        const langMap: Record<string, string> = { 'ms': 'ms-MY', 'en': 'en-US' };
-        recognition.lang = langMap[currentLanguage] || 'en-US';
-        recognition.continuous = false; 
-        recognition.interimResults = true;
-
-        recognition.onstart = () => {
-            setIsLiveListening(true);
-            setLiveTranscript('');
-            latestTranscriptRef.current = '';
-            if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current);
-        };
-
-        recognition.onend = () => {
-            // Do not automatically trigger Groq onend unless we want to.
-            // But if the browser says speech ended natively, we should probably stop and transcribe.
-            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-                stopAndTranscribe();
-            }
-        };
-
-        recognition.onerror = (e: any) => {
-            if (e.error !== 'aborted') {
-                 console.warn("Live mic error:", e.error);
-                 // If speech recognition fails (e.g. no-speech), still stop recording and try to process what we have
-                 stopAndTranscribe();
-            }
-        };
-
-        recognition.onresult = (event: any) => {
-            let interimTranscript = '';
-            let finalTranscript = '';
-
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
-                }
-            }
-
-            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-
-            // If browser confidently detects end of speech
-            if (finalTranscript.trim().length > 0) {
-                stopAndTranscribe();
-                return;
-            }
-
-            // Show subtitles
-            if (interimTranscript.trim().length > 0) {
-                 setLiveTranscript(interimTranscript);
-                 latestTranscriptRef.current = interimTranscript;
-
-                 // Fallback 1.5s VAD timer
-                 silenceTimerRef.current = setTimeout(() => {
-                     if (latestTranscriptRef.current.trim()) {
-                         stopAndTranscribe();
-                     }
-                 }, 1500); 
-            }
-        };
-
-        try {
-            recognition.start();
-        } catch (e) {
-            console.error("Failed to start live mic", e);
-        }
+        updateLevel(); // Start visualizer & VAD
 
     }).catch(err => {
         console.error("Mic access denied or error:", err);
@@ -566,17 +535,19 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
         {/* Input Area */}
         <div className="p-3 bg-white border-t border-gray-100 rounded-b-none sm:rounded-b-2xl shrink-0">
            {isLiveMode ? (
-               <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-700 text-sm mb-1 shadow-inner">
-                   <div className="flex items-center gap-2">
-                       <WaveformIcon className="w-4 h-4 animate-pulse" />
-                       <span className="font-bold">{currentLanguage === 'ms' ? 'Sedang mendengar...' : 'Listening...'}</span>
-                   </div>
-                   {/* Live Transcript Preview */}
-                   {liveTranscript && (
-                       <span className="text-xs text-emerald-600 truncate max-w-[180px] opacity-80 italic">
-                           "{liveTranscript}..."
+               <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-700 text-sm mb-1 shadow-inner relative overflow-hidden">
+                   {/* Audio Visualizer Background Bar */}
+                   <div 
+                       className="absolute left-0 bottom-0 top-0 bg-emerald-200/50 transition-all duration-75 ease-out"
+                       style={{ width: `${audioLevel}%` }}
+                   />
+                   
+                   <div className="flex items-center gap-2 relative z-10">
+                       <WaveformIcon className={`w-4 h-4 ${audioLevel > 5 ? 'animate-bounce text-emerald-600' : 'animate-pulse text-emerald-400'}`} />
+                       <span className="font-bold">
+                           {liveTranscript ? liveTranscript : (currentLanguage === 'ms' ? 'Sedang mendengar (Kuasa Groq)...' : 'Listening (Powered by Groq)...')}
                        </span>
-                   )}
+                   </div>
                </div>
            ) : null}
 
