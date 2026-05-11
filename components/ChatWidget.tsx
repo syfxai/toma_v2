@@ -358,8 +358,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     }
 
     // TWEAK: Increase rate slightly to fix "sebutir sebutir" (robotic slow) issues
-    utterance.rate = 1.02; 
-    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    utterance.rate = 1.08; 
+    utterance.pitch = 1.02;
 
     utterance.onend = () => {
         suppressListeningUntilRef.current = Date.now() + 2200;
