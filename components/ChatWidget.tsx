@@ -221,7 +221,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
         mediaRecorder.onstop = async () => {
             setIsLiveListening(false);
-            const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType });
+            const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType || 'audio/webm' });
             
             if (audioChunksRef.current.length > 0) {
                 setLiveTranscript(currentLanguage === 'ms' ? 'Menterjemah Groq...' : 'Transcribing...');

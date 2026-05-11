@@ -1,4 +1,3 @@
-import FormData from 'form-data';
 
 export const config = {
   api: {
@@ -25,24 +24,21 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not set' });
     }
 
-    // Convert base64 back to buffer
+    // Convert base64 back to buffer/blob using native Web APIs
     const audioBuffer = Buffer.from(audioBase64, 'base64');
+    const audioBlob = new Blob([audioBuffer], { type: 'audio/webm' });
 
     const formData = new FormData();
-    formData.append('file', audioBuffer, {
-      filename: 'audio.webm',
-      contentType: 'audio/webm',
-    });
+    formData.append('file', audioBlob, 'audio.webm');
     formData.append('model', 'whisper-large-v3-turbo');
-    formData.append('language', 'ms'); // Default bias towards Malay to help with manglish
+    formData.append('language', 'ms');
 
     const groqResponse = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        // Note: fetch will automatically set the correct Content-Type with boundary for FormData
       },
-      body: formData as any,
+      body: formData,
     });
 
     if (!groqResponse.ok) {
