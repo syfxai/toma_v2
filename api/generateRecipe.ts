@@ -1,5 +1,43 @@
 import { GoogleGenAI } from "@google/genai";
 
+const GEMINI_MODELS = [
+  process.env.GEMINI_MODEL,
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+].filter(Boolean) as string[];
+
+const isRateLimitError = (error: any) =>
+  error?.status === 429 ||
+  error?.message?.includes('429') ||
+  error?.message?.toLowerCase?.().includes('quota') ||
+  error?.message?.toLowerCase?.().includes('rate limit');
+
+async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
+  let lastError: any;
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      return await ai.models.generateContent({
+        model,
+        config: {
+          responseMimeType: 'application/json',
+        },
+        contents: prompt,
+      });
+    } catch (error: any) {
+      lastError = error;
+      console.error(`Gemini model ${model} failed:`, error?.message || error);
+
+      if (!isRateLimitError(error)) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -44,13 +82,7 @@ export default async function handler(req: any, res: any) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      config: {
-        responseMimeType: 'application/json',
-      },
-      contents: prompt,
-    });
+    const response = await generateRecipeJson(ai, prompt);
     
     const text = response.text;
     if (!text) {
@@ -79,7 +111,7 @@ export default async function handler(req: any, res: any) {
   } catch (error: any) {
     console.error("Error generating recipe in API:", error?.message || error);
     
-    if (error.status === 429 || error.message?.includes('429') || error.message?.includes('quota')) {
+    if (isRateLimitError(error)) {
       return res.status(429).json({ error: "RATE_LIMIT_REACHED" });
     }
 

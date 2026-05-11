@@ -8,6 +8,43 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const GEMINI_MODELS = [
+  process.env.GEMINI_MODEL,
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+].filter(Boolean) as string[];
+
+const isRateLimitError = (error: any) =>
+  error?.status === 429 ||
+  error?.message?.includes('429') ||
+  error?.message?.toLowerCase?.().includes('quota') ||
+  error?.message?.toLowerCase?.().includes('rate limit');
+
+async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
+  let lastError: any;
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      return await ai.models.generateContent({
+        model,
+        config: {
+          responseMimeType: 'application/json',
+        },
+        contents: prompt,
+      });
+    } catch (error: any) {
+      lastError = error;
+      console.error(`Gemini model ${model} failed:`, error?.message || error);
+
+      if (!isRateLimitError(error)) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError;
+}
 
 async function startServer() {
   const app = express();
@@ -70,13 +107,7 @@ async function startServer() {
       **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
       User Input: ${ingredients}`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        config: {
-          responseMimeType: 'application/json',
-        },
-        contents: prompt,
-      });
+      const response = await generateJsonWithFallback(ai, prompt);
       const text = response.text || "";
       
       try {
