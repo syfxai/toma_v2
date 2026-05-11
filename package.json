@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "tsx server.ts",
+    "build": "vite build && tsx build_server.ts",
+    "start": "NODE_ENV=production node dist/server.cjs",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@google/genai": "^1.16.0",
     "@supabase/supabase-js": "^2.45.0",
+    "express": "^5.2.1",
     "firebase": "^12.12.1",
     "form-data": "^4.0.5",
     "framer-motion": "^12.38.0",
@@ -25,11 +27,14 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.4",
+    "@types/express": "^5.0.6",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.0",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.2.4",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

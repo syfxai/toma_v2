@@ -250,6 +250,17 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     }).catch(err => {
         console.error("Mic access denied or error:", err);
         setIsLiveMode(false);
+        
+        // Inform the user in the chat
+        const errorMsg: ChatMessage = {
+          id: Date.now().toString(),
+          role: 'model',
+          text: currentLanguage === 'ms' 
+            ? "Sila benarkan akses mikrofon di browser anda untuk menggunakan fungsi suara. Jika ia masih tidak berfungsi, cuba buka aplikasi di tab baru ya! 😊" 
+            : "Please allow microphone access in your browser to use voice features. If it still doesn't work, try opening the app in a new tab! 😊",
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, errorMsg]);
     });
 
   }, [isLiveMode, isTyping, currentLanguage, isOpen]);

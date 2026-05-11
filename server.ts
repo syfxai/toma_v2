@@ -1,0 +1,148 @@
+import express from 'express';
+import { createServer as createViteServer } from 'vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { GoogleGenAI, Type } from "@google/genai";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+async function startServer() {
+  const app = express();
+  app.use(express.json({ limit: '10mb' }));
+
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY || '',
+  });
+
+  // API Routes
+  app.post('/api/chat', async (req, res) => {
+    try {
+      const { message, history, languageName } = req.body;
+      const triggerRecipeAppTool = {
+        name: "triggerRecipeApp",
+        description: "Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.",
+        parameters: {
+          type: Type.OBJECT,
+          properties: {
+            ingredients: {
+              type: Type.STRING,
+              description: "The list of ingredients or the name of the dish to generate a recipe for (e.g., 'chicken, rice' or 'Nasi Lemak').",
+            },
+          },
+          required: ["ingredients"],
+        },
+      };
+
+      const model = ai.getGenerativeModel({
+        model: 'gemini-2.0-flash', // Upgraded as requested
+        systemInstruction: `You are Chef Toma, a world-class culinary expert. 
+        **Tone:** Extremely warm, casual, and human. Act like a best friend.
+        **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish/informal Malay.
+        **Rules:** Strictly Halal. Refuse haram/syubhah items politely.
+        Language: ${languageName || 'Bahasa Melayu'}.`,
+        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+      });
+
+      const chat = model.startChat({
+        history: history || [],
+      });
+
+      const result = await chat.sendMessage(message);
+      const response = await result.response;
+      
+      res.json({
+        text: response.text(),
+        functionCalls: response.functionCalls()
+      });
+    } catch (error) {
+      console.error("Chat error:", error);
+      res.status(500).json({ error: "Failed to process chat message." });
+    }
+  });
+
+  app.post('/api/generateRecipe', async (req, res) => {
+    try {
+      const { ingredients } = req.body;
+      const model = ai.getGenerativeModel({
+        model: 'gemini-2.0-flash',
+        generationConfig: {
+          responseMimeType: 'application/json',
+        }
+      });
+
+      const prompt = `Expert Culinary AI for Malaysian home cooks. 
+      **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items. 
+      **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
+      User Input: ${ingredients}`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      res.json(JSON.parse(response.text()));
+    } catch (error) {
+      console.error("Generate error:", error);
+      res.status(500).json({ error: "Failed to generate recipe." });
+    }
+  });
+
+  app.post('/api/transcribe', async (req, res) => {
+    try {
+      const { audioBase64 } = req.body;
+      const apiKey = process.env.GROQ_API_KEY;
+      if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY is not set' });
+
+      const audioBuffer = Buffer.from(audioBase64, 'base64');
+      const audioBlob = new Blob([audioBuffer], { type: 'audio/webm' });
+
+      const formData = new FormData();
+      formData.append('file', audioBlob, 'audio.webm');
+      formData.append('model', 'whisper-large-v3-turbo');
+      formData.append('language', 'ms');
+
+      const groqResponse = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        body: formData,
+      });
+
+      const data = await groqResponse.json();
+      res.json({ text: data.text });
+    } catch (error) {
+      console.error("Transcribe error:", error);
+      res.status(500).json({ error: "Voice transcription failed." });
+    }
+  });
+
+  // Vite Integration
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'dist')));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    });
+  } else {
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'custom',
+    });
+    app.use(vite.middlewares);
+    app.get('*', async (req, res, next) => {
+      try {
+        const url = req.originalUrl;
+        const html = await vite.transformIndexHtml(url, 'index.html');
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
+  }
+
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+  });
+}
+
+startServer();
