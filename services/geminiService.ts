@@ -144,16 +144,17 @@ export const createChatSession = (languageName: string): any => {
   };
 };
 
-export const transcribeAudio = async (audioBase64: string): Promise<string> => {
+export const transcribeAudio = async (audioBase64: string, mimeType?: string): Promise<string> => {
   try {
     const response = await fetch('/api/transcribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ audioBase64 })
+      body: JSON.stringify({ audioBase64, mimeType })
     });
 
     if (!response.ok) {
-      throw new Error("Transcription failed");
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || "Transcription failed");
     }
 
     const data = await response.json();

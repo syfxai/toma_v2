@@ -224,7 +224,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                 setIsTyping(true);
                 try {
                     const base64 = await blobToBase64(audioBlob);
-                    const text = await transcribeAudio(base64);
+                    const text = await transcribeAudio(base64, audioBlob.type);
                     if (text && text.trim()) {
                         handleSendMessage(text);
                         return; // success
