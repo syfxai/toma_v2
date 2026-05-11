@@ -70,6 +70,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const latestTranscriptRef = useRef('');
   const resumeListeningTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const processingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSpokenTextRef = useRef('');
+  const suppressListeningUntilRef = useRef(0);
 
   useEffect(() => {
     const langObj = languages.find(l => l.code === currentLanguage);
@@ -158,7 +160,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   }, []);
 
   const startLiveListening = useCallback(() => {
-    if (!isLiveMode || isTyping || window.speechSynthesis.speaking) return;
+    if (!isLiveMode || isTyping || window.speechSynthesis.speaking || Date.now() < suppressListeningUntilRef.current) return;
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         const mediaRecorder = new MediaRecorder(stream);
@@ -198,9 +200,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
              
              totalFrames += 1;
 
-             // Assuming ~60fps, 120 frames = ~2.0 seconds of silence
+             // Assuming ~60fps, 55 frames = ~0.9 seconds of silence
              // Or forcefully stop after ~15 seconds of total recording (900 frames)
-             if (silenceCounter > 120 || totalFrames > 900) {
+             if (silenceCounter > 55 || totalFrames > 720) {
                  stopAndTranscribe();
                  return;
              }
@@ -225,8 +227,16 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                 try {
                     const base64 = await blobToBase64(audioBlob);
                     const text = await transcribeAudio(base64, audioBlob.type);
-                    if (text && text.trim()) {
-                        handleSendMessage(text);
+                    const cleanedText = text.trim();
+                    const lastSpoken = lastSpokenTextRef.current.trim();
+                    const isEcho = lastSpoken && (
+                        cleanedText === lastSpoken ||
+                        cleanedText.includes(lastSpoken.slice(0, 60)) ||
+                        lastSpoken.includes(cleanedText.slice(0, 60))
+                    );
+
+                    if (cleanedText && !isEcho) {
+                        handleSendMessage(cleanedText);
                         return; // success
                     }
                 } catch(e) {
@@ -240,7 +250,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             if (isLiveMode && isOpen) {
                 resumeListeningTimerRef.current = setTimeout(() => {
                     startLiveListening();
-                }, 500);
+                }, 700);
             }
         };
 
@@ -286,7 +296,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     window.speechSynthesis.cancel();
 
     // Clean text of emojis for reading
-    const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
+    const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
+    lastSpokenTextRef.current = cleanText;
     
     const detectedLang = detectTextLanguage(cleanText);
 
@@ -320,22 +331,24 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     }
 
     // TWEAK: Increase rate slightly to fix "sebutir sebutir" (robotic slow) issues
-    utterance.rate = 1.1; 
-    utterance.pitch = 1.0;
+    utterance.rate = 1.18; 
+    utterance.pitch = 1.03;
 
     utterance.onend = () => {
+        suppressListeningUntilRef.current = Date.now() + 1200;
         if (isLiveMode && isOpen) {
             resumeListeningTimerRef.current = setTimeout(() => {
                 startLiveListening();
-            }, 500); // Shorter delay for snappier conversation
+            }, 1200);
         }
     };
     
     utterance.onerror = () => {
+         suppressListeningUntilRef.current = Date.now() + 900;
          if (isLiveMode && isOpen) {
              resumeListeningTimerRef.current = setTimeout(() => {
                 startLiveListening();
-            }, 500);
+            }, 900);
          }
     };
 
