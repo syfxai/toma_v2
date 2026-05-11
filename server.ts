@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,6 +26,74 @@ const isModelUnavailableError = (error: any) =>
   error?.message?.includes('404') ||
   error?.message?.toLowerCase?.().includes('not found') ||
   error?.message?.toLowerCase?.().includes('not supported for generatecontent');
+
+const GROQ_CHAT_MODELS = [
+  process.env.GROQ_CHAT_MODEL,
+  'llama-3.3-70b-versatile',
+  'openai/gpt-oss-20b',
+].filter(Boolean) as string[];
+
+const isFallbackableGroqError = (status: number, message: string) =>
+  status === 404 ||
+  status === 429 ||
+  message.includes('not found') ||
+  message.includes('rate limit') ||
+  message.includes('quota');
+
+const toGroqMessages = (history: any[] = [], message: string, languageName?: string) => [
+  {
+    role: 'system',
+    content: `You are Chef Toma, a world-class culinary expert.
+Tone: Extremely warm, casual, and human. Act like a caring best friend who happens to be a top chef.
+Format: Chat-style, very concise, 1-3 short sentences. Use Manglish or informal Malay particles like je, lah, kan, kot when appropriate.
+Personality: Enthusiastic but grounded. Use appropriate emojis. No robotic preamble.
+Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.
+If the user explicitly asks to create, generate, or show a recipe card, call the triggerRecipeApp tool with the ingredients or dish name.`,
+  },
+  ...history.map((item: any) => ({
+    role: item.role === 'model' ? 'assistant' : 'user',
+    content: item.parts?.map((part: any) => part.text).filter(Boolean).join('\n') || '',
+  })).filter((item: any) => item.content),
+  { role: 'user', content: message },
+];
+
+async function createGroqChatCompletion(body: any) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error('GROQ_API_KEY is missing on the server');
+  }
+
+  let lastError = 'Groq chat failed.';
+
+  for (const model of GROQ_CHAT_MODELS) {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...body,
+        model,
+      }),
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (response.ok) {
+      return data;
+    }
+
+    lastError = data?.error?.message || data?.error || response.statusText || lastError;
+    console.error(`Groq chat model ${model} failed:`, response.status, lastError);
+
+    if (!isFallbackableGroqError(response.status, String(lastError).toLowerCase())) {
+      throw new Error(String(lastError));
+    }
+  }
+
+  throw new Error(String(lastError));
+}
 
 async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemini model') {
   let lastError: any;
@@ -68,41 +136,52 @@ async function startServer() {
   app.post('/api/chat', async (req, res) => {
     try {
       const { message, history, languageName } = req.body;
-      const triggerRecipeAppTool = {
-        name: "triggerRecipeApp",
-        description: "Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.",
-        parameters: {
-          type: Type.OBJECT,
-          properties: {
-            ingredients: {
-              type: Type.STRING,
-              description: "The list of ingredients or the name of the dish to generate a recipe for (e.g., 'chicken, rice' or 'Nasi Lemak').",
+      const completion = await createGroqChatCompletion({
+        messages: toGroqMessages(history, message, languageName),
+        temperature: 0.7,
+        max_completion_tokens: 300,
+        tool_choice: 'auto',
+        tools: [
+          {
+            type: 'function',
+            function: {
+              name: 'triggerRecipeApp',
+              description: 'Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.',
+              parameters: {
+                type: 'object',
+                properties: {
+                  ingredients: {
+                    type: 'string',
+                    description: "The list of ingredients or the name of the dish to generate a recipe for, for example 'chicken, rice' or 'Nasi Lemak'.",
+                  },
+                },
+                required: ['ingredients'],
+              },
             },
           },
-          required: ["ingredients"],
-        },
-      };
+        ],
+      });
 
-      const contents = [
-        ...(history || []),
-        { role: 'user', parts: [{ text: message }] },
-      ];
+      const assistantMessage = completion?.choices?.[0]?.message || {};
+      const functionCalls = (assistantMessage.tool_calls || [])
+        .filter((toolCall: any) => toolCall.type === 'function')
+        .map((toolCall: any) => {
+          let args = {};
+          try {
+            args = JSON.parse(toolCall.function?.arguments || '{}');
+          } catch {
+            args = {};
+          }
 
-      const response = await generateWithFallback(ai, {
-        config: {
-          systemInstruction: `You are Chef Toma, a world-class culinary expert. 
-          **Tone:** Extremely warm, casual, and human. Act like a best friend.
-          **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish/informal Malay.
-          **Rules:** Strictly Halal. Refuse haram/syubhah items politely.
-          Language: ${languageName || 'Bahasa Melayu'}.`,
-          tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
-        },
-        contents,
-      }, 'Gemini chat model');
+          return {
+            name: toolCall.function?.name,
+            args,
+          };
+        });
       
       res.json({
-        text: response.text || "",
-        functionCalls: response.functionCalls || []
+        text: assistantMessage.content || "",
+        functionCalls,
       });
     } catch (error) {
       console.error("Chat error:", error);
