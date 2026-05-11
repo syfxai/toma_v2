@@ -87,7 +87,7 @@ export const getFeedbackList = async (): Promise<FeedbackItem[]> => {
         ...data,
         // Convert Firestore Timestamp to ISO string for compatibility with FeedbackItem type
         created_at: data.created_at?.toDate()?.toISOString() || new Date().toISOString()
-      } as FeedbackItem;
+      } as unknown as FeedbackItem;
     });
   } catch (error) {
     console.error('Error fetching feedback list:', error);

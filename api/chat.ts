@@ -12,7 +12,7 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
     
     const triggerRecipeAppTool = {
       name: "triggerRecipeApp",
@@ -33,34 +33,35 @@ export default async function handler(req: any, res: any) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
-    const model = ai.getGenerativeModel({
+    const contents = [
+      ...(history || []),
+      { role: 'user', parts: [{ text: message }] },
+    ];
+
+    const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
-      systemInstruction: `You are Chef Toma, a world-class culinary expert. 
-      **Tone:** Extremely warm, casual, and human. Act like a caring best friend who happens to be a top chef.
-      **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish or informal Malay particles (e.g., 'je', 'lah', 'kan', 'kot') when appropriate to sound local and authentic. 
-      **Personality:** Enthusiastic but grounded. Use appropriate emojis. No robotic preamble (e.g., Avoid saying "Sebagai seorang chef...").
-      Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.`,
-      tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+      config: {
+        systemInstruction: `You are Chef Toma, a world-class culinary expert. 
+        **Tone:** Extremely warm, casual, and human. Act like a caring best friend who happens to be a top chef.
+        **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish or informal Malay particles (e.g., 'je', 'lah', 'kan', 'kot') when appropriate to sound local and authentic. 
+        **Personality:** Enthusiastic but grounded. Use appropriate emojis. No robotic preamble (e.g., Avoid saying "Sebagai seorang chef...").
+        Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.`,
+        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+      },
+      contents,
     });
-
-    const chat = model.startChat({
-      history: history || [],
-    });
-
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
     
     // Check for candidates and text
-    const text = response.text() || "";
-    const functionCalls = response.functionCalls() || [];
+    const text = response.text || "";
+    const functionCalls = response.functionCalls || [];
     
     if (!text && functionCalls.length === 0) {
       console.error("Empty response from Gemini API for chat");
       throw new Error("Maaf, Toma tidak dapat membalas sekarang.");
     }
     res.status(200).json({
-      text: response.text || "",
-      functionCalls: response.functionCalls,
+      text,
+      functionCalls,
     });
   } catch (error: any) {
     console.error("Chat API error:", error);

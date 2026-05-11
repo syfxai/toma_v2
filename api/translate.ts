@@ -15,22 +15,21 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
     const prompt = `Translate all string values in the following JSON object to ${languageName}. The context is a food recipe, so be natural and use appropriate culinary terms for that language. Do not translate keys. Respond with only the translated JSON object, maintaining the exact same structure and keys. If a value is an array of strings, translate each string in the array.
   
   JSON to translate:
   ${JSON.stringify(content, null, 2)}`;
 
-    const model = ai.getGenerativeModel({
+    const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
-      generationConfig: {
+      config: {
         responseMimeType: 'application/json'
-      }
+      },
+      contents: prompt,
     });
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const jsonText = response.text().trim();
+    const jsonText = response.text?.trim() || '';
     
     if (!jsonText) {
       console.error("Empty response from Gemini API for translation");

@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
     const prompt = `Expert Culinary AI for Malaysian home cooks.
     
@@ -44,14 +44,15 @@ export default async function handler(req: any, res: any) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
-    const response = await ai.getGenerativeModel({
+    const response = await ai.models.generateContent({
       model: 'gemini-2.0-flash',
-      generationConfig: {
+      config: {
         responseMimeType: 'application/json',
-      }
-    }).generateContent(prompt);
+      },
+      contents: prompt,
+    });
     
-    const text = response.response.text();
+    const text = response.text;
     if (!text) {
       console.error("Empty response from Gemini API");
       throw new Error("Toma tidak dapat menjana resepi buat masa ini. Sila cuba lagi.");

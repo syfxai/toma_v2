@@ -13,7 +13,7 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
-  const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
   // API Routes
   app.post('/api/chat', async (req, res) => {
@@ -34,26 +34,27 @@ async function startServer() {
         },
       };
 
-      const model = ai.getGenerativeModel({
+      const contents = [
+        ...(history || []),
+        { role: 'user', parts: [{ text: message }] },
+      ];
+
+      const response = await ai.models.generateContent({
         model: 'gemini-2.0-flash', // Upgraded as requested
-        systemInstruction: `You are Chef Toma, a world-class culinary expert. 
-        **Tone:** Extremely warm, casual, and human. Act like a best friend.
-        **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish/informal Malay.
-        **Rules:** Strictly Halal. Refuse haram/syubhah items politely.
-        Language: ${languageName || 'Bahasa Melayu'}.`,
-        tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+        config: {
+          systemInstruction: `You are Chef Toma, a world-class culinary expert. 
+          **Tone:** Extremely warm, casual, and human. Act like a best friend.
+          **Format:** Chat-style, Very Concise (1-3 short sentences). Use Manglish/informal Malay.
+          **Rules:** Strictly Halal. Refuse haram/syubhah items politely.
+          Language: ${languageName || 'Bahasa Melayu'}.`,
+          tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
+        },
+        contents,
       });
-
-      const chat = model.startChat({
-        history: history || [],
-      });
-
-      const result = await chat.sendMessage(message);
-      const response = await result.response;
       
       res.json({
-        text: response.text(),
-        functionCalls: response.functionCalls()
+        text: response.text || "",
+        functionCalls: response.functionCalls || []
       });
     } catch (error) {
       console.error("Chat error:", error);
@@ -64,21 +65,19 @@ async function startServer() {
   app.post('/api/generateRecipe', async (req, res) => {
     try {
       const { ingredients } = req.body;
-      const model = ai.getGenerativeModel({
-        model: 'gemini-2.0-flash',
-        generationConfig: {
-          responseMimeType: 'application/json',
-        }
-      });
-
       const prompt = `Expert Culinary AI for Malaysian home cooks. 
       **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items. 
       **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
       User Input: ${ingredients}`;
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        config: {
+          responseMimeType: 'application/json',
+        },
+        contents: prompt,
+      });
+      const text = response.text || "";
       
       try {
         res.json(JSON.parse(text));
