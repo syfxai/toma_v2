@@ -1,5 +1,44 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
+const GEMINI_MODELS = [
+  process.env.GEMINI_MODEL,
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-flash-latest',
+].filter(Boolean) as string[];
+
+const isFallbackableError = (error: any) =>
+  error?.status === 429 ||
+  error?.status === 404 ||
+  error?.message?.includes('429') ||
+  error?.message?.includes('404') ||
+  error?.message?.toLowerCase?.().includes('quota') ||
+  error?.message?.toLowerCase?.().includes('rate limit') ||
+  error?.message?.toLowerCase?.().includes('not found') ||
+  error?.message?.toLowerCase?.().includes('not supported for generatecontent');
+
+async function generateChatResponse(ai: GoogleGenAI, request: any) {
+  let lastError: any;
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      return await ai.models.generateContent({
+        ...request,
+        model,
+      });
+    } catch (error: any) {
+      lastError = error;
+      console.error(`Gemini chat model ${model} failed:`, error?.message || error);
+
+      if (!isFallbackableError(error)) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -38,8 +77,7 @@ export default async function handler(req: any, res: any) {
       { role: 'user', parts: [{ text: message }] },
     ];
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+    const response = await generateChatResponse(ai, {
       config: {
         systemInstruction: `You are Chef Toma, a world-class culinary expert. 
         **Tone:** Extremely warm, casual, and human. Act like a caring best friend who happens to be a top chef.
@@ -65,6 +103,6 @@ export default async function handler(req: any, res: any) {
     });
   } catch (error: any) {
     console.error("Chat API error:", error);
-    res.status(500).json({ error: "Failed to process chat message." });
+    res.status(500).json({ error: error?.message || "Failed to process chat message." });
   }
 }

@@ -115,14 +115,17 @@ export const createChatSession = (languageName: string): any => {
         });
 
         if (!response.ok) {
-          throw new Error("Chat failed");
+          const errorData = await response.json().catch(() => null);
+          throw new Error(errorData?.error || "Chat failed");
         }
 
         const data = await response.json();
 
         // Update history for next turn
         history.push({ role: 'user', parts: [{ text: message }] });
-        history.push({ role: 'model', parts: [{ text: data.text }] });
+        if (data.text) {
+          history.push({ role: 'model', parts: [{ text: data.text }] });
+        }
 
         // Return async iterator to mimic the SDK's streaming response
         // Note: Real streaming would require ReadableStream handling, 

@@ -27,21 +27,18 @@ const isModelUnavailableError = (error: any) =>
   error?.message?.toLowerCase?.().includes('not found') ||
   error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
-async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
+async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemini model') {
   let lastError: any;
 
   for (const model of GEMINI_MODELS) {
     try {
       return await ai.models.generateContent({
+        ...request,
         model,
-        config: {
-          responseMimeType: 'application/json',
-        },
-        contents: prompt,
       });
     } catch (error: any) {
       lastError = error;
-      console.error(`Gemini model ${model} failed:`, error?.message || error);
+      console.error(`${label} ${model} failed:`, error?.message || error);
 
       if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
         throw error;
@@ -50,6 +47,15 @@ async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
   }
 
   throw lastError;
+}
+
+async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
+  return generateWithFallback(ai, {
+        config: {
+          responseMimeType: 'application/json',
+        },
+        contents: prompt,
+      }, 'Gemini JSON model');
 }
 
 async function startServer() {
@@ -82,8 +88,7 @@ async function startServer() {
         { role: 'user', parts: [{ text: message }] },
       ];
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash', // Upgraded as requested
+      const response = await generateWithFallback(ai, {
         config: {
           systemInstruction: `You are Chef Toma, a world-class culinary expert. 
           **Tone:** Extremely warm, casual, and human. Act like a best friend.
@@ -93,7 +98,7 @@ async function startServer() {
           tools: [{ functionDeclarations: [triggerRecipeAppTool] }],
         },
         contents,
-      });
+      }, 'Gemini chat model');
       
       res.json({
         text: response.text || "",
