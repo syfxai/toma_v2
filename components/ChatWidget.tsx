@@ -103,25 +103,21 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   }, []);
 
   useEffect(() => {
+    if (isLiveMode && !isTyping && isOpen && !window.speechSynthesis.speaking) {
+        startLiveListening();
+    } else if (!isLiveMode) {
+        stopLiveListening();
+    }
+  }, [isLiveMode, isOpen]);
+
+  useEffect(() => {
     if (!isOpen) {
       window.speechSynthesis.cancel();
       stopLiveListening();
       setIsLiveMode(false);
       if (resumeListeningTimerRef.current) clearTimeout(resumeListeningTimerRef.current);
-    } else {
-        // If opened with auto-start live mode
-        if (startLiveOnOpen) {
-            const timer = setTimeout(() => {
-                if (!isLiveMode) {
-                    setIsLiveMode(true);
-                    setIsMuted(false);
-                    startLiveListening();
-                }
-            }, 600); 
-            return () => clearTimeout(timer);
-        }
     }
-  }, [isOpen, startLiveOnOpen]);
+  }, [isOpen]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -342,9 +338,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       
       if (newMode) {
           setIsMuted(false);
-          startLiveListening();
       } else {
-          stopLiveListening();
           window.speechSynthesis.cancel();
           if (resumeListeningTimerRef.current) clearTimeout(resumeListeningTimerRef.current);
       }
