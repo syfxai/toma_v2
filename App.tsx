@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Language, Recipe, UiText, LanguageCode, RecipeList, RecipeSearchResult } from './types';
-import { generateRecipe, translateContent } from './services/geminiService';
+import { generateRecipe, normalizeGenAIResponse, translateContent } from './services/geminiService';
 import { getGenerationCount, recordGeneration, keepAlive, getCachedRecipe, saveRecipeToCache } from './services/firebaseService';
 import { getCachedResponse, setCachedResponse } from './services/cacheService';
 import Header from './components/Header';
@@ -457,6 +457,7 @@ const App: React.FC = () => {
           setCooldown(15); // 15 seconds cooldown after API call
       } else {
           console.log("Loaded recipe from global cache");
+          generatedData = normalizeGenAIResponse(generatedData);
       }
 
       const generatedRecipe = generatedData as Recipe;

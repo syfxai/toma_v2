@@ -1,28 +1,59 @@
-import type { Recipe, RecipeList, GenAIResponse } from '../types';
+import type { Recipe, RecipeList, GenAIResponse, NutritionFacts } from '../types';
 
 const cleanCitations = (str: any) => (typeof str === 'string') ? str.replace(/\s*\[[\d,\s]+\]/g, '').trim() : str;
 
-const processResponseData = (data: any): GenAIResponse => {
+const stringifyRecipeValue = (value: any): string => {
+  if (typeof value === 'string') return cleanCitations(value);
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (!value) return '';
+
+  if (typeof value === 'object') {
+    const item = value.item || value.name || value.ingredient || value.step || value.instruction || value.nutrient;
+    const quantity = value.quantity || value.amount || value.value;
+    const unit = value.unit;
+
+    if (item && quantity && unit) return cleanCitations(`${quantity} ${unit} ${item}`);
+    if (item && quantity) return cleanCitations(`${quantity} ${item}`);
+    if (item) return cleanCitations(String(item));
+    if (value.text) return cleanCitations(String(value.text));
+  }
+
+  return cleanCitations(JSON.stringify(value));
+};
+
+const normalizeStringArray = (items: any): string[] => {
+  if (!Array.isArray(items)) return [];
+  return items.map(stringifyRecipeValue).filter(Boolean);
+};
+
+export const normalizeGenAIResponse = (data: any): GenAIResponse => {
   if (data.results && Array.isArray(data.results)) {
     data.results = data.results.map((r: any) => ({
-      title: cleanCitations(r.title),
-      description: cleanCitations(r.description)
+      title: stringifyRecipeValue(r.title),
+      description: stringifyRecipeValue(r.description)
     }));
     return data as RecipeList;
   }
 
   const recipe = data as Recipe;
-  if (recipe.recipeName) recipe.recipeName = cleanCitations(recipe.recipeName);
-  if (recipe.description) recipe.description = cleanCitations(recipe.description);
-  if (recipe.prepTime) recipe.prepTime = cleanCitations(recipe.prepTime);
-  if (recipe.cookTime) recipe.cookTime = cleanCitations(recipe.cookTime);
-  if (recipe.totalTime) recipe.totalTime = cleanCitations(recipe.totalTime);
-  if (recipe.servings) recipe.servings = cleanCitations(recipe.servings);
-  if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
-    recipe.ingredients = recipe.ingredients.map(cleanCitations);
-  }
-  if (recipe.instructions && Array.isArray(recipe.instructions)) {
-    recipe.instructions = recipe.instructions.map(cleanCitations);
+  if (recipe.recipeName) recipe.recipeName = stringifyRecipeValue(recipe.recipeName);
+  if (recipe.description) recipe.description = stringifyRecipeValue(recipe.description);
+  if (recipe.prepTime) recipe.prepTime = stringifyRecipeValue(recipe.prepTime);
+  if (recipe.cookTime) recipe.cookTime = stringifyRecipeValue(recipe.cookTime);
+  if (recipe.totalTime) recipe.totalTime = stringifyRecipeValue(recipe.totalTime);
+  if (recipe.servings) recipe.servings = stringifyRecipeValue(recipe.servings);
+  recipe.ingredients = normalizeStringArray(recipe.ingredients);
+  recipe.instructions = normalizeStringArray(recipe.instructions);
+
+  if (recipe.nutrition) {
+    const nutrition = recipe.nutrition as NutritionFacts;
+    nutrition.calories = stringifyRecipeValue(nutrition.calories);
+    nutrition.protein = stringifyRecipeValue(nutrition.protein);
+    nutrition.fat = stringifyRecipeValue(nutrition.fat);
+    nutrition.carbohydrates = stringifyRecipeValue(nutrition.carbohydrates);
+    nutrition.vitamins = normalizeStringArray(nutrition.vitamins);
+    nutrition.minerals = normalizeStringArray(nutrition.minerals);
+    nutrition.others = normalizeStringArray(nutrition.others);
   }
 
   return recipe;
@@ -45,7 +76,7 @@ export const generateRecipe = async (ingredients: string): Promise<GenAIResponse
     }
 
     const data = await response.json();
-    return processResponseData(data);
+    return normalizeGenAIResponse(data);
   } catch (error: any) {
     console.error("Error generating recipe:", error);
     throw error;
@@ -64,7 +95,7 @@ export const translateContent = async (content: object, languageName: string): P
       throw new Error("Failed to translate content.");
     }
 
-    return await response.json();
+    return normalizeGenAIResponse(await response.json());
   } catch (error) {
     console.error(`Error translating content to ${languageName}:`, error);
     throw new Error(`Failed to translate content. Please try a different language.`);
