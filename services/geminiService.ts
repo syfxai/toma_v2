@@ -1,6 +1,6 @@
 import type { Recipe, RecipeList, GenAIResponse } from '../types';
 
-const cleanCitations = (str: string) => str ? str.replace(/\s*\[[\d,\s]+\]/g, '').trim() : str;
+const cleanCitations = (str: any) => (typeof str === 'string') ? str.replace(/\s*\[[\d,\s]+\]/g, '').trim() : str;
 
 const processResponseData = (data: any): GenAIResponse => {
   if (data.results && Array.isArray(data.results)) {
