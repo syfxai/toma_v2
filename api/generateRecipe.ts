@@ -46,32 +46,35 @@ export default async function handler(req: any, res: any) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-flash-latest',
-      contents: prompt,
-    });
-    const text = response.text || "";
+    const response = await ai.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      generationConfig: {
+        responseMimeType: 'application/json',
+      }
+    }).generateContent(prompt);
+    
+    const text = response.response.text();
     if (!text) {
       console.error("Empty response from Gemini API");
       throw new Error("Toma tidak dapat menjana resepi buat masa ini. Sila cuba lagi.");
     }
     
-    // Simple JSON extraction logic for the server side
-    const match = text.match(/\{[\s\S]*\}/);
-    if (!match) {
-      console.error("Malformed AI response:", text);
-      return res.status(500).json({ error: "The kitchen returned a malformed recipe card." });
-    }
-    
     try {
-      const data = JSON.parse(match[0]);
+      const data = JSON.parse(text);
       if (data.error) {
         return res.status(400).json({ error: data.error });
       }
-
       res.status(200).json(data);
     } catch (e) {
-      console.error("JSON parse error:", e);
+      // Fallback: try to extract JSON if it was wrapped in markdown
+      const match = text.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          res.status(200).json(JSON.parse(match[0]));
+          return;
+        } catch(e2) {}
+      }
+      console.error("JSON parse error:", e, "Raw text:", text);
       res.status(500).json({ error: "Failed to parse recipe data." });
     }
   } catch (error: any) {

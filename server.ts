@@ -80,7 +80,18 @@ async function startServer() {
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      res.json(JSON.parse(response.text()));
+      const text = response.text();
+      
+      try {
+        res.json(JSON.parse(text));
+      } catch (e) {
+        const match = text.match(/\{[\s\S]*\}/);
+        if (match) {
+          res.json(JSON.parse(match[0]));
+        } else {
+          throw new Error("Failed to parse recipe data");
+        }
+      }
     } catch (error) {
       console.error("Generate error:", error);
       res.status(500).json({ error: "Failed to generate recipe." });
