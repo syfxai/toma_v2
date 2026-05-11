@@ -15,9 +15,7 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
     }
 
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    });
+    const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
 
     const prompt = `Expert Culinary AI for Malaysian home cooks.
     

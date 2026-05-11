@@ -13,9 +13,7 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY || '',
-  });
+  const ai = new GoogleGenAI(process.env.GEMINI_API_KEY || '');
 
   // API Routes
   app.post('/api/chat', async (req, res) => {
