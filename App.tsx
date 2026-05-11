@@ -473,9 +473,15 @@ const App: React.FC = () => {
       } else {
         const targetLanguage = LANGUAGES.find(l => l.code === language);
         if (targetLanguage) {
+          try {
             const translatedRecipe = await translateContent(generatedRecipe, targetLanguage.name);
             setRecipe(translatedRecipe);
             finalRecipe = translatedRecipe;
+          } catch (translationError) {
+            console.error("Translation failed, showing original recipe:", translationError);
+            setRecipe(generatedRecipe);
+            finalRecipe = generatedRecipe;
+          }
         } else {
             setRecipe(generatedRecipe); // Fallback to english
         }
