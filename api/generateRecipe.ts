@@ -2,9 +2,9 @@ import { GoogleGenAI } from "@google/genai";
 
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
-  'gemini-2.0-flash-lite',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-flash-latest',
 ].filter(Boolean) as string[];
 
 const isRateLimitError = (error: any) =>
@@ -12,6 +12,12 @@ const isRateLimitError = (error: any) =>
   error?.message?.includes('429') ||
   error?.message?.toLowerCase?.().includes('quota') ||
   error?.message?.toLowerCase?.().includes('rate limit');
+
+const isModelUnavailableError = (error: any) =>
+  error?.status === 404 ||
+  error?.message?.includes('404') ||
+  error?.message?.toLowerCase?.().includes('not found') ||
+  error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
 async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
   let lastError: any;
@@ -29,7 +35,7 @@ async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
       lastError = error;
       console.error(`Gemini model ${model} failed:`, error?.message || error);
 
-      if (!isRateLimitError(error)) {
+      if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
         throw error;
       }
     }
@@ -111,7 +117,7 @@ export default async function handler(req: any, res: any) {
   } catch (error: any) {
     console.error("Error generating recipe in API:", error?.message || error);
     
-    if (isRateLimitError(error)) {
+    if (isRateLimitError(error) || isModelUnavailableError(error)) {
       return res.status(429).json({ error: "RATE_LIMIT_REACHED" });
     }
 

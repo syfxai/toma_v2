@@ -10,9 +10,9 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
-  'gemini-2.0-flash-lite',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-flash-latest',
 ].filter(Boolean) as string[];
 
 const isRateLimitError = (error: any) =>
@@ -20,6 +20,12 @@ const isRateLimitError = (error: any) =>
   error?.message?.includes('429') ||
   error?.message?.toLowerCase?.().includes('quota') ||
   error?.message?.toLowerCase?.().includes('rate limit');
+
+const isModelUnavailableError = (error: any) =>
+  error?.status === 404 ||
+  error?.message?.includes('404') ||
+  error?.message?.toLowerCase?.().includes('not found') ||
+  error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
 async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
   let lastError: any;
@@ -37,7 +43,7 @@ async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
       lastError = error;
       console.error(`Gemini model ${model} failed:`, error?.message || error);
 
-      if (!isRateLimitError(error)) {
+      if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
         throw error;
       }
     }
