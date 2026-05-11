@@ -72,6 +72,29 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   const processingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSpokenTextRef = useRef('');
   const suppressListeningUntilRef = useRef(0);
+  const hasDetectedSpeechRef = useRef(false);
+
+  const looksLikeNoiseTranscript = (text: string): boolean => {
+    const cleaned = text.trim().toLowerCase();
+    if (!cleaned) return true;
+    if (cleaned.length < 5) return true;
+    if (cleaned.split(/\s+/).length < 2 && cleaned.length < 10) return true;
+
+    const noisePhrases = [
+      'terima kasih',
+      'thank you',
+      'thanks',
+      'you',
+      'bye',
+      'okay',
+      'ok',
+      'hmm',
+      'um',
+      'uh',
+    ];
+
+    return noisePhrases.includes(cleaned.replace(/[.!?]/g, ''));
+  };
 
   useEffect(() => {
     const langObj = languages.find(l => l.code === currentLanguage);
@@ -166,6 +189,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
         const mediaRecorder = new MediaRecorder(stream);
         mediaRecorderRef.current = mediaRecorder;
         audioChunksRef.current = [];
+        hasDetectedSpeechRef.current = false;
 
         // Audio Visualizer & VAD Setup
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -192,8 +216,11 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
              setAudioLevel(Math.min(100, Math.round((avg / 60) * 100)));
              
              // Volume-based Voice Activity Detection (VAD) - Increased threshold to 15 to ignore static
-             if (avg > 15) { 
+             if (avg > 22) { 
                  silenceCounter = 0;
+                 if (totalFrames > 8) {
+                    hasDetectedSpeechRef.current = true;
+                 }
              } else { 
                  silenceCounter += 1;
              }
@@ -202,7 +229,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
              // Assuming ~60fps, 55 frames = ~0.9 seconds of silence
              // Or forcefully stop after ~15 seconds of total recording (900 frames)
-             if (silenceCounter > 55 || totalFrames > 720) {
+             if ((hasDetectedSpeechRef.current && silenceCounter > 55) || totalFrames > 720) {
                  stopAndTranscribe();
                  return;
              }
@@ -221,7 +248,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             setIsLiveListening(false);
             const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType || 'audio/webm' });
             
-            if (audioChunksRef.current.length > 0) {
+            if (audioChunksRef.current.length > 0 && hasDetectedSpeechRef.current) {
                 setLiveTranscript(currentLanguage === 'ms' ? 'Menterjemah Groq...' : 'Transcribing...');
                 setIsTyping(true);
                 try {
@@ -235,7 +262,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                         lastSpoken.includes(cleanedText.slice(0, 60))
                     );
 
-                    if (cleanedText && !isEcho) {
+                    if (cleanedText && !isEcho && !looksLikeNoiseTranscript(cleanedText)) {
                         handleSendMessage(cleanedText);
                         return; // success
                     }
@@ -250,11 +277,11 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
             if (isLiveMode && isOpen) {
                 resumeListeningTimerRef.current = setTimeout(() => {
                     startLiveListening();
-                }, 700);
+                }, 1500);
             }
         };
 
-        mediaRecorder.start(500);
+        mediaRecorder.start(250);
         updateLevel(); // Start visualizer & VAD
 
     }).catch(err => {
@@ -335,20 +362,20 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     utterance.pitch = 1.0;
 
     utterance.onend = () => {
-        suppressListeningUntilRef.current = Date.now() + 1200;
+        suppressListeningUntilRef.current = Date.now() + 2200;
         if (isLiveMode && isOpen) {
             resumeListeningTimerRef.current = setTimeout(() => {
                 startLiveListening();
-            }, 1200);
+            }, 2200);
         }
     };
     
     utterance.onerror = () => {
-         suppressListeningUntilRef.current = Date.now() + 900;
+         suppressListeningUntilRef.current = Date.now() + 1800;
          if (isLiveMode && isOpen) {
              resumeListeningTimerRef.current = setTimeout(() => {
                 startLiveListening();
-            }, 900);
+            }, 1800);
          }
     };
 
