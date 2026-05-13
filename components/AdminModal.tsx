@@ -8,15 +8,17 @@ interface AdminModalProps {
   onClose: () => void;
 }
 
+const ITEMS_PER_PAGE = 5;
+
 const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
   const [pin, setPin] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // HARDCODED PIN - Tukar ini jika mahu password lain
-  const SECRET_PIN = "2024";
+  const SECRET_PIN = import.meta.env.VITE_ADMIN_PIN || "2024";
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +34,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
+    setCurrentPage(1);
     try {
       const data = await getFeedbackList();
       setFeedbackList(data);
@@ -42,6 +45,12 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
       setIsLoading(false);
     }
   };
+
+  const totalPages = Math.ceil(feedbackList.length / ITEMS_PER_PAGE);
+  const paginatedList = feedbackList.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   if (!isAuthenticated) {
     return (
@@ -117,7 +126,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
             <div className="flex justify-center items-center h-full text-gray-500">No feedback yet.</div>
           ) : (
             <div className="grid gap-4">
-              {feedbackList.map((item) => (
+              {paginatedList.map((item) => (
                 <div key={item.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-2">
@@ -159,6 +168,32 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
             </div>
           )}
         </div>
+
+        {/* Pagination Footer */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between shrink-0">
+            <span className="text-sm text-gray-500">
+              Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              &nbsp;({feedbackList.length} total)
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors"
+              >
+                ← Back
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed font-bold transition-colors"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

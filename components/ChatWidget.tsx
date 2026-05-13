@@ -579,6 +579,41 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
               </div>
             </div>
           ))}
+          {messages.length <= 1 && (
+            <div className="mt-2 mb-1">
+              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-xs text-emerald-800">
+                <p className="font-bold text-emerald-700 mb-2 flex items-center gap-1">
+                  💡 {currentLanguage === 'ms' ? 'Tips — Tanya Toma:' : 'Tips — Try asking Toma:'}
+                </p>
+                <ul className="space-y-1.5">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-500 mt-0.5">🔥</span>
+                    <span>
+                      {currentLanguage === 'ms'
+                        ? <><strong>"Resepi ayam 200 kalori"</strong> — Toma akan jana resepi dalam had kalori itu.</>
+                        : <><strong>"Chicken recipe 200 calories"</strong> — Toma generates a recipe within that calorie limit.</>}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-500 mt-0.5">👨‍👩‍👧‍👦</span>
+                    <span>
+                      {currentLanguage === 'ms'
+                        ? <><strong>"Nasi goreng untuk 100 orang"</strong> — Toma kira sukatan bahan dengan tepat.</>
+                        : <><strong>"Fried rice for 100 people"</strong> — Toma calculates exact ingredient amounts.</>}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-500 mt-0.5">🥗</span>
+                    <span>
+                      {currentLanguage === 'ms'
+                        ? <><strong>"Resepi rendah karbohidrat"</strong> — Toma cadangkan pilihan sihat.</>
+                        : <><strong>"Low carb recipe ideas"</strong> — Toma suggests healthy alternatives.</>}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 

@@ -1,10 +1,9 @@
-import express from 'express';
+﻿import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
-import fs from 'fs';
 
 dotenv.config();
 
@@ -49,12 +48,9 @@ Tone: Very warm, kind, and natural. Speak like a helpful friend who is happy to 
 Malay style: Use clear, natural Bahasa Melayu. Light casual words like nak, boleh, je, lah are okay, but keep grammar tidy.
 Format: 1 short sentence by default. Use 2 short sentences only when needed. No lists unless requested.
 Avoid: Do not repeat the user's words back. Do not ask two questions in one reply. Do not use awkward phrasing like "apa yang masak apa". Do not be sarcastic or scold the user.
-
-CRITICAL BEHAVIOR:
-1. When the user gives general ingredients (e.g., "ayam", "resepi khairul aming") WITHOUT explicitly asking for a recipe card, DO NOT call the tool. Instead, briefly suggest 2-3 dish ideas and ask which one they prefer.
-2. ONLY if the user explicitly asks to create, generate, or show a recipe card, call the triggerRecipeApp tool.
-3. When calling triggerRecipeApp, pass the dish/ingredients ALONG WITH any user constraints (like "200 calories", "untuk 100 orang", "kurang pedas") inside the ingredients parameter.
-Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.`,
+When the user is unsure what to cook, reassure them briefly, then suggest one simple next step or ask one clear question.
+Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.
+If the user explicitly asks to create, generate, or show a recipe card, call the triggerRecipeApp tool with the ingredients or dish name.`,
   },
   ...history.map((item: any) => ({
     role: item.role === 'model' ? 'assistant' : 'user',
@@ -104,15 +100,15 @@ async function createGroqChatCompletion(body: any) {
 async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemini model') {
   let lastError: any;
 
-  for (const modelName of GEMINI_MODELS) {
+  for (const model of GEMINI_MODELS) {
     try {
       return await ai.models.generateContent({
         ...request,
-        model: modelName,
+        model,
       });
     } catch (error: any) {
       lastError = error;
-      console.error(`${label} ${modelName} failed:`, error?.message || error);
+      console.error(`${label} ${model} failed:`, error?.message || error);
 
       if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
         throw error;
@@ -136,8 +132,7 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.GEMINI_TRANSLATE_API_KEY || '' });
-  const translateAi = new GoogleGenAI({ apiKey: process.env.GEMINI_TRANSLATE_API_KEY || process.env.GEMINI_API_KEY || '' });
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
   // API Routes
   app.post('/api/chat', async (req, res) => {
@@ -159,7 +154,7 @@ async function startServer() {
                 properties: {
                   ingredients: {
                     type: 'string',
-                    description: "The list of ingredients, dish name, and ANY specific instructions like '200 calories', 'for 100 pax', or 'less spicy'.",
+                    description: "The list of ingredients or the name of the dish to generate a recipe for, for example 'chicken, rice' or 'Nasi Lemak'.",
                   },
                 },
                 required: ['ingredients'],
@@ -199,49 +194,10 @@ async function startServer() {
   app.post('/api/generateRecipe', async (req, res) => {
     try {
       const { ingredients } = req.body;
-      const prompt = `You are an Expert Culinary AI and Nutritionist for Malaysian home cooks.
-
-**MISSION:** Generate a high-quality, authentic Malaysian recipe OR suggest recipe ideas based on the user's input.
-
-**STRICT RULES:**
-1. **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items.
-2. **POLITE REFUSAL:** If the input is non-halal, return ONLY: { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
-3. **SCALING:** If the user specifies a number of people, calculate EXACT ingredient measurements.
-4. **HEALTH & CALORIES:** If the user specifies a calorie limit or health constraint, adjust the ingredients strictly to that limit.
-5. **NUTRITION:** Always calculate and provide accurate nutritional estimates. For low-calorie or diet recipes, the healthScore MUST be "healthy".
-
-**OUTPUT FORMAT 1 (GENERAL SEARCH):**
-If the user input is a general ingredient (e.g. "ayam", "resepi khairul aming") WITHOUT specific instructions, return a list of 2-4 recipe suggestions:
-{
-  "results": [
-    { "title": "Ayam Masak Merah", "description": "Classic sweet and spicy chicken." }
-  ]
-}
-
-**OUTPUT FORMAT 2 (SPECIFIC RECIPE):**
-If the user input is a specific dish, OR contains specific constraints (like "200 kalori", "untuk 100 orang"), return the FULL recipe:
-{
-  "recipeName": "...",
-  "description": "...",
-  "prepTime": "...",
-  "cookTime": "...",
-  "totalTime": "...",
-  "servings": "...",
-  "ingredients": ["...", "..."],
-  "instructions": ["...", "..."],
-  "nutrition": {
-    "calories": "...",
-    "protein": "...",
-    "fat": "...",
-    "carbohydrates": "...",
-    "vitamins": ["..."],
-    "minerals": ["..."],
-    "others": ["..."],
-    "healthScore": "healthy" | "unhealthy" // ALWAYS use 'healthy' for diet/low-calorie requests. Only use 'unhealthy' for exceptionally unhealthy foods.
-  }
-}
-
-User Input: ${ingredients}`;
+      const prompt = `Expert Culinary AI for Malaysian home cooks. 
+      **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items. 
+      **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
+      User Input: ${ingredients}`;
 
       const response = await generateJsonWithFallback(ai, prompt);
       const text = response.text || "";
@@ -259,30 +215,6 @@ User Input: ${ingredients}`;
     } catch (error) {
       console.error("Generate error:", error);
       res.status(500).json({ error: "Failed to generate recipe." });
-    }
-  });
-
-  // ✅ TRANSLATE ROUTE — was missing, causing "Translation failed" error
-  app.post('/api/translate', async (req, res) => {
-    try {
-      const { content, languageName } = req.body;
-      if (!content || !languageName) {
-        return res.status(400).json({ error: 'Content and languageName are required' });
-      }
-
-      const prompt = `Translate all string values in the following JSON object to ${languageName}. The context is a food recipe, so be natural and use appropriate culinary terms for that language. Do not translate keys. Respond with only the translated JSON object, maintaining the exact same structure and keys. If a value is an array of strings, translate each string in the array.
-
-JSON to translate:
-${JSON.stringify(content, null, 2)}`;
-
-      const response = await generateJsonWithFallback(translateAi, prompt);
-      const jsonText = response.text?.trim() || '';
-
-      if (!jsonText) throw new Error('Empty translation response');
-      res.status(200).json(JSON.parse(jsonText));
-    } catch (error) {
-      console.error('Translate error:', error);
-      res.status(500).json({ error: 'Failed to translate content. Please try again.' });
     }
   });
 
@@ -317,7 +249,7 @@ ${JSON.stringify(content, null, 2)}`;
   // Vite Integration
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'dist')));
-    app.get(/.*/, (req, res) => {
+    app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'dist', 'index.html'));
     });
   } else {
@@ -326,11 +258,10 @@ ${JSON.stringify(content, null, 2)}`;
       appType: 'custom',
     });
     app.use(vite.middlewares);
-    app.get(/.*/, async (req, res, next) => {
+    app.get('*', async (req, res, next) => {
       try {
         const url = req.originalUrl;
-        const template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8');
-        const html = await vite.transformIndexHtml(url, template);
+        const html = await vite.transformIndexHtml(url, 'index.html');
         res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
       } catch (e) {
         vite.ssrFixStacktrace(e as Error);
