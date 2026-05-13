@@ -50,7 +50,7 @@ Format: 1 short sentence by default. Use 2 short sentences only when needed. No 
 Avoid: Do not repeat the user's words back. Do not ask two questions in one reply. Do not use awkward phrasing like "apa yang masak apa". Do not be sarcastic or scold the user.
 When the user is unsure what to cook, reassure them briefly, then suggest one simple next step or ask one clear question.
 Language: ${languageName || 'Bahasa Melayu'}. Detect user language and adapt seamlessly.
-If the user explicitly asks to create, generate, or show a recipe card, call the triggerRecipeApp tool with the ingredients or dish name.`,
+If the user mentions a dish name, a list of ingredients, a chef's name (like Khairul Aming), or asks for recipe suggestions, call the triggerRecipeApp tool immediately.`,
   },
   ...history.map((item: any) => ({
     role: item.role === 'model' ? 'assistant' : 'user',
@@ -148,13 +148,13 @@ async function startServer() {
             type: 'function',
             function: {
               name: 'triggerRecipeApp',
-              description: 'Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.',
+              description: 'Triggers the main recipe generator app with a search query. Use this for ANY recipe request, chef name (e.g. Khairul Aming), or ingredient list.',
               parameters: {
                 type: 'object',
                 properties: {
                   ingredients: {
                     type: 'string',
-                    description: "The list of ingredients or the name of the dish to generate a recipe for, for example 'chicken, rice' or 'Nasi Lemak'.",
+                    description: "The search query, e.g. 'Khairul Aming', 'Ayam', or 'Nasi Lemak'.",
                   },
                 },
                 required: ['ingredients'],
@@ -197,6 +197,43 @@ async function startServer() {
       const prompt = `Expert Culinary AI for Malaysian home cooks. 
       **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items. 
       **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
+
+      **DETERMINE THE SCENARIO:**
+
+      SCENARIO A: The user is asking for a SPECIFIC dish or providing a SPECIFIC list of ingredients.
+      Examples: "Resepi Nasi Lemak Sambal Sotong", "Ayam, kicap, halia, bawang", "How to make Roti Canai".
+      ACTION: Return ONE detailed recipe in this JSON format:
+      {
+        "recipeName": "...",
+        "description": "...",
+        "prepTime": "...",
+        "cookTime": "...",
+        "totalTime": "...",
+        "servings": "...",
+        "ingredients": ["...", "..."],
+        "instructions": ["...", "..."],
+        "nutrition": {
+          "calories": "...",
+          "protein": "...",
+          "fat": "...",
+          "carbohydrates": "...",
+          "vitamins": ["..."],
+          "minerals": ["..."],
+          "others": ["..."],
+          "healthScore": "healthy" | "unhealthy"
+        }
+      }
+
+      SCENARIO B: The user is searching GENERALLY, by Chef name, or by broad category.
+      Examples: "Khairul Aming", "Ayam", "Resepi Diet", "Masakan Kampung", "Village Cooking", "Chef Wan".
+      ACTION: Return a LIST of 5-8 relevant recipe titles in this JSON format:
+      {
+        "results": [
+          { "title": "Specific Dish Name (e.g. Sambal Nyet Khairul Aming)", "description": "A very brief one-sentence hook." },
+          ...
+        ]
+      }
+
       User Input: ${ingredients}`;
 
       const response = await generateJsonWithFallback(ai, prompt);
