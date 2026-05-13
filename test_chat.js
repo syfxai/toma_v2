@@ -1,8 +1,9 @@
 import { GoogleGenAI, Type } from '@google/genai';
+import 'dotenv/config';
 
 async function testChat() {
     const ai = new GoogleGenAI({
-        apiKey: 'AIzaSyBft6Nm2rNJ4yOHyWW6RcxWXdMAsNgikLA'
+        apiKey: process.env.GEMINI_API_KEY
     });
     
     const triggerRecipeAppTool = {

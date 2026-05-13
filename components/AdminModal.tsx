@@ -15,8 +15,9 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // HARDCODED PIN - Tukar ini jika mahu password lain
-  const SECRET_PIN = "2024";
+  // PIN dari environment variable
+  const SECRET_PIN = import.meta.env.VITE_ADMIN_PIN || "2024";
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
