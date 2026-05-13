@@ -221,7 +221,7 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
       </div>
       
       {/* Hidden components for clean exports */}
-      <div className="absolute -left-[9999px] -top-[9999px]">
+      <div className="fixed top-0 left-0 -z-50 opacity-0 pointer-events-none" aria-hidden="true">
         {/* Pass the generated image to the export component so it gets included */}
         <RecipeImageExport 
             recipe={recipe} 

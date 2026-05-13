@@ -19,16 +19,22 @@ const isModelUnavailableError = (error: any) =>
   error?.message?.toLowerCase?.().includes('not found') ||
   error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
-async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
+async function generateRecipeJson(ai: GoogleGenAI, prompt: string, useSearch: boolean) {
   let lastError: any;
 
   for (const model of GEMINI_MODELS) {
     try {
+      const config: any = {
+        responseMimeType: 'application/json',
+      };
+      
+      if (useSearch) {
+        config.tools = [{ googleSearch: {} }];
+      }
+
       return await ai.models.generateContent({
         model,
-        config: {
-          responseMimeType: 'application/json',
-        },
+        config,
         contents: prompt,
       });
     } catch (error: any) {
@@ -50,7 +56,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { ingredients } = req.body;
+    const { ingredients, forceSingle } = req.body;
     if (!ingredients) {
       return res.status(400).json({ error: 'Ingredients are required' });
     }
@@ -60,6 +66,8 @@ export default async function handler(req: any, res: any) {
     }
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+    const isGeneralQuery = forceSingle ? false : (/resepi|recipe|chef|aming|asli|original|betul|cara|nom/i.test(ingredients) || ingredients.split(',').length <= 2);
 
     const prompt = `Expert Culinary AI for Malaysian home cooks.
     
@@ -72,6 +80,10 @@ export default async function handler(req: any, res: any) {
     - **Single Dish/Ingredients:** Create a logical, delicious Malaysian dish. Creative name/description.
     - **Collection:** 15-25 distinct titles + short descriptions.
     
+    ${isGeneralQuery 
+      ? "CRITICAL RULE: The user provided a general query or asked for a chef. You MUST return a Collection/List of 15-25 recipes matching the query. NEVER return a Single Dish." 
+      : "CRITICAL RULE: You MUST return a Single Dish/Ingredients recipe. NEVER return a Collection/List."}
+    
     **SPECS:** Clear steps, estimated nutrition (with mg/µg for vitamins/minerals), English JSON.
     
     **OUTPUT FORMAT:**
@@ -82,13 +94,13 @@ export default async function handler(req: any, res: any) {
 
     // OPTIMIZATION: Only use Google Search tool if the user explicitly asks for a recipe, chef, or authentic dish.
     // Passing an empty tools array causes SDK errors, so we only include it when needed.
-    const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
+    const needsAuthenticRecipe = isGeneralQuery;
 
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
-    const response = await generateRecipeJson(ai, prompt);
+    const response = await generateRecipeJson(ai, prompt, needsAuthenticRecipe);
     
     const text = response.text;
     if (!text) {

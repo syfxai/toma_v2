@@ -59,12 +59,12 @@ export const normalizeGenAIResponse = (data: any): GenAIResponse => {
   return recipe;
 };
 
-export const generateRecipe = async (ingredients: string): Promise<GenAIResponse> => {
+export const generateRecipe = async (ingredients: string, forceSingle: boolean = false): Promise<GenAIResponse> => {
   try {
     const response = await fetch('/api/generateRecipe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ingredients })
+      body: JSON.stringify({ ingredients, forceSingle })
     });
 
     if (!response.ok) {

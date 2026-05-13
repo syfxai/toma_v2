@@ -407,13 +407,13 @@ const App: React.FC = () => {
     }
   }, [language, originalRecipe]);
 
-  const generateRecipeLogic = useCallback(async (inputIngredients: string) => {
+  const generateRecipeLogic = useCallback(async (inputIngredients: string, forceSingle: boolean = false) => {
     if (!inputIngredients.trim()) {
       setError(uiText.errorIngredients);
       return;
     }
     
-    const isSearch = /resepi|recipe|cara|how to|masak|buat/i.test(inputIngredients) || inputIngredients.split(',').length <= 2;
+    const isSearch = !forceSingle && (/resepi|recipe|cara|how to|masak|buat|ayam|daging|ikan|telur|chef/i.test(inputIngredients) || inputIngredients.split(',').length <= 2);
     setLoadingType(isSearch ? 'search' : 'generate');
 
     setShowTips(false);
@@ -441,7 +441,7 @@ const App: React.FC = () => {
       
       if (!generatedData) {
           // If not in cache, call API
-          generatedData = await generateRecipe(inputIngredients);
+          generatedData = await generateRecipe(inputIngredients, forceSingle);
           
           // Check if it's a list or a single recipe
           if ('results' in generatedData) {
@@ -530,17 +530,8 @@ const App: React.FC = () => {
   };
 
   const handleRecipeSelect = (selected: RecipeSearchResult) => {
-      // When selecting from list, treat it as a new generation request for that specific title
-      // But we can keep the list visible in background or just replace it?
-      // User asked for "Back button", so we should probably hide list and show recipe, then allow back.
-      // Actually, simplest is to just call generateRecipeLogic with the title.
-      // BUT we need to handle "Back".
-      // Let's just generate it. If user wants back, they can search again? 
-      // Or better: We can store the list in state, and if we are viewing a recipe that came from a list, show back button.
-      // For now, let's just generate. The "Back" button logic requires more complex state management (navigation stack).
-      // Let's implement a simple "Back to Results" if recipeList is present.
-      
-      generateRecipeLogic(selected.title);
+      // Generate specific recipe from the list
+      generateRecipeLogic(selected.title, true);
   };
 
   const handleBackToResults = () => {
