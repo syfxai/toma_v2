@@ -437,7 +437,9 @@ const App: React.FC = () => {
           .join('-');
       const recipeId = normalized || inputIngredients.toLowerCase().trim().replace(/[^a-z0-9]/g, '-').substring(0, 100);
 
-      let generatedData = await getCachedRecipe(recipeId);
+      // Skip cache for general queries — always fetch fresh list from AI
+      const isGeneralQuery = !forceSingle && (/resepi|recipe|chef|aming|asli|original|betul|cara|nom/i.test(inputIngredients) || inputIngredients.split(',').length <= 2);
+      let generatedData = isGeneralQuery ? null : await getCachedRecipe(recipeId);
       
       if (!generatedData) {
           // If not in cache, call API

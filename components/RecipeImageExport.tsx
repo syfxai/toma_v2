@@ -1,8 +1,6 @@
 
 import React, { forwardRef } from 'react';
 import type { Recipe, ExportImageLayout, UiText } from '../types';
-import ClockIcon from './icons/ClockIcon';
-import UsersIcon from './icons/UsersIcon';
 
 interface RecipeImageExportProps {
   recipe: Recipe;
@@ -10,135 +8,260 @@ interface RecipeImageExportProps {
   uiText: UiText;
 }
 
-const RecipeInfoItem: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
-  <div className="flex flex-col items-center text-center">
-    <div className="text-emerald-600">{icon}</div>
-    <p className="mt-1 text-xs font-bold uppercase text-gray-500 tracking-wider">{label}</p>
-    <p className="text-sm text-gray-800">{value}</p>
-  </div>
-);
-
 const RecipeImageExport = forwardRef<HTMLDivElement, RecipeImageExportProps>(({ recipe, layout = 'desktop', uiText }, ref) => {
   const isMobile = layout === 'mobile';
+  const width = isMobile ? 450 : 800;
+  const padding = isMobile ? 32 : 48;
 
-  const getContainerClasses = () => {
-    const baseClasses = "bg-white text-gray-800";
-    if (isMobile) {
-      return `${baseClasses} w-[450px] p-8`;
-    }
-    // Desktop image export
-    return `${baseClasses} w-[800px] p-12`;
+  const s = {
+    container: {
+      background: '#ffffff',
+      color: '#1f2937',
+      width: `${width}px`,
+      padding: `${padding}px`,
+      fontFamily: "'Segoe UI', Arial, sans-serif",
+      boxSizing: 'border-box' as const,
+    },
+    header: {
+      textAlign: 'center' as const,
+      marginBottom: '28px',
+    },
+    title: {
+      fontSize: isMobile ? '26px' : '32px',
+      fontWeight: 700,
+      color: '#059669',
+      marginBottom: '8px',
+      lineHeight: 1.2,
+    },
+    description: {
+      fontSize: '14px',
+      color: '#6b7280',
+      fontStyle: 'italic',
+      maxWidth: '600px',
+      margin: '0 auto',
+      lineHeight: 1.5,
+    },
+    infoRow: {
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      borderTop: '1px solid #e5e7eb',
+      borderBottom: '1px solid #e5e7eb',
+      padding: '16px 0',
+      margin: '20px 0',
+    },
+    infoItem: {
+      textAlign: 'center' as const,
+    },
+    infoLabel: {
+      fontSize: '10px',
+      fontWeight: 700,
+      textTransform: 'uppercase' as const,
+      color: '#9ca3af',
+      letterSpacing: '0.05em',
+      marginBottom: '4px',
+    },
+    infoValue: {
+      fontSize: '13px',
+      color: '#1f2937',
+      fontWeight: 600,
+    },
+    sectionTitle: {
+      fontSize: isMobile ? '16px' : '18px',
+      fontWeight: 600,
+      color: '#065f46',
+      borderBottom: '2px solid #6ee7b7',
+      paddingBottom: '6px',
+      marginBottom: '12px',
+    },
+    listItem: {
+      fontSize: '13px',
+      color: '#374151',
+      marginBottom: '6px',
+      lineHeight: 1.5,
+    },
+    section: {
+      marginTop: '20px',
+    },
+    nutritionGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gap: '8px',
+      marginBottom: '16px',
+    },
+    nutritionCell: {
+      textAlign: 'center' as const,
+      padding: '8px',
+      background: '#f9fafb',
+      borderRadius: '6px',
+      border: '1px solid #e5e7eb',
+    },
+    nutritionLabel: {
+      fontSize: '9px',
+      fontWeight: 700,
+      textTransform: 'uppercase' as const,
+      color: '#6b7280',
+      marginBottom: '3px',
+    },
+    nutritionValue: {
+      fontSize: '12px',
+      fontWeight: 700,
+      color: '#111827',
+    },
+    microGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: '8px',
+      fontSize: '11px',
+    },
+    microLabel: {
+      fontWeight: 700,
+      color: '#059669',
+      marginBottom: '3px',
+    },
+    microValue: {
+      color: '#6b7280',
+      lineHeight: 1.4,
+    },
+    healthTip: {
+      marginTop: '12px',
+      padding: '10px 14px',
+      background: '#ecfdf5',
+      borderRadius: '8px',
+      color: '#065f46',
+      fontSize: '12px',
+      fontWeight: 500,
+      border: '1px solid #d1fae5',
+    },
+    disclaimer: {
+      marginTop: '8px',
+      fontSize: '10px',
+      color: '#9ca3af',
+      fontStyle: 'italic',
+      textAlign: 'center' as const,
+    },
+    footer: {
+      marginTop: '28px',
+      paddingTop: '16px',
+      borderTop: '1px solid #e5e7eb',
+      textAlign: 'center' as const,
+    },
+    footerTitle: {
+      fontSize: '20px',
+      fontWeight: 700,
+      color: '#059669',
+    },
+    footerSub: {
+      fontSize: '12px',
+      color: '#9ca3af',
+      marginTop: '4px',
+    },
   };
-  const containerClasses = getContainerClasses();
-
-  const titleClasses = isMobile
-    ? "text-3xl"
-    : "text-4xl";
-  const sectionTitleClasses = isMobile
-    ? "text-xl"
-    : "text-2xl";
 
   return (
-    <div 
-      ref={ref} 
-      className={containerClasses}
-      style={{ fontFamily: "'Poppins', sans-serif" }}
-    >
-      <div className="text-center mb-8">
-        <h1 className={`font-bold text-emerald-700 mb-2 ${titleClasses}`}>{recipe.recipeName}</h1>
-        <p className="text-gray-600 italic max-w-2xl mx-auto">{recipe.description}</p>
+    <div ref={ref} style={s.container}>
+      {/* Header */}
+      <div style={s.header}>
+        <div style={s.title}>{recipe.recipeName}</div>
+        <div style={s.description}>{recipe.description}</div>
       </div>
 
-      <div className="my-8 py-4 border-y border-gray-200 flex justify-around items-center">
-        <RecipeInfoItem icon={<ClockIcon className="w-6 h-6" />} label={uiText.recipePrepTime} value={recipe.prepTime} />
-        <RecipeInfoItem icon={<ClockIcon className="w-6 h-6" />} label={uiText.recipeCookTime} value={recipe.cookTime} />
-        <RecipeInfoItem icon={<UsersIcon className="w-6 h-6" />} label={uiText.recipeServings} value={recipe.servings} />
+      {/* Info Row */}
+      <div style={s.infoRow}>
+        <div style={s.infoItem}>
+          <div style={s.infoLabel}>{uiText.recipePrepTime}</div>
+          <div style={s.infoValue}>{recipe.prepTime}</div>
+        </div>
+        <div style={s.infoItem}>
+          <div style={s.infoLabel}>{uiText.recipeCookTime}</div>
+          <div style={s.infoValue}>{recipe.cookTime}</div>
+        </div>
+        <div style={s.infoItem}>
+          <div style={s.infoLabel}>{uiText.recipeTotalTime}</div>
+          <div style={s.infoValue}>{recipe.totalTime}</div>
+        </div>
+        <div style={s.infoItem}>
+          <div style={s.infoLabel}>{uiText.recipeServings}</div>
+          <div style={s.infoValue}>{recipe.servings}</div>
+        </div>
       </div>
 
-      <div>
-        <h2 className={`font-semibold mb-4 border-b-2 border-emerald-300 pb-2 text-emerald-800 ${sectionTitleClasses}`}>{uiText.recipeIngredients}</h2>
-        <ul className="list-disc list-inside space-y-2 text-gray-700 text-sm">
-          {recipe.ingredients.map((ingredient, index) => (
-            <li key={`ing-${index}`}>{ingredient}</li>
+      {/* Ingredients */}
+      <div style={s.section}>
+        <div style={s.sectionTitle}>{uiText.recipeIngredients}</div>
+        <ul style={{ listStyle: 'disc', paddingLeft: '18px', margin: 0 }}>
+          {recipe.ingredients.map((ing, i) => (
+            <li key={i} style={s.listItem}>{ing}</li>
           ))}
         </ul>
       </div>
 
-      <div className="mt-6">
-          <h2 className={`font-semibold mb-4 border-b-2 border-emerald-300 pb-2 text-emerald-800 ${sectionTitleClasses}`}>{uiText.recipeInstructions}</h2>
-          <ol className="list-decimal list-outside space-y-2 text-gray-700 text-sm leading-relaxed pl-4">
-              {recipe.instructions.map((step, index) => (
-                  <li key={`inst-${index}`}>{step}</li>
-              ))}
-          </ol>
+      {/* Instructions */}
+      <div style={s.section}>
+        <div style={s.sectionTitle}>{uiText.recipeInstructions}</div>
+        <ol style={{ listStyle: 'decimal', paddingLeft: '18px', margin: 0 }}>
+          {recipe.instructions.map((step, i) => (
+            <li key={i} style={s.listItem}>{step}</li>
+          ))}
+        </ol>
       </div>
 
+      {/* Nutrition */}
       {recipe.nutrition && (
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <h2 className={`font-semibold mb-4 text-emerald-800 ${sectionTitleClasses}`}>{uiText.nutritionTitle}</h2>
-          
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
-              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.caloriesLabel}</p>
-              <p className="text-sm font-bold">{recipe.nutrition.calories}</p>
-            </div>
-            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
-              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.proteinLabel}</p>
-              <p className="text-sm font-bold">{recipe.nutrition.protein}</p>
-            </div>
-            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
-              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.fatLabel}</p>
-              <p className="text-sm font-bold">{recipe.nutrition.fat}</p>
-            </div>
-            <div className="text-center p-2 bg-gray-50 rounded border border-gray-100">
-              <p className="text-[10px] font-bold uppercase text-gray-500">{uiText.carbsLabel}</p>
-              <p className="text-sm font-bold">{recipe.nutrition.carbohydrates}</p>
-            </div>
+        <div style={{ ...s.section, marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
+          <div style={s.sectionTitle}>{uiText.nutritionTitle}</div>
+          <div style={s.nutritionGrid}>
+            {[
+              { label: uiText.caloriesLabel, value: recipe.nutrition.calories },
+              { label: uiText.proteinLabel, value: recipe.nutrition.protein },
+              { label: uiText.fatLabel, value: recipe.nutrition.fat },
+              { label: uiText.carbsLabel, value: recipe.nutrition.carbohydrates },
+            ].map(({ label, value }) => (
+              <div key={label} style={s.nutritionCell}>
+                <div style={s.nutritionLabel}>{label}</div>
+                <div style={s.nutritionValue}>{value}</div>
+              </div>
+            ))}
           </div>
 
-          <div className="grid grid-cols-3 gap-4 text-xs">
+          <div style={s.microGrid}>
             {recipe.nutrition.vitamins.length > 0 && (
               <div>
-                <p className="font-bold text-emerald-700 mb-1">{uiText.vitaminsLabel}</p>
-                <p className="text-gray-600 leading-tight">{recipe.nutrition.vitamins.join(', ')}</p>
+                <div style={s.microLabel}>{uiText.vitaminsLabel}</div>
+                <div style={s.microValue}>{recipe.nutrition.vitamins.join(', ')}</div>
               </div>
             )}
             {recipe.nutrition.minerals.length > 0 && (
               <div>
-                <p className="font-bold text-emerald-700 mb-1">{uiText.mineralsLabel}</p>
-                <p className="text-gray-600 leading-tight">{recipe.nutrition.minerals.join(', ')}</p>
+                <div style={s.microLabel}>{uiText.mineralsLabel}</div>
+                <div style={s.microValue}>{recipe.nutrition.minerals.join(', ')}</div>
               </div>
             )}
             {recipe.nutrition.others.length > 0 && (
               <div>
-                <p className="font-bold text-emerald-700 mb-1">{uiText.othersLabel}</p>
-                <p className="text-gray-600 leading-tight">{recipe.nutrition.others.join(', ')}</p>
+                <div style={s.microLabel}>{uiText.othersLabel}</div>
+                <div style={s.microValue}>{recipe.nutrition.others.join(', ')}</div>
               </div>
             )}
           </div>
 
-          <div className="mt-4 p-3 bg-emerald-50 rounded-lg text-emerald-800 text-xs font-medium border border-emerald-100">
-             {recipe.nutrition.healthScore === 'healthy' ? uiText.healthyTip : uiText.unhealthyTip}
+          <div style={s.healthTip}>
+            {recipe.nutrition.healthScore === 'healthy' ? uiText.healthyTip : uiText.unhealthyTip}
           </div>
-          
-          <p className="mt-2 text-[10px] text-gray-400 italic text-center">
-            {uiText.nutritionDisclaimer}
-          </p>
+          <div style={s.disclaimer}>{uiText.nutritionDisclaimer}</div>
         </div>
       )}
 
-      <div className="mt-8 pt-4 text-center border-t border-gray-200">
-        <h3 className="text-2xl font-bold text-emerald-700 flex items-center justify-center gap-2">
-            <span>🍅</span>
-            <span>Toma</span>
-        </h3>
-        <p className="text-gray-500 text-sm mt-1">{uiText.tagline}</p>
-        <p className="text-xs text-gray-500 mt-2">
-          Toma AI recipe generator by Syafiq Haron
-        </p>
+      {/* Footer */}
+      <div style={s.footer}>
+        <div style={s.footerTitle}>🍅 Toma</div>
+        <div style={s.footerSub}>{uiText.tagline}</div>
+        <div style={{ ...s.footerSub, marginTop: '2px' }}>Toma AI recipe generator by Syafiq Haron</div>
       </div>
     </div>
   );
 });
+
+RecipeImageExport.displayName = 'RecipeImageExport';
 
 export default RecipeImageExport;
