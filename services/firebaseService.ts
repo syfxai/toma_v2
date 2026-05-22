@@ -11,7 +11,7 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
-import type { FeedbackData, FeedbackItem } from '../types';
+import type { FeedbackData, FeedbackItem, SurveyData } from '../types';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -125,3 +125,29 @@ export const saveRecipeToCache = async (recipeId: string, data: any, originalInp
 
 // Empty function to keep interface compatibility if needed
 export const keepAlive = async (): Promise<void> => {};
+
+export const submitSurvey = async (data: SurveyData): Promise<void> => {
+  try {
+    const userId = getUserId();
+    await addDoc(collection(db, 'toma_surveys'), {
+      user_id: userId,
+      cooking_frequency: data.cookingFrequency,
+      cooking_challenge: data.cookingChallenge,
+      food_waste: data.foodWaste,
+      recipe_accuracy: data.recipeAccuracy,
+      step_clarity: data.stepClarity,
+      halal_importance: data.halalImportance,
+      voice_search_utility: data.voiceSearchUtility,
+      time_saved: data.timeSaved,
+      pmf_feeling: data.pmfFeeling,
+      desired_features: data.desiredFeatures,
+      willing_to_pay: data.willingToPay,
+      name: data.name || '',
+      email: data.email || '',
+      created_at: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error submitting survey:', error);
+    throw new Error('Failed to submit survey. Please try again.');
+  }
+};

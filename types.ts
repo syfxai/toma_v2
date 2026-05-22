@@ -158,3 +158,19 @@ export interface UiText {
 }
 
 export type ExportImageLayout = 'mobile' | 'desktop';
+
+export interface SurveyData {
+  cookingFrequency: string;
+  cookingChallenge: string;
+  foodWaste: string;
+  recipeAccuracy: number;
+  stepClarity: number;
+  halalImportance: number;
+  voiceSearchUtility: string;
+  timeSaved: string;
+  pmfFeeling: string;
+  desiredFeatures: string[];
+  willingToPay: string;
+  name?: string;
+  email?: string;
+}
