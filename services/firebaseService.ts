@@ -11,7 +11,7 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
-import type { FeedbackData, FeedbackItem, SurveyData } from '../types';
+import type { FeedbackData, FeedbackItem, SurveyData, SurveyItem } from '../types';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -131,6 +131,8 @@ export const submitSurvey = async (data: SurveyData): Promise<void> => {
     const userId = getUserId();
     await addDoc(collection(db, 'toma_surveys'), {
       user_id: userId,
+      gender: data.gender,
+      occupation: data.occupation,
       cooking_frequency: data.cookingFrequency,
       cooking_challenge: data.cookingChallenge,
       food_waste: data.foodWaste,
@@ -149,5 +151,39 @@ export const submitSurvey = async (data: SurveyData): Promise<void> => {
   } catch (error) {
     console.error('Error submitting survey:', error);
     throw new Error('Failed to submit survey. Please try again.');
+  }
+};
+
+export const getSurveyList = async (): Promise<SurveyItem[]> => {
+  try {
+    const q = query(collection(db, 'toma_surveys'), orderBy('created_at', 'desc'));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        gender: data.gender || '',
+        occupation: data.occupation || '',
+        cookingFrequency: data.cooking_frequency || '',
+        cookingChallenge: data.cooking_challenge || '',
+        foodWaste: data.food_waste || '',
+        recipeAccuracy: data.recipe_accuracy || 0,
+        stepClarity: data.step_clarity || 0,
+        halalImportance: data.halal_importance || 0,
+        voiceSearchUtility: data.voice_search_utility || '',
+        timeSaved: data.time_saved || '',
+        pmfFeeling: data.pmf_feeling || '',
+        desiredFeatures: data.desired_features || [],
+        willingToPay: data.willing_to_pay || '',
+        name: data.name || '',
+        email: data.email || '',
+        created_at: data.created_at?.toDate()?.toISOString() || new Date().toISOString(),
+        user_id: data.user_id || ''
+      } as SurveyItem;
+    });
+  } catch (error) {
+    console.error('Error fetching survey list:', error);
+    throw new Error('Failed to load survey data.');
   }
 };

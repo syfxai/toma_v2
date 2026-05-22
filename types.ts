@@ -160,6 +160,8 @@ export interface UiText {
 export type ExportImageLayout = 'mobile' | 'desktop';
 
 export interface SurveyData {
+  gender: string;
+  occupation: string;
   cookingFrequency: string;
   cookingChallenge: string;
   foodWaste: string;
@@ -173,4 +175,10 @@ export interface SurveyData {
   willingToPay: string;
   name?: string;
   email?: string;
+}
+
+export interface SurveyItem extends SurveyData {
+  id: string;
+  created_at: string;
+  user_id?: string;
 }

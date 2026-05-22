@@ -36,6 +36,8 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
 
   // Survey fields
   const [surveyStep, setSurveyStep] = useState<number>(1);
+  const [gender, setGender] = useState('');
+  const [occupation, setOccupation] = useState('');
   const [cookingFrequency, setCookingFrequency] = useState('');
   const [cookingChallenge, setCookingChallenge] = useState('');
   const [foodWaste, setFoodWaste] = useState('');
@@ -154,6 +156,8 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
     setIsSubmitting(true);
 
     const surveyData: SurveyData = {
+      gender,
+      occupation,
       cookingFrequency,
       cookingChallenge,
       foodWaste,
@@ -185,7 +189,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
   const validateSurveyStep = (currentStep: number): boolean => {
     setError(null);
     if (currentStep === 1) {
-      if (!cookingFrequency || !cookingChallenge || !foodWaste) {
+      if (!gender || !occupation || !cookingFrequency || !cookingChallenge || !foodWaste) {
         setError('Sila jawab semua soalan pada Bahagian 1.');
         return false;
       }
@@ -371,9 +375,57 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                 {/* Step 1: Cooking Habits */}
                 {surveyStep === 1 && (
                   <div className="space-y-5 animate-fadeInUp" style={{ animationDuration: '0.2s' }}>
-                    {/* Q1 */}
+                    {/* Gender Q */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">1. Berapa kerap anda memasak di rumah dalam seminggu? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">1. Jantina *</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {["Lelaki", "Perempuan"].map((option) => (
+                          <button
+                            key={option}
+                            type="button; button"
+                            onClick={() => setGender(option)}
+                            className={`px-4 py-2.5 text-center text-sm rounded-lg border transition-all ${
+                              gender === option 
+                                ? 'border-emerald-600 bg-emerald-50 text-emerald-800 font-medium' 
+                                : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Occupation Q */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold text-gray-800">2. Kategori Pekerjaan / Status *</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {[
+                          "Pelajar",
+                          "Bekerja (Sektor Swasta / Awam)",
+                          "Bekerja Sendiri / Usahawan",
+                          "Suri Rumah",
+                          "Tidak Bekerja / Lain-lain"
+                        ].map((option) => (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setOccupation(option)}
+                            className={`px-4 py-2.5 text-left text-sm rounded-lg border transition-all ${
+                              occupation === option 
+                                ? 'border-emerald-600 bg-emerald-50 text-emerald-800 font-medium' 
+                                : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Q3 */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold text-gray-800">3. Berapa kerap anda memasak di rumah dalam seminggu? *</label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {["Setiap hari", "3-4 kali seminggu", "Jarang-jarang", "Hanya hujung minggu"].map((option) => (
                           <button
@@ -392,9 +444,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q2 */}
+                    {/* Q4 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">2. Apakah cabaran terbesar anda setiap kali ingin menyediakan hidangan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">4. Apakah cabaran terbesar anda setiap kali ingin menyediakan hidangan? *</label>
                       <div className="grid grid-cols-1 gap-2">
                         {[
                           "Tiada idea (masak apa hari ni)",
@@ -419,9 +471,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q3 */}
+                    {/* Q5 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">3. Pernahkah anda terpaksa membuang bahan mentah di dapur kerana rosak akibat tidak tahu mahu masak apa dengannya? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">5. Pernahkah anda terpaksa membuang bahan mentah di dapur kerana rosak akibat tidak tahu mahu masak apa dengannya? *</label>
                       <div className="grid grid-cols-3 gap-2">
                         {["Ya, kerap berlaku", "Kadang-kadang", "Tidak pernah"].map((option) => (
                           <button
@@ -445,9 +497,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                 {/* Step 2: Toma Experience */}
                 {surveyStep === 2 && (
                   <div className="space-y-5 animate-fadeInUp" style={{ animationDuration: '0.2s' }}>
-                    {/* Q4 */}
+                    {/* Q6 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">4. Seberapa tepat resipi yang dijana oleh Toma berdasarkan bahan yang anda masukkan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">6. Seberapa tepat resipi yang dijana oleh Toma berdasarkan bahan yang anda masukkan? *</label>
                       <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                         <span className="text-xs text-gray-500 font-light">Tidak Tepat</span>
                         <div className="flex gap-2">
@@ -470,9 +522,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q5 */}
+                    {/* Q7 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">5. Adakah langkah memasak yang diberikan Toma mudah diikuti dan praktikal untuk dapur rumah Malaysia? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">7. Adakah langkah memasak yang diberikan Toma mudah diikuti dan praktikal untuk dapur rumah Malaysia? *</label>
                       <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                         <span className="text-xs text-gray-500 font-light">Sukar</span>
                         <div className="flex gap-2">
@@ -495,9 +547,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q6 */}
+                    {/* Q8 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">6. Seberapa penting bagi anda fungsi tapisan Halal dan sensitiviti tempatan (tiada bahan syubhah) dalam Toma? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">8. Seberapa penting bagi anda fungsi tapisan Halal dan sensitiviti tempatan (tiada bahan syubhah) dalam Toma? *</label>
                       <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                         <span className="text-xs text-gray-500 font-light">Kurang Penting</span>
                         <div className="flex gap-2">
@@ -520,9 +572,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q7 */}
+                    {/* Q9 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">7. Bagaimanakah fungsi carian suara (voice search) membantu anda semasa memasukkan bahan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">9. Bagaimanakah fungsi carian suara (voice search) membantu anda semasa memasukkan bahan? *</label>
                       <div className="grid grid-cols-1 gap-2">
                         {[
                           "Sangat membantu (mudah cakap sahaja)",
@@ -550,9 +602,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                 {/* Step 3: Impact & Future */}
                 {surveyStep === 3 && (
                   <div className="space-y-5 animate-fadeInUp" style={{ animationDuration: '0.2s' }}>
-                    {/* Q8 */}
+                    {/* Q10 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">8. Adakah Toma berjaya mengurangkan masa yang anda luangkan untuk berfikir tentang menu makanan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">10. Adakah Toma berjaya mengurangkan masa yang anda luangkan untuk berfikir tentang menu makanan? *</label>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                         {[
                           "Ya, menjimatkan masa",
@@ -575,9 +627,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q9 */}
+                    {/* Q11 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">9. Bagaimana perasaan anda jika esok Toma tidak lagi boleh digunakan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">11. Bagaimana perasaan anda jika esok Toma tidak lagi boleh digunakan? *</label>
                       <div className="grid grid-cols-3 gap-2">
                         {["Sangat kecewa", "Sedikit kecewa", "Tidak kisah"].map((option) => (
                           <button
@@ -596,9 +648,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q10 */}
+                    {/* Q12 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">10. Apakah fungsi tambahan yang paling anda harapkan ada dalam Toma selepas ini? (Pilih semua yang berkenaan)</label>
+                      <label className="block text-sm font-semibold text-gray-800">12. Apakah fungsi tambahan yang paling anda harapkan ada dalam Toma selepas ini? (Pilih semua yang berkenaan)</label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {[
                           "Anggaran kos/harga bahan",
@@ -626,9 +678,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ uiText, onClose }) => {
                       </div>
                     </div>
 
-                    {/* Q11 */}
+                    {/* Q13 */}
                     <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-gray-800">11. Adakah anda sanggup membayar sedikit caj bulanan jika Toma menawarkan resipi premium tanpa had dan fungsi perancang hidangan mingguan? *</label>
+                      <label className="block text-sm font-semibold text-gray-800">13. Adakah anda sanggup membayar sedikit caj bulanan jika Toma menawarkan resipi premium tanpa had dan fungsi perancang hidangan mingguan? *</label>
                       <div className="grid grid-cols-3 gap-2">
                         {["Ya, pasti", "Mungkin ya", "Tidak, mahu percuma"].map((option) => (
                           <button
