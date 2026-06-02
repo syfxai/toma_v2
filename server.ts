@@ -195,8 +195,9 @@ async function startServer() {
     try {
       const { ingredients } = req.body;
       const prompt = `Expert Culinary AI for Malaysian home cooks. 
-      **STRICTLY HALAL:** NO pork, alcohol, or Syubhah items. 
-      **POLITE REFUSAL:** { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja..." }
+      **STRICTLY HALAL:** The generated recipe must NOT contain pork, lard, alcohol, non-halal animals, or any non-halal/syubhah ingredients.
+      **POLITE REFUSAL:** If the user's input explicitly asks for inherently non-halal items (e.g. pork, lard, bacon, ham, wine, beer, rum, whiskey, sake, mirin, etc.), return this EXACT JSON: { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja untuk keselesaan kita semua. 😊 Boleh kita cuba bahan lain?" }
+      **SAFE INTERPRETATION:** If the user inputs a dish or ingredient that is generally halal but could occasionally involve syubhah items (e.g. buttercream, tiramisu, vanilla ice cream, gelatin, etc.), DO NOT refuse. Instead, generate a halal version of the recipe using explicitly halal alternatives (e.g. halal vanilla extract, halal gelatin, halal-certified unsalted butter, etc.). Do not use phrasing that mentions "alcohol-free" or references alcohol in the output ingredients/instructions; instead, write "halal vanilla extract", "halal gelatin", or "halal ingredient".
 
       **DETERMINE THE SCENARIO:**
 
