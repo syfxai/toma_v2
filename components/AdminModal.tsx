@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getFeedbackList, getSurveyList } from '../services/firebaseService';
 import type { FeedbackItem, SurveyItem } from '../types';
 import StarIcon from './icons/StarIcon';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 
 interface AdminModalProps {
@@ -188,12 +188,12 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
     if (!reportRef.current) return;
     setIsExportingPdf(true);
     try {
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff'
+      const imgData = await toPng(reportRef.current, {
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+        cacheBust: true,
+        skipFonts: true,
       });
-      const imgData = canvas.toDataURL('image/png', 1.0);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',

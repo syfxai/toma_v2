@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import type { Recipe, UiText } from '../types';
 import FileTextIcon from './icons/FileTextIcon';
@@ -72,12 +72,12 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
     }
 
     try {
-        const canvas = await html2canvas(targetRef.current, {
-            scale: 2,
-            useCORS: true,
+        const image = await toPng(targetRef.current, {
+            pixelRatio: 2,
             backgroundColor: '#ffffff',
+            cacheBust: true,
+            skipFonts: true,
         });
-        const image = canvas.toDataURL('image/png', 1.0);
         const link = document.createElement('a');
         link.href = image;
         link.download = `${recipe.recipeName.replace(/\s/g, '_')}_recipe.png`;
@@ -105,13 +105,16 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
     }
 
     try {
-        const canvas = await html2canvas(targetRef.current, {
-            scale: 2, // Use a higher scale for better resolution in the PDF
-            useCORS: true,
+        const imgData = await toPng(targetRef.current, {
+            pixelRatio: 2, // Use a higher scale for better resolution in the PDF
             backgroundColor: '#ffffff',
+            cacheBust: true,
+            skipFonts: true,
         });
 
-        const imgData = canvas.toDataURL('image/png', 1.0);
+        const rect = targetRef.current.getBoundingClientRect();
+        const elementWidth = targetRef.current.scrollWidth || rect.width || 800;
+        const elementHeight = targetRef.current.scrollHeight || rect.height || 1000;
         
         const pdf = new jsPDF({
             orientation: 'portrait',
@@ -126,7 +129,7 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
         const contentWidth = pdfWidth - (margin * 2);
         const contentHeight = pdfHeight - (margin * 2);
 
-        const canvasAspectRatio = canvas.width / canvas.height;
+        const canvasAspectRatio = elementWidth / elementHeight;
 
         let finalImgWidth = contentWidth;
         let finalImgHeight = finalImgWidth / canvasAspectRatio;
