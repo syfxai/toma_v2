@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { getFeedbackList, getSurveyList } from '../services/firebaseService';
+import React, { useState, useRef } from 'react';
 import type { FeedbackItem, SurveyItem } from '../types';
 import StarIcon from './icons/StarIcon';
 import { toPng } from 'html-to-image';
@@ -26,36 +25,43 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
 
   const reportRef = useRef<HTMLDivElement>(null);
 
-  // PIN from environment variable
-  const SECRET_PIN = import.meta.env.VITE_ADMIN_PIN || "2024";
+  const fetchData = async (inputPin?: string) => {
+    const pinToUse = inputPin || pin;
+    if (!pinToUse.trim()) return false;
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pin === SECRET_PIN) {
-      setIsAuthenticated(true);
-      fetchData();
-    } else {
-      setError("PIN Salah!");
-      setPin('');
-    }
-  };
-
-  const fetchData = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const [fData, sData] = await Promise.all([
-        getFeedbackList(),
-        getSurveyList()
-      ]);
-      setFeedbackList(fData);
-      setSurveyList(sData);
-    } catch (err) {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pinToUse.trim() })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error || "PIN Salah!");
+        if (!isAuthenticated) setPin('');
+        return false;
+      }
+
+      setFeedbackList(result.feedbackList || []);
+      setSurveyList(result.surveyList || []);
+      setIsAuthenticated(true);
+      return true;
+    } catch (err: any) {
       console.error(err);
-      setError("Gagal mengambil data. Sila pastikan anda telah menetapkan Rules di Firebase Console.");
+      setError(err?.message || "Gagal berhubung dengan pelayan.");
+      return false;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await fetchData(pin);
   };
 
   // --- STATS COMPUTATIONS ---
@@ -238,9 +244,10 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
               </button>
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold"
+                disabled={isLoading}
+                className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold disabled:opacity-50"
               >
-                Unlock
+                {isLoading ? "Memeriksa..." : "Unlock"}
               </button>
             </div>
           </form>
@@ -272,10 +279,11 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
               </button>
             )}
             <button 
-              onClick={fetchData}
-              className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium"
+              onClick={() => fetchData()}
+              disabled={isLoading}
+              className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium disabled:opacity-50"
             >
-              Refresh
+              {isLoading ? "Menyegarkan..." : "Refresh"}
             </button>
             <button 
               onClick={onClose}

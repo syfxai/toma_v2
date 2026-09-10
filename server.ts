@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
+import adminDataHandler from './api/admin/data';
 
 dotenv.config();
 
@@ -283,6 +284,8 @@ async function startServer() {
       res.status(500).json({ error: "Voice transcription failed." });
     }
   });
+
+  app.post('/api/admin/data', (req, res) => adminDataHandler(req, res));
 
   // Vite Integration
   if (process.env.NODE_ENV === 'production') {
