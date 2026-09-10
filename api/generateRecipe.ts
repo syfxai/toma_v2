@@ -60,10 +60,16 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { ingredients } = req.body;
-    if (!ingredients) {
-      return res.status(400).json({ error: 'Ingredients are required' });
+    const rawIngredients = req.body?.ingredients;
+    if (!rawIngredients || typeof rawIngredients !== 'string' || !rawIngredients.trim()) {
+      return res.status(400).json({ error: 'Sila masukkan bahan masakan atau nama hidangan yang ingin dicari.' });
     }
+
+    if (rawIngredients.trim().length > 500) {
+      return res.status(400).json({ error: 'Input terlalu panjang. Sila hadkan carian kepada bawah 500 aksara.' });
+    }
+
+    const cleanIngredients = rawIngredients.trim();
 
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'GEMINI_API_KEY is missing on the server' });
@@ -89,11 +95,11 @@ export default async function handler(req: any, res: any) {
     - Single: { "recipeName", "description", "prepTime", "cookTime", "totalTime", "servings", "ingredients": [], "instructions": [], "nutrition": { "calories", "protein", "fat", "carbohydrates", "vitamins": ["Vitamin C (12mg)"], "minerals": ["Iron (2.5mg)"], "others": [], "healthScore": "healthy|unhealthy" } }
     - List: { "results": [{ "title", "description" }] }
     
-    User Input: ${ingredients}`;
+    User Input: ${cleanIngredients}`;
 
     // OPTIMIZATION: Only use Google Search tool if the user explicitly asks for a recipe, chef, or authentic dish.
     // Passing an empty tools array causes SDK errors, so we only include it when needed.
-    const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(ingredients);
+    const needsAuthenticRecipe = /resepi|recipe|chef|aming|asli|original|betul|cara/i.test(cleanIngredients);
 
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is not set in environment variables.");

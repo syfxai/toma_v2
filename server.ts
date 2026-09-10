@@ -136,6 +136,16 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
+  // Security Headers Middleware
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
+    next();
+  });
+
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
   // API Routes
@@ -150,9 +160,21 @@ async function startServer() {
     }
 
     try {
-      const { message, history, languageName } = req.body;
+      const rawMessage = req.body?.message;
+      if (!rawMessage || typeof rawMessage !== 'string' || !rawMessage.trim()) {
+        return res.status(400).json({ error: 'Mesej tidak boleh kosong.' });
+      }
+
+      if (rawMessage.trim().length > 500) {
+        return res.status(400).json({ error: 'Mesej terlalu panjang. Sila hadkan mesej anda kepada bawah 500 aksara.' });
+      }
+
+      const cleanMessage = rawMessage.trim();
+      const cleanHistory = Array.isArray(req.body?.history) ? req.body.history.slice(-10) : [];
+      const languageName = req.body?.languageName;
+
       const completion = await createGroqChatCompletion({
-        messages: toGroqMessages(history, message, languageName),
+        messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
         temperature: 0.7,
         max_completion_tokens: 300,
         tool_choice: 'auto',
@@ -215,7 +237,16 @@ async function startServer() {
     }
 
     try {
-      const { ingredients } = req.body;
+      const rawIngredients = req.body?.ingredients;
+      if (!rawIngredients || typeof rawIngredients !== 'string' || !rawIngredients.trim()) {
+        return res.status(400).json({ error: 'Sila masukkan bahan masakan atau nama hidangan yang ingin dicari.' });
+      }
+
+      if (rawIngredients.trim().length > 500) {
+        return res.status(400).json({ error: 'Input terlalu panjang. Sila hadkan carian kepada bawah 500 aksara.' });
+      }
+
+      const cleanIngredients = rawIngredients.trim();
       const prompt = `Expert Culinary AI for Malaysian home cooks. 
       **STRICTLY HALAL:** The generated recipe must NOT contain pork, lard, alcohol, non-halal animals, or any non-halal/syubhah ingredients.
       **POLITE REFUSAL:** If the user's input explicitly asks for inherently non-halal items (e.g. pork, lard, bacon, ham, wine, beer, rum, whiskey, sake, mirin, etc.), return this EXACT JSON: { "error": "Minta maaf ya, Toma hanya berkongsi resepi yang halal dan suci sahaja untuk keselesaan kita semua. 😊 Boleh kita cuba bahan lain?" }
@@ -257,7 +288,7 @@ async function startServer() {
         ]
       }
 
-      User Input: ${ingredients}`;
+      User Input: ${cleanIngredients}`;
 
       const response = await generateJsonWithFallback(ai, prompt);
       const text = response.text || "";

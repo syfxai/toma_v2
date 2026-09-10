@@ -89,13 +89,21 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { message, history, languageName } = req.body;
-    if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
+    const rawMessage = req.body?.message;
+    if (!rawMessage || typeof rawMessage !== 'string' || !rawMessage.trim()) {
+      return res.status(400).json({ error: 'Mesej tidak boleh kosong.' });
     }
 
+    if (rawMessage.trim().length > 500) {
+      return res.status(400).json({ error: 'Mesej terlalu panjang. Sila hadkan mesej anda kepada bawah 500 aksara.' });
+    }
+
+    const cleanMessage = rawMessage.trim();
+    const cleanHistory = Array.isArray(req.body?.history) ? req.body.history.slice(-10) : [];
+    const languageName = req.body?.languageName;
+
     const completion = await createGroqChatCompletion({
-      messages: toGroqMessages(history, message, languageName),
+      messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
       temperature: 0.7,
       max_completion_tokens: 300,
       tool_choice: 'auto',
