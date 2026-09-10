@@ -1,3 +1,5 @@
+import { getClientIp, checkRateLimit } from './lib/rateLimit';
+
 const GROQ_CHAT_MODELS = [
   process.env.GROQ_CHAT_MODEL,
   'llama-3.3-70b-versatile',
@@ -75,6 +77,15 @@ async function createGroqChatCompletion(body: any) {
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const clientIp = getClientIp(req);
+  const rateCheck = checkRateLimit(clientIp, 'chat', 20, 60 * 1000);
+  if (rateCheck.limited) {
+    res.setHeader?.('Retry-After', String(rateCheck.resetInSec));
+    return res.status(429).json({
+      error: `Had perbualan tercapai (Maksimum 20 mesej seminit). Sila tunggu ${rateCheck.resetInSec} saat.`
+    });
   }
 
   try {

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
 import adminDataHandler from './api/admin/data';
+import { getClientIp, checkRateLimit } from './api/lib/rateLimit';
 
 dotenv.config();
 
@@ -137,6 +138,15 @@ async function startServer() {
 
   // API Routes
   app.post('/api/chat', async (req, res) => {
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(clientIp, 'chat', 20, 60 * 1000);
+    if (rateCheck.limited) {
+      res.setHeader('Retry-After', String(rateCheck.resetInSec));
+      return res.status(429).json({
+        error: `Had perbualan tercapai (Maksimum 20 mesej seminit). Sila tunggu ${rateCheck.resetInSec} saat.`
+      });
+    }
+
     try {
       const { message, history, languageName } = req.body;
       const completion = await createGroqChatCompletion({
@@ -193,6 +203,15 @@ async function startServer() {
   });
 
   app.post('/api/generateRecipe', async (req, res) => {
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(clientIp, 'generateRecipe', 10, 60 * 1000);
+    if (rateCheck.limited) {
+      res.setHeader('Retry-After', String(rateCheck.resetInSec));
+      return res.status(429).json({
+        error: `Had permintaan tercapai (Maksimum 10 resepi seminit). Sila cuba lagi dalam ${rateCheck.resetInSec} saat.`
+      });
+    }
+
     try {
       const { ingredients } = req.body;
       const prompt = `Expert Culinary AI for Malaysian home cooks. 

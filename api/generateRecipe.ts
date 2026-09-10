@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { getClientIp, checkRateLimit } from "./lib/rateLimit";
 
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
@@ -47,6 +48,15 @@ async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const clientIp = getClientIp(req);
+  const rateCheck = checkRateLimit(clientIp, 'generateRecipe', 10, 60 * 1000);
+  if (rateCheck.limited) {
+    res.setHeader?.('Retry-After', String(rateCheck.resetInSec));
+    return res.status(429).json({
+      error: `Had permintaan tercapai (Maksimum 10 resepi seminit). Sila cuba lagi dalam ${rateCheck.resetInSec} saat.`
+    });
   }
 
   try {
