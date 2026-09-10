@@ -61,17 +61,19 @@ export const getGenerationCount = async (): Promise<number | null> => {
 export const submitFeedback = async (data: FeedbackData): Promise<void> => {
   try {
     const userId = getUserId();
-    await addDoc(collection(db, 'toma_feedback'), {
-      user_id: userId,
-      rating: data.rating,
-      name: data.name,
-      email: data.email,
-      comment: data.comment,
-      created_at: serverTimestamp()
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, userId })
     });
-  } catch (error) {
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      throw new Error(err?.error || 'Failed to submit feedback. Please try again.');
+    }
+  } catch (error: any) {
     console.error('Error submitting feedback:', error);
-    throw new Error('Failed to submit feedback. Please try again.');
+    throw new Error(error?.message || 'Failed to submit feedback. Please try again.');
   }
 };
 
@@ -129,28 +131,19 @@ export const keepAlive = async (): Promise<void> => {};
 export const submitSurvey = async (data: SurveyData): Promise<void> => {
   try {
     const userId = getUserId();
-    await addDoc(collection(db, 'toma_surveys'), {
-      user_id: userId,
-      gender: data.gender,
-      occupation: data.occupation,
-      cooking_frequency: data.cookingFrequency,
-      cooking_challenge: data.cookingChallenge,
-      food_waste: data.foodWaste,
-      recipe_accuracy: data.recipeAccuracy,
-      step_clarity: data.stepClarity,
-      halal_importance: data.halalImportance,
-      voice_search_utility: data.voiceSearchUtility,
-      time_saved: data.timeSaved,
-      pmf_feeling: data.pmfFeeling,
-      desired_features: data.desiredFeatures,
-      willing_to_pay: data.willingToPay,
-      name: data.name || '',
-      email: data.email || '',
-      created_at: serverTimestamp()
+    const response = await fetch('/api/survey', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, userId })
     });
-  } catch (error) {
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      throw new Error(err?.error || 'Failed to submit survey. Please try again.');
+    }
+  } catch (error: any) {
     console.error('Error submitting survey:', error);
-    throw new Error('Failed to submit survey. Please try again.');
+    throw new Error(error?.message || 'Failed to submit survey. Please try again.');
   }
 };
 

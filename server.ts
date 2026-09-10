@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
 import adminDataHandler from './api/admin/data';
+import feedbackHandler from './api/feedback';
+import surveyHandler from './api/survey';
 import { getClientIp, checkRateLimit } from './api/lib/rateLimit';
 
 dotenv.config();
@@ -305,6 +307,8 @@ async function startServer() {
   });
 
   app.post('/api/admin/data', (req, res) => adminDataHandler(req, res));
+  app.post('/api/feedback', (req, res) => feedbackHandler(req, res));
+  app.post('/api/survey', (req, res) => surveyHandler(req, res));
 
   // Vite Integration
   if (process.env.NODE_ENV === 'production') {
