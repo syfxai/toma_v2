@@ -10,6 +10,7 @@ import CheckIcon from './icons/CheckIcon';
 import RecipeImageExport from './RecipeImageExport';
 import RecipeInfo from './RecipeInfo';
 import NutritionDisplay from './NutritionDisplay';
+import PriceEstimateDisplay from './PriceEstimateDisplay';
 
 interface RecipeDisplayProps {
   recipe: Recipe;
@@ -216,6 +217,8 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
         </div>
         
         <RecipeInfo recipe={recipe} uiText={uiText} />
+        
+        <PriceEstimateDisplay ingredients={recipe.ingredients} servings={recipe.servings} />
         
         <NutritionDisplay nutrition={recipe.nutrition} uiText={uiText} />
 

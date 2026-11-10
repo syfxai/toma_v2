@@ -3,17 +3,17 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
 import adminDataHandler from './api/admin/data';
 import feedbackHandler from './api/feedback';
 import surveyHandler from './api/survey';
 import translateHandler from './api/translate';
 import apiStatusHandler from './api/admin/apiStatus';
+import pricesHandler from './api/prices';
 import { recordApiCall } from './api/lib/apiTracker';
 import { getClientIp, checkRateLimit } from './api/lib/rateLimit';
 
-const rootDir = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+const rootDir = typeof __dirname !== 'undefined' ? __dirname : process.cwd();
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
   'gemini-2.5-flash-lite',
@@ -426,6 +426,7 @@ async function startServer() {
   });
 
   app.post('/api/translate', (req, res) => translateHandler(req, res));
+  app.all('/api/prices', (req, res) => pricesHandler(req, res));
   app.all('/api/admin/api-status', (req, res) => apiStatusHandler(req, res));
   app.post('/api/admin/data', (req, res) => adminDataHandler(req, res));
   app.post('/api/feedback', (req, res) => feedbackHandler(req, res));

@@ -1,0 +1,831 @@
+{
+  "metadata": {
+    "source": "KPDN PriceCatcher via data.gov.my",
+    "cadence": "Quarterly Snapshot Reference",
+    "lastUpdated": "2026-11-10T06:25:40.300Z",
+    "disclaimer": "Penafian: Data harga barangan dapur dipetik daripada inisiatif terbuka KPDN PriceCatcher (data.gov.my) sebagai panduan anggaran kos masakan sahaja. Harga sebenar di premis mungkin berbeza mengikut lokasi, gred, promosi, atau perubahan semasa peruncit."
+  },
+  "zones": [
+    {
+      "id": "national",
+      "name": "Purata Nasional (Semua Zon)",
+      "supermarkets": [
+        "Econsave",
+        "Mydin",
+        "Lotus's"
+      ],
+      "wetMarkets": [
+        "Pasar Awam Tempatan",
+        "Pasar Basah",
+        "Pasar Tani"
+      ]
+    },
+    {
+      "id": "timur",
+      "name": "Pantai Timur (Terengganu, Kelantan, Pahang)",
+      "states": [
+        "Terengganu",
+        "Kelantan",
+        "Pahang"
+      ],
+      "supermarkets": [
+        "Sabasun HyperRuncit",
+        "Mydin",
+        "Tunas Manja (TMG)"
+      ],
+      "wetMarkets": [
+        "Pasar Besar Kedai Payang (KT)",
+        "Pasar Chabang Tiga",
+        "Pasar Siti Khadijah (KB)",
+        "Pasar Besar Kuantan"
+      ]
+    },
+    {
+      "id": "utara",
+      "name": "Zon Utara (Perak/Bagan Serai, Kedah, P.Pinang, Perlis)",
+      "states": [
+        "Perak",
+        "Kedah",
+        "Pulau Pinang",
+        "Perlis"
+      ],
+      "supermarkets": [
+        "TF Value-Mart",
+        "Econsave",
+        "C-Mart",
+        "Mydin"
+      ],
+      "wetMarkets": [
+        "Pasar Awam Bagan Serai",
+        "Pasar Parit Buntar",
+        "Pasar Besar Alor Setar",
+        "Pasar Chowrasta"
+      ]
+    },
+    {
+      "id": "tengah",
+      "name": "Zon Tengah (Selangor, KL, Putrajaya)",
+      "states": [
+        "Selangor",
+        "Kuala Lumpur",
+        "Putrajaya"
+      ],
+      "supermarkets": [
+        "NSK Trade City",
+        "Lotus's",
+        "Econsave",
+        "Giant",
+        "Segi Fresh"
+      ],
+      "wetMarkets": [
+        "Pasar Chow Kit",
+        "Pasar Borong Selayang",
+        "Pasar Seksyen 16 Shah Alam",
+        "Pasar Pudu"
+      ]
+    },
+    {
+      "id": "selatan",
+      "name": "Zon Selatan (Johor, Melaka, N.Sembilan)",
+      "states": [
+        "Johor",
+        "Melaka",
+        "Negeri Sembilan"
+      ],
+      "supermarkets": [
+        "Maslee",
+        "Econsave",
+        "Lotus's",
+        "Target Supermarket"
+      ],
+      "wetMarkets": [
+        "Pasar Awam Larkin",
+        "Pasar Besar Melaka Sentral",
+        "Pasar Besar Seremban"
+      ]
+    },
+    {
+      "id": "borneo",
+      "name": "Sabah & Sarawak",
+      "states": [
+        "Sabah",
+        "Sarawak",
+        "Labuan"
+      ],
+      "supermarkets": [
+        "Bataras",
+        "Servay",
+        "Everrise",
+        "Emart"
+      ],
+      "wetMarkets": [
+        "Pasar Besar Kota Kinabalu",
+        "Pasar Tamu Donggongon",
+        "Pasar Medan Niaga Satok"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "ayam-standard",
+      "name": "Ayam Bersih (Standard)",
+      "unit": "1 kg",
+      "category": "Ayam",
+      "channel": "both",
+      "minPrice": 8.5,
+      "avgPrice": 9.4,
+      "maxPrice": 10.5,
+      "supermarketPrice": 9.2,
+      "wetMarketPrice": 9.8,
+      "cheapestRetailers": [
+        "Econsave",
+        "Mydin",
+        "Lotus's"
+      ],
+      "keywords": [
+        "ayam",
+        "chicken",
+        "daging ayam",
+        "seekor ayam"
+      ]
+    },
+    {
+      "id": "ayam-super",
+      "name": "Ayam Bersih (Super)",
+      "unit": "1 kg",
+      "category": "Ayam",
+      "channel": "both",
+      "minPrice": 9.5,
+      "avgPrice": 10.4,
+      "maxPrice": 11.5,
+      "supermarketPrice": 10.2,
+      "wetMarketPrice": 10.8,
+      "cheapestRetailers": [
+        "Mydin",
+        "Giant",
+        "Pasar Basah"
+      ],
+      "keywords": [
+        "ayam super",
+        "isi ayam",
+        "peha ayam"
+      ]
+    },
+    {
+      "id": "daging-lembu-tempatan",
+      "name": "Daging Lembu Tempatan (Segar)",
+      "unit": "1 kg",
+      "category": "Daging",
+      "channel": "wet_market",
+      "minPrice": 38,
+      "avgPrice": 42,
+      "maxPrice": 45,
+      "supermarketPrice": 43,
+      "wetMarketPrice": 41.5,
+      "cheapestRetailers": [
+        "Pasar Awam",
+        "Pasar Borong",
+        "Mydin"
+      ],
+      "keywords": [
+        "daging",
+        "beef",
+        "daging lembu",
+        "daging cincang"
+      ]
+    },
+    {
+      "id": "daging-import-beku",
+      "name": "Daging Kerbau / Lembu Import",
+      "unit": "1 kg",
+      "category": "Daging",
+      "channel": "supermarket",
+      "minPrice": 19.5,
+      "avgPrice": 22,
+      "maxPrice": 25,
+      "supermarketPrice": 21.5,
+      "wetMarketPrice": 23,
+      "cheapestRetailers": [
+        "Econsave",
+        "Lotus's",
+        "Mydin"
+      ],
+      "keywords": [
+        "daging beku",
+        "daging import",
+        "kerbau"
+      ]
+    },
+    {
+      "id": "ikan-kembung",
+      "name": "Ikan Kembung Segar",
+      "unit": "1 kg",
+      "category": "Ikan",
+      "channel": "both",
+      "minPrice": 14,
+      "avgPrice": 17.5,
+      "maxPrice": 22,
+      "supermarketPrice": 17,
+      "wetMarketPrice": 18,
+      "cheapestRetailers": [
+        "Pasar Basah",
+        "Econsave",
+        "Lotus's"
+      ],
+      "keywords": [
+        "ikan",
+        "fish",
+        "ikan kembung",
+        "kembong"
+      ]
+    },
+    {
+      "id": "ikan-siakap",
+      "name": "Ikan Siakap (Barramundi)",
+      "unit": "1 kg",
+      "category": "Ikan",
+      "channel": "both",
+      "minPrice": 16,
+      "avgPrice": 19.5,
+      "maxPrice": 24,
+      "supermarketPrice": 19,
+      "wetMarketPrice": 20.5,
+      "cheapestRetailers": [
+        "Mydin",
+        "Lotus's",
+        "Pasar Basah"
+      ],
+      "keywords": [
+        "siakap",
+        "ikan siakap",
+        "barramundi"
+      ]
+    },
+    {
+      "id": "udang-sederhana",
+      "name": "Udang Putih / Harimau (Sederhana)",
+      "unit": "1 kg",
+      "category": "Makanan Laut",
+      "channel": "both",
+      "minPrice": 26,
+      "avgPrice": 32,
+      "maxPrice": 38,
+      "supermarketPrice": 31,
+      "wetMarketPrice": 33,
+      "cheapestRetailers": [
+        "Pasar Awam",
+        "Econsave",
+        "Pasar Tani"
+      ],
+      "keywords": [
+        "udang",
+        "prawn",
+        "shrimp"
+      ]
+    },
+    {
+      "id": "sotong",
+      "name": "Sotong Sederhana Segar",
+      "unit": "1 kg",
+      "category": "Makanan Laut",
+      "channel": "both",
+      "minPrice": 28,
+      "avgPrice": 34,
+      "maxPrice": 40,
+      "supermarketPrice": 33,
+      "wetMarketPrice": 35,
+      "cheapestRetailers": [
+        "Pasar Basah",
+        "Mydin",
+        "Lotus's"
+      ],
+      "keywords": [
+        "sotong",
+        "squid",
+        "calamari"
+      ]
+    },
+    {
+      "id": "telur-gred-a",
+      "name": "Telur Ayam Gred A",
+      "unit": "10 biji",
+      "category": "Telur",
+      "channel": "supermarket",
+      "minPrice": 4.2,
+      "avgPrice": 4.5,
+      "maxPrice": 5,
+      "supermarketPrice": 4.4,
+      "wetMarketPrice": 4.8,
+      "cheapestRetailers": [
+        "Lotus's",
+        "Mydin",
+        "Speedmart 99"
+      ],
+      "keywords": [
+        "telur",
+        "egg",
+        "eggs",
+        "telur ayam"
+      ]
+    },
+    {
+      "id": "telur-gred-b",
+      "name": "Telur Ayam Gred B",
+      "unit": "10 biji",
+      "category": "Telur",
+      "channel": "supermarket",
+      "minPrice": 3.9,
+      "avgPrice": 4.2,
+      "maxPrice": 4.6,
+      "supermarketPrice": 4.1,
+      "wetMarketPrice": 4.5,
+      "cheapestRetailers": [
+        "Econsave",
+        "Speedmart 99",
+        "Mydin"
+      ],
+      "keywords": [
+        "telur gred b",
+        "telur b"
+      ]
+    },
+    {
+      "id": "bawang-besar-india",
+      "name": "Bawang Besar Merah (Import)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 4.5,
+      "avgPrice": 5.5,
+      "maxPrice": 7,
+      "supermarketPrice": 5.2,
+      "wetMarketPrice": 5.8,
+      "cheapestRetailers": [
+        "Mydin",
+        "Econsave",
+        "Kedai Runcit"
+      ],
+      "keywords": [
+        "bawang",
+        "onion",
+        "bawang besar",
+        "bawang merah"
+      ]
+    },
+    {
+      "id": "bawang-putih",
+      "name": "Bawang Putih (Garlic)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 8,
+      "avgPrice": 9.8,
+      "maxPrice": 12,
+      "supermarketPrice": 9.5,
+      "wetMarketPrice": 10.2,
+      "cheapestRetailers": [
+        "Lotus's",
+        "Econsave",
+        "Mydin"
+      ],
+      "keywords": [
+        "bawang putih",
+        "garlic"
+      ]
+    },
+    {
+      "id": "cili-merah",
+      "name": "Cili Merah (Kulai / Minyak)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 12,
+      "avgPrice": 15.5,
+      "maxPrice": 19,
+      "supermarketPrice": 15,
+      "wetMarketPrice": 16,
+      "cheapestRetailers": [
+        "Pasar Awam",
+        "Lotus's",
+        "Econsave"
+      ],
+      "keywords": [
+        "cili",
+        "chili",
+        "cili merah",
+        "chilli"
+      ]
+    },
+    {
+      "id": "cili-padi",
+      "name": "Cili Padi / Cili Api Kampung",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 10,
+      "avgPrice": 13.5,
+      "maxPrice": 17,
+      "supermarketPrice": 13,
+      "wetMarketPrice": 14,
+      "cheapestRetailers": [
+        "Pasar Tani",
+        "Mydin",
+        "Econsave"
+      ],
+      "keywords": [
+        "cili padi",
+        "cili api",
+        "bird eye chili"
+      ]
+    },
+    {
+      "id": "cili-kering",
+      "name": "Cili Kering (Gred Pedas/Biasa)",
+      "unit": "1 kg",
+      "category": "Barangan Kering",
+      "channel": "both",
+      "minPrice": 18,
+      "avgPrice": 22.5,
+      "maxPrice": 27,
+      "supermarketPrice": 21.5,
+      "wetMarketPrice": 23.5,
+      "cheapestRetailers": [
+        "Mydin",
+        "Pasar Borong",
+        "Kedai Rempah"
+      ],
+      "keywords": [
+        "cili kering",
+        "dried chili"
+      ]
+    },
+    {
+      "id": "halia-tua",
+      "name": "Halia Tua",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 7,
+      "avgPrice": 9,
+      "maxPrice": 12,
+      "supermarketPrice": 8.8,
+      "wetMarketPrice": 9.5,
+      "cheapestRetailers": [
+        "Lotus's",
+        "Mydin",
+        "Pasar Basah"
+      ],
+      "keywords": [
+        "halia",
+        "ginger"
+      ]
+    },
+    {
+      "id": "serai",
+      "name": "Serai (Lemongrass)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "wet_market",
+      "minPrice": 3.5,
+      "avgPrice": 4.8,
+      "maxPrice": 6.5,
+      "supermarketPrice": 5,
+      "wetMarketPrice": 4.5,
+      "cheapestRetailers": [
+        "Pasar Tani",
+        "Econsave",
+        "Kedai Runcit"
+      ],
+      "keywords": [
+        "serai",
+        "lemongrass",
+        "batang serai"
+      ]
+    },
+    {
+      "id": "kunyit-hidup",
+      "name": "Kunyit Hidup",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran & Rempah",
+      "channel": "both",
+      "minPrice": 6.5,
+      "avgPrice": 8.5,
+      "maxPrice": 11,
+      "supermarketPrice": 8.2,
+      "wetMarketPrice": 8.8,
+      "cheapestRetailers": [
+        "Pasar Basah",
+        "Mydin",
+        "Lotus's"
+      ],
+      "keywords": [
+        "kunyit",
+        "turmeric",
+        "kunyit hidup"
+      ]
+    },
+    {
+      "id": "santan-kelapa",
+      "name": "Santan Kelapa Segar (Perahan)",
+      "unit": "1 kg / 1 liter",
+      "category": "Barangan Segar & Kotak",
+      "channel": "wet_market",
+      "minPrice": 10,
+      "avgPrice": 12,
+      "maxPrice": 14,
+      "supermarketPrice": 12.5,
+      "wetMarketPrice": 11.5,
+      "cheapestRetailers": [
+        "Pasar Basah",
+        "Speedmart 99",
+        "Mydin"
+      ],
+      "keywords": [
+        "santan",
+        "coconut milk",
+        "coconut cream"
+      ]
+    },
+    {
+      "id": "minyak-masak-paket",
+      "name": "Minyak Masak Sawit (Paket Bersubsidi)",
+      "unit": "1 kg",
+      "category": "Minyak",
+      "channel": "supermarket",
+      "minPrice": 2.5,
+      "avgPrice": 2.5,
+      "maxPrice": 2.5,
+      "supermarketPrice": 2.5,
+      "wetMarketPrice": 2.5,
+      "cheapestRetailers": [
+        "Kedai Runcit",
+        "Mydin",
+        "Pasar Mini"
+      ],
+      "keywords": [
+        "minyak masak",
+        "cooking oil",
+        "minyak"
+      ]
+    },
+    {
+      "id": "minyak-masak-botol-5kg",
+      "name": "Minyak Masak Sawit Tulen (Botol)",
+      "unit": "5 kg",
+      "category": "Minyak",
+      "channel": "supermarket",
+      "minPrice": 29.5,
+      "avgPrice": 30.9,
+      "maxPrice": 33.5,
+      "supermarketPrice": 30.5,
+      "wetMarketPrice": 32,
+      "cheapestRetailers": [
+        "Econsave",
+        "Lotus's",
+        "Mydin"
+      ],
+      "keywords": [
+        "minyak botol",
+        "minyak sawit"
+      ]
+    },
+    {
+      "id": "beras-tempatan-5kg",
+      "name": "Beras Putih Tempatan (SST)",
+      "unit": "5 kg",
+      "category": "Beras & Bijirin",
+      "channel": "supermarket",
+      "minPrice": 13,
+      "avgPrice": 14.5,
+      "maxPrice": 16,
+      "supermarketPrice": 14,
+      "wetMarketPrice": 15,
+      "cheapestRetailers": [
+        "Mydin",
+        "Econsave",
+        "Pasar Mini"
+      ],
+      "keywords": [
+        "beras",
+        "rice",
+        "nasi"
+      ]
+    },
+    {
+      "id": "tepung-gandum",
+      "name": "Tepung Gandum Kegunaan Am",
+      "unit": "1 kg",
+      "category": "Tepung",
+      "channel": "supermarket",
+      "minPrice": 2.8,
+      "avgPrice": 3.2,
+      "maxPrice": 3.8,
+      "supermarketPrice": 3.1,
+      "wetMarketPrice": 3.4,
+      "cheapestRetailers": [
+        "Speedmart 99",
+        "Lotus's",
+        "Econsave"
+      ],
+      "keywords": [
+        "tepung",
+        "flour",
+        "tepung gandum"
+      ]
+    },
+    {
+      "id": "kentang",
+      "name": "Ubi Kentang (Import)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran",
+      "channel": "both",
+      "minPrice": 3.2,
+      "avgPrice": 4.2,
+      "maxPrice": 5.5,
+      "supermarketPrice": 4,
+      "wetMarketPrice": 4.5,
+      "cheapestRetailers": [
+        "Econsave",
+        "Mydin",
+        "Pasar Basah"
+      ],
+      "keywords": [
+        "kentang",
+        "potato",
+        "ubi kentang"
+      ]
+    },
+    {
+      "id": "tomato",
+      "name": "Tomato Tanah Rendah / Cameron",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran",
+      "channel": "both",
+      "minPrice": 4.5,
+      "avgPrice": 5.8,
+      "maxPrice": 7.5,
+      "supermarketPrice": 5.5,
+      "wetMarketPrice": 6.2,
+      "cheapestRetailers": [
+        "Lotus's",
+        "Pasar Tani",
+        "Econsave"
+      ],
+      "keywords": [
+        "tomato",
+        "buah tomato"
+      ]
+    },
+    {
+      "id": "kobis-bulat",
+      "name": "Kobis Bulat Tempatan / Import",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran",
+      "channel": "both",
+      "minPrice": 3.5,
+      "avgPrice": 4.5,
+      "maxPrice": 6,
+      "supermarketPrice": 4.2,
+      "wetMarketPrice": 4.8,
+      "cheapestRetailers": [
+        "Mydin",
+        "Econsave",
+        "Pasar Basah"
+      ],
+      "keywords": [
+        "kobis",
+        "cabbage",
+        "kubis"
+      ]
+    },
+    {
+      "id": "sawi-hijau",
+      "name": "Sawi Hijau (Choy Sum)",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran",
+      "channel": "both",
+      "minPrice": 4,
+      "avgPrice": 5.5,
+      "maxPrice": 7.5,
+      "supermarketPrice": 5.2,
+      "wetMarketPrice": 5.8,
+      "cheapestRetailers": [
+        "Pasar Tani",
+        "Pasar Basah",
+        "Lotus's"
+      ],
+      "keywords": [
+        "sawi",
+        "choy sum",
+        "mustard green"
+      ]
+    },
+    {
+      "id": "kangkung",
+      "name": "Kangkung",
+      "unit": "1 kg",
+      "category": "Sayur-Sayuran",
+      "channel": "wet_market",
+      "minPrice": 3.5,
+      "avgPrice": 4.8,
+      "maxPrice": 6.5,
+      "supermarketPrice": 5,
+      "wetMarketPrice": 4.5,
+      "cheapestRetailers": [
+        "Pasar Basah",
+        "Econsave",
+        "Pasar Tani"
+      ],
+      "keywords": [
+        "kangkung",
+        "water spinach"
+      ]
+    },
+    {
+      "id": "kicap-manis",
+      "name": "Kicap Manis / Masin",
+      "unit": "640 ml",
+      "category": "Sos & Perasa",
+      "channel": "supermarket",
+      "minPrice": 5.8,
+      "avgPrice": 6.9,
+      "maxPrice": 8.2,
+      "supermarketPrice": 6.8,
+      "wetMarketPrice": 7.2,
+      "cheapestRetailers": [
+        "Speedmart 99",
+        "Econsave",
+        "Mydin"
+      ],
+      "keywords": [
+        "kicap",
+        "soy sauce",
+        "kicap manis",
+        "kicap pekat"
+      ]
+    },
+    {
+      "id": "sos-tiram",
+      "name": "Sos Tiram",
+      "unit": "510 g",
+      "category": "Sos & Perasa",
+      "channel": "supermarket",
+      "minPrice": 4.9,
+      "avgPrice": 5.8,
+      "maxPrice": 6.8,
+      "supermarketPrice": 5.7,
+      "wetMarketPrice": 6,
+      "cheapestRetailers": [
+        "Lotus's",
+        "Speedmart 99",
+        "Mydin"
+      ],
+      "keywords": [
+        "sos tiram",
+        "oyster sauce"
+      ]
+    },
+    {
+      "id": "gula-pasir-kasar",
+      "name": "Gula Pasir Kasar / Halus (Bersubsidi)",
+      "unit": "1 kg",
+      "category": "Barangan Kering",
+      "channel": "supermarket",
+      "minPrice": 2.85,
+      "avgPrice": 2.85,
+      "maxPrice": 3,
+      "supermarketPrice": 2.85,
+      "wetMarketPrice": 2.9,
+      "cheapestRetailers": [
+        "Kedai Runcit",
+        "Mydin",
+        "Econsave"
+      ],
+      "keywords": [
+        "gula",
+        "sugar"
+      ]
+    },
+    {
+      "id": "garam-halus",
+      "name": "Garam Halus / Kasar",
+      "unit": "450 g",
+      "category": "Barangan Kering",
+      "channel": "supermarket",
+      "minPrice": 0.9,
+      "avgPrice": 1.2,
+      "maxPrice": 1.6,
+      "supermarketPrice": 1.1,
+      "wetMarketPrice": 1.3,
+      "cheapestRetailers": [
+        "Speedmart 99",
+        "Mydin",
+        "Kedai Runcit"
+      ],
+      "keywords": [
+        "garam",
+        "salt"
+      ]
+    }
+  ]
+}
