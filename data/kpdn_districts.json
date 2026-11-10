@@ -1,0 +1,3493 @@
+[
+  {
+    "id": "perak-kinta",
+    "key": "Perak::Kinta",
+    "state": "Perak",
+    "district": "Kinta",
+    "label": "Kinta (Ipoh & Batu Gajah)",
+    "lat": 4.5975,
+    "lon": 101.0901,
+    "wetMarkets": [
+      "PASAR BESAR IPOH",
+      "PASAR TANJUNG RAMBUTAN",
+      "PASAR GOPENG",
+      "PASAR BATU GAJAH",
+      "PASAR GUNUNG RAPAT",
+      "PASAR KAMPUNG TAWAS"
+    ],
+    "supermarkets": [
+      "LOTUSS STORE STATION 18",
+      "MEDAN SELERA LOTUS'S STATION 18",
+      "TF VALUE MART BATU GAJAH",
+      "LOTUSS STORE BERCHAM",
+      "AEON KINTA CITY",
+      "MYDIN MERU RAYA"
+    ]
+  },
+  {
+    "id": "melaka-melaka-tengah",
+    "key": "Melaka::Melaka Tengah",
+    "state": "Melaka",
+    "district": "Melaka Tengah",
+    "label": "Melaka Tengah",
+    "lat": 2.2,
+    "lon": 102.25,
+    "wetMarkets": [
+      "PASAR BESAR MBMB",
+      "PASAR BUKIT CINA"
+    ],
+    "supermarkets": [
+      "JUSCO AYER KEROH",
+      "ECONSAVE CASH AND CARRY MALIM S/B",
+      "TESCO PERINGGIT",
+      "MYDIN MITC MELAKA",
+      "NSK TRADE CITY (MELAKA) SDN BHD",
+      "BIG 10 GROCER"
+    ]
+  },
+  {
+    "id": "w-p-putrajaya-wp-putrajaya",
+    "key": "W.P. Putrajaya::Wp Putrajaya",
+    "state": "W.P. Putrajaya",
+    "district": "Wp Putrajaya",
+    "label": "Wp Putrajaya, W.P. Putrajaya",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR TANI, PRESINT 4",
+      "PASAR BASAH PRESINT 8",
+      "MYFARM OUTLET PRESINT 7"
+    ],
+    "supermarkets": [
+      "AEON BIG ALAMANDA",
+      "COLD STORAGE ALAMANDA",
+      "MYDIN BAZAAR PRESINT 15",
+      "MY HERO HYPERMARKET PRESINT 3",
+      "LOTUS’S IOI MALL PUTRAJAYA",
+      "SEGI FRESH PUTRAJAYA PRESINT 15"
+    ]
+  },
+  {
+    "id": "perlis-kangar",
+    "key": "Perlis::Kangar",
+    "state": "Perlis",
+    "district": "Kangar",
+    "label": "Kangar, Perlis",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KUALA PERLIS",
+      "PASAR BASAH AWAM SENA"
+    ],
+    "supermarkets": [
+      "PASARAYA K-CERIA (KANGAR) SDN. BHD",
+      "PASARAYA THE STORE (MALAYSIA)",
+      "KEDAI BORONG DIN",
+      "PASARAYA SERI  UTAMA SDN. BHD. (CAWANGAN BOHOR PULAI)",
+      "GIANT SUPERSTORE KANGAR",
+      "PASARAYA SERI UTAMA (KUALA PERLIS)"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-tampin",
+    "key": "Negeri Sembilan::Tampin",
+    "state": "Negeri Sembilan",
+    "district": "Tampin",
+    "label": "Tampin, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR TAMPIN",
+      "PASAR TAMPIN"
+    ],
+    "supermarkets": [
+      "TAMPIN SHOPPING CENTRE",
+      "PASARAYA KK",
+      "ECONSAVE TAMPIN"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-cheras",
+    "key": "W.P. Kuala Lumpur::Cheras",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Cheras",
+    "label": "Cheras, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR PUDU",
+      "PASAR TAMAN CHERAS",
+      "PASAR SEMENTARA JALAN LENGKUAS",
+      "PASAR ICC PUDU"
+    ],
+    "supermarkets": [
+      "THE STORE ( PUDU PLAZA )",
+      "LOTUS'S CHERAS",
+      "SEGI FRESH ( TAMAN SHAMELIN )",
+      "AEON (TAMAN MALURI )",
+      "AEON MAXVALU PRIME ( SUNWAY VELOCITY MALL )",
+      "NSK TRADE CITY ( JALAN PEEL )"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-seremban",
+    "key": "Negeri Sembilan::Seremban",
+    "state": "Negeri Sembilan",
+    "district": "Seremban",
+    "label": "Seremban",
+    "lat": 2.7297,
+    "lon": 101.9381,
+    "wetMarkets": [
+      "PASAR AWAM RASAH",
+      "PASAR AMPANGAN",
+      "PASAR BESAR SEREMBAN",
+      "PASAR BESAR SEREMBAN, NEGERI SEMBILAN",
+      "PASAR AWAM NILAI"
+    ],
+    "supermarkets": [
+      "HUDA GROCER",
+      "GIANT NILAI",
+      "FAMILY STORE RASAH JAYA",
+      "TESCO SEREMBAN 2",
+      "FAMILY STORE SIKAMAT",
+      "GRAND UNION STORE"
+    ]
+  },
+  {
+    "id": "selangor-petaling-jaya",
+    "key": "Selangor::Petaling Jaya",
+    "state": "Selangor",
+    "district": "Petaling Jaya",
+    "label": "Petaling Jaya, Selangor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR JALAN OTHMAN",
+      "PASAR SERI SETIA",
+      "PASAR LEMBAH SUBANG DAMANSARA"
+    ],
+    "supermarkets": [
+      "GIANT SUPERMARKET KELANA JAYA",
+      "GIANT SUPERMARKET AMCORP MALL",
+      "GIANT HYPERMARKET KOTA DAMANSARA",
+      "MY MYDIN TAMAN SRI MANJA",
+      "GIANT SUPERMARKET SRI MANJA",
+      "GIANT HYPERMARKET KELANA JAYA"
+    ]
+  },
+  {
+    "id": "sabah-tuaran",
+    "key": "Sabah::Tuaran",
+    "state": "Sabah",
+    "district": "Tuaran",
+    "label": "Tuaran, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH TUARAN"
+    ],
+    "supermarkets": [
+      "GMART TUARAN",
+      "CKS HYPERMARKET TUARAN",
+      "JAYA SUPERSTORE TUARAN",
+      "BATARAS LEGACY",
+      "GMART COLD STORAGE SDN BHD GAYANG"
+    ]
+  },
+  {
+    "id": "perak-larut-matang-selama",
+    "key": "Perak::Larut, Matang & Selama",
+    "state": "Perak",
+    "district": "Larut, Matang & Selama",
+    "label": "Larut, Matang & Selama, Perak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM TAIPING.",
+      "PASAR AWAM BATU KURAU",
+      "PASAR AWAM MATANG",
+      "PASAR SIMPANG",
+      "PASAR BESAR KAMUNTING",
+      "PASAR TAMAN KAYA ( TAIPING)"
+    ],
+    "supermarkets": [
+      "LOTUSS STORE TAIPING",
+      "THE STORE KAMUNTING",
+      "ECONSAVE CASH & CARRY SDN. BHD. KAMUNTING",
+      "PACIFIC HYPERMARKET & DEPT. STORE SDN BHD",
+      "AEON CO.(M) BHD.",
+      "FOOD COURT ECONSAVE"
+    ]
+  },
+  {
+    "id": "selangor-petaling",
+    "key": "Selangor::Petaling",
+    "state": "Selangor",
+    "district": "Petaling",
+    "label": "Petaling (Shah Alam, PJ, Subang)",
+    "lat": 3.0738,
+    "lon": 101.5183,
+    "wetMarkets": [
+      "PASAR KAMPUNG MELAYU SUBANG",
+      "PASAR SEKSYEN 16",
+      "PASAR FAMA PUCHONG",
+      "PASAR SS 15 SUBANG JAYA",
+      "PASAR BASAH SEKSYEN 6"
+    ],
+    "supermarkets": [
+      "TESCO SEKSYEN 13",
+      "TESCO PUCHONG",
+      "AEON BIG SUBANG JAYA",
+      "GIANT SEKSYEN 7 SHAH ALAM",
+      "GIANT KINRARA",
+      "MYDIN USJ"
+    ]
+  },
+  {
+    "id": "w-p-labuan-kawasan-luar-bandar",
+    "key": "W.P. Labuan::Kawasan Luar Bandar",
+    "state": "W.P. Labuan",
+    "district": "Kawasan Luar Bandar",
+    "label": "Kawasan Luar Bandar, W.P. Labuan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Kawasan Luar Bandar",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "HAP HUAT SUPERSTORE",
+      "FAMILY SHOPPING MART",
+      "EMPORIUM LABUAN SHOPPING MART",
+      "LAYANGAN SUPERSTORE",
+      "NEW CHP GUAN ECONMART",
+      "SAVEMORE SUPERMARKET PLT"
+    ]
+  },
+  {
+    "id": "kelantan-kota-bharu",
+    "key": "Kelantan::Kota Bharu",
+    "state": "Kelantan",
+    "district": "Kota Bharu",
+    "label": "Kota Bharu",
+    "lat": 6.1254,
+    "lon": 102.2386,
+    "wetMarkets": [
+      "PASAR BASAH KETEREH",
+      "PASAR BASAH PENGKALAN CHEPA",
+      "PASAR BASAH MELOR",
+      "PASAR  BESAR SITI KHADIJAH",
+      "PASAR KUBANG PASU",
+      "PASAR BEREK 12"
+    ],
+    "supermarkets": [
+      "TESCO KOTA BHARU",
+      "PASARAYA PKT PASIR TUMBOH",
+      "BILLION KOTA SERI MUTIARA",
+      "PANTAI TIMUR PINTU PONG",
+      "PANTAI TIMUR HYPERMARKET",
+      "PACIFIC HYPERMARKET & DEPARTMENT STORE SDN BHD"
+    ]
+  },
+  {
+    "id": "kedah-kota-setar",
+    "key": "Kedah::Kota Setar",
+    "state": "Kedah",
+    "district": "Kota Setar",
+    "label": "Kota Setar (Alor Setar)",
+    "lat": 6.1167,
+    "lon": 100.3667,
+    "wetMarkets": [
+      "PASAR BESAR ALOR STAR",
+      "PASAR BASAH SIMPANG EMPAT (ALOR SETAR)",
+      "PASAR BASAH KUALA KEDAH"
+    ],
+    "supermarkets": [
+      "LOTUSS STORE (TESCO MERGONG)",
+      "PACIFIC STAR PARADE COMPLEX",
+      "PASARAYA BILLION (ALOR SETAR) SDN BHD",
+      "MYDIN WHOLESALE HYPERMARKET ALOR SETAR",
+      "PACIFIC ALOR STAR MALL",
+      "LOTUSS STORE (TESCO STARGATE)"
+    ]
+  },
+  {
+    "id": "sarawak-bintulu",
+    "key": "Sarawak::Bintulu",
+    "state": "Sarawak",
+    "district": "Bintulu",
+    "label": "Bintulu, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR UTAMA BINTULU"
+    ],
+    "supermarkets": [
+      "FARLEY SUPERMARKET",
+      "MDS MART SDN. BHD.",
+      "NEW WORLD MART SDN. BHD.",
+      "SING KWONG",
+      "ECONSAVE CASH & CARRY (EM) SDN. BHD",
+      "EMART (BINTULU) SDN BHD"
+    ]
+  },
+  {
+    "id": "sabah-tamparuli",
+    "key": "Sabah::Tamparuli",
+    "state": "Sabah",
+    "district": "Tamparuli",
+    "label": "Tamparuli, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH TAMPARULI"
+    ],
+    "supermarkets": [
+      "GMART TAMPARULI",
+      "BATARAS HYPERMARKET TAMPARULI"
+    ]
+  },
+  {
+    "id": "kelantan-kuala-krai",
+    "key": "Kelantan::Kuala Krai",
+    "state": "Kelantan",
+    "district": "Kuala Krai",
+    "label": "Kuala Krai, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR KUALA KRAI",
+      "PASAR BORONG GUCHIL"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONJAYA KUALA KRAI",
+      "PASARAYA PKT SDN BHD",
+      "PASARAYA PANTAI TIMUR SDN. BHD",
+      "PASARAYA JAYA GADING SDN BHD",
+      "PASARAYA KITO KUALA KRAI"
+    ]
+  },
+  {
+    "id": "sarawak-bau",
+    "key": "Sarawak::Bau",
+    "state": "Sarawak",
+    "district": "Bau",
+    "label": "Bau, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH BAU"
+    ],
+    "supermarkets": [
+      "UPWELL SUPERMARKET SDN. BHD. (BAU)",
+      "LEPAPA MARKET JAMBUSAN",
+      "LEPAPA HYPERMARKET @ TASIK BIRU BAU",
+      "EVERWIN CENTRE SDN BHD - BAU BRANCH"
+    ]
+  },
+  {
+    "id": "perlis-arau",
+    "key": "Perlis::Arau",
+    "state": "Perlis",
+    "district": "Arau",
+    "label": "Arau, Perlis",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR ARAU",
+      "PASAR BESAR SIMPANG EMPAT"
+    ],
+    "supermarkets": [
+      "PASARAYA EKONOMI A-WANG",
+      "PASARAYA AMBAR SEJATI",
+      "PASARAYA C-MART",
+      "BORONG DIN AS CASH & CARRY (JEJAWI)"
+    ]
+  },
+  {
+    "id": "perlis-padang-besar",
+    "key": "Perlis::Padang Besar",
+    "state": "Perlis",
+    "district": "Padang Besar",
+    "label": "Padang Besar, Perlis",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH MATA AYER",
+      "PASAR BASAH PADANG BESAR"
+    ],
+    "supermarkets": [
+      "PASARAYA PERTUBUHAN PELADANG",
+      "PASARAYA BORONG DIN",
+      "PASARAYA MAJU AHAMMAD",
+      "JIMAT-JIMAT FRESH & FROZEN MART (BESERI)",
+      "PASARAYA AL- MADEENA",
+      "OSLO FRESH MART"
+    ]
+  },
+  {
+    "id": "kelantan-tumpat",
+    "key": "Kelantan::Tumpat",
+    "state": "Kelantan",
+    "district": "Tumpat",
+    "label": "Tumpat, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR CHABANG EMPAT",
+      "PASAR BESAR WAKAF BHARU",
+      "PASAR SUMAYYAH"
+    ],
+    "supermarkets": [
+      "PASARAYA SALAMKU (PASIR PEKAN) S/B",
+      "PASARAYA SUPERMAS",
+      "PASARAYA PANTAI TIMOR, TUMPAT"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-seputeh",
+    "key": "W.P. Kuala Lumpur::Seputeh",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Seputeh",
+    "label": "Seputeh, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR JALAN KLANG LAMA"
+    ],
+    "supermarkets": [
+      "THE STORE ( SRI PETALING )",
+      "NSK TRADE CITY ( KUCHAI LAMA )",
+      "DE MARKET ( KNL MARKET SDN BHD )",
+      "JAYA GROCER ( PEARL SHOPPING GALERY )",
+      "ECONSAVE CASH AND CARRY ( SCOTT GARDEN )",
+      "BEN'S INDEPENDENT GROCER ( B.I.G )"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-setiawangsa",
+    "key": "W.P. Kuala Lumpur::Setiawangsa",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Setiawangsa",
+    "label": "Setiawangsa, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AIR PANAS"
+    ],
+    "supermarkets": [
+      "AEON BIG ( WANGSA MAJU )",
+      "PASARAYA B & O",
+      "GIANT SUPERMARKET ( SETIAWANGSA )",
+      "AEON ( AU2 )",
+      "NSK TOPZELLER",
+      "HERO MARKET (SEKSYEN 6, WANGSA MAJU )"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-lembah-pantai",
+    "key": "W.P. Kuala Lumpur::Lembah Pantai",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Lembah Pantai",
+    "label": "Lembah Pantai, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR PAGI AWAM JALAN TELAWI"
+    ],
+    "supermarkets": [
+      "AEON BIG ( MID VALLEY )",
+      "AEON ( MID VALLEY )",
+      "TMC ( BANGSAR )",
+      "VILLAGE GROCER ( BANGSAR VILLAGE )",
+      "CHECKERS CASH & CARRY ( TMN SRI SENTOSA )",
+      "JAYA GROCER ( THE GARDENS MID VALLEY )"
+    ]
+  },
+  {
+    "id": "kelantan-gua-musang",
+    "key": "Kelantan::Gua Musang",
+    "state": "Kelantan",
+    "district": "Gua Musang",
+    "label": "Gua Musang, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR GUA MUSANG",
+      "PASAR BESAR CHIKU 3"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONJAYA (GM) SDN. BHD.",
+      "TUNAS MANJA GROUP (TMG)",
+      "BS FRESHMART",
+      "TF VALUE MART (GUA MUSANG) SDN. BHD",
+      "ECONSAVE CASH & CARRY (GM) SDN. BHD",
+      "PASARAYA PKT (GUA MUSANG) SDN. BHD"
+    ]
+  },
+  {
+    "id": "kelantan-pasir-puteh",
+    "key": "Kelantan::Pasir Puteh",
+    "state": "Kelantan",
+    "district": "Pasir Puteh",
+    "label": "Pasir Puteh, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SITI HAJAR PASIR PUTEH",
+      "PASAR SITI SARAH SELISING"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONJAYA PASIR PUTEH",
+      "PASARAYA PANTAI TIMOR (PASIR PUTEH) SDN BHD",
+      "PKT PASIR PUTEH",
+      "ECONSAVE CASH & CARRY (PP)",
+      "MYDIN MART PASIR PUTEH"
+    ]
+  },
+  {
+    "id": "kelantan-bachok",
+    "key": "Kelantan::Bachok",
+    "state": "Kelantan",
+    "district": "Bachok",
+    "label": "Bachok, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR SITI AISYAH",
+      "PASAR BESAR SITI HAFSAH"
+    ],
+    "supermarkets": [
+      "PASARAYA PANTAI TIMUR (BACHOK) SDN. BHD",
+      "PASARAYA BILLION MART",
+      "SALAMKU RETAIL SDN BHD (BACHOK)",
+      "PANTAI TIMUR JELAWAT",
+      "SALAMKU XTRA - KOTA JEMBAL SDN BHD"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-batu",
+    "key": "W.P. Kuala Lumpur::Batu",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Batu",
+    "label": "Batu, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SENTUL",
+      "PASAR BATU 5",
+      "PASAR HARIAN SELAYANG ( KL )",
+      "PASAR BANDAR BARU SENTUL"
+    ],
+    "supermarkets": [
+      "MERCATO ( SUNWAY PUTRA MALL )",
+      "PASARAYA ONG TAI KIM ( SENTUL )",
+      "LOTUS'S SELAYANG",
+      "UMA RANI CASH & CARRY",
+      "HERO MARKET ( SUNGAI MAS PLAZA )",
+      "VILLAGE GROCER LSH33"
+    ]
+  },
+  {
+    "id": "kelantan-tanah-merah",
+    "key": "Kelantan::Tanah Merah",
+    "state": "Kelantan",
+    "district": "Tanah Merah",
+    "label": "Tanah Merah, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR TANAH MERAH",
+      "PASAR BASAH AGRO SANTAN SEGAR",
+      "PASAR SEGAR PELADANG",
+      "AGRO BAZAR RAKYAT",
+      "PASAR OTHMAN BIN OMAR"
+    ],
+    "supermarkets": [
+      "PASARAYA PANTAI TIMUR",
+      "PASARAYA JAYA GADING SDN.BHD",
+      "PASARAYA PANTAI TIMUR BUKIT BUNGA",
+      "PASARAYA PKT"
+    ]
+  },
+  {
+    "id": "johor-pontian",
+    "key": "Johor::Pontian",
+    "state": "Johor",
+    "district": "Pontian",
+    "label": "Pontian, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM PONTIAN",
+      "PASAR AWAM PEKAN NANAS"
+    ],
+    "supermarkets": [
+      "ECONSAVE CASH & CARRY PONTIAN",
+      "MASLEE WHOLESALE C & C (PONTIAN) S/B",
+      "CHOP GUAN SENG (GS MART)",
+      "TARGET SUPERMARKET (PONTIAN) SDN. BHD.",
+      "ECONSAVE CASH & CARRY JERAM BATU",
+      "MASLEE EXPRESS PEKAN NENAS"
+    ]
+  },
+  {
+    "id": "johor-mersing",
+    "key": "Johor::Mersing",
+    "state": "Johor",
+    "district": "Mersing",
+    "label": "Mersing, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH MERSING",
+      "PASAR AWAM ENDAU"
+    ],
+    "supermarkets": [
+      "PASARAYA TUNAS MANJA",
+      "PASARAYA KINI",
+      "PASARAYA FRESH HUB",
+      "BS FRESH MART",
+      "DF FRESH MART",
+      "BS FRESHMART MERSING"
+    ]
+  },
+  {
+    "id": "johor-johor-bahru",
+    "key": "Johor::Johor Bahru",
+    "state": "Johor",
+    "district": "Johor Bahru",
+    "label": "Johor Bahru",
+    "lat": 1.4927,
+    "lon": 103.7414,
+    "wetMarkets": [
+      "PASAR AWAM MASAI",
+      "PASAR AWAM LARKIN",
+      "PASAR AWAM ULU TIRAM",
+      "PASAR AWAM TAMAN UNIVERSITI",
+      "PASAR AWAM KULAI",
+      "PASAR AWAM PERLING"
+    ],
+    "supermarkets": [
+      "LOTUS`S SERI ALAM",
+      "PASARAYA KIP MART MASAI",
+      "GIANT HYPERMARKET PLENTONG",
+      "GIANT HYPERMARKET TAMPOI",
+      "GIANT HYPERMARKET LEISURE MALL",
+      "ECONSAVE SKUDAI PARADE"
+    ]
+  },
+  {
+    "id": "johor-kota-tinggi",
+    "key": "Johor::Kota Tinggi",
+    "state": "Johor",
+    "district": "Kota Tinggi",
+    "label": "Kota Tinggi, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM KOTA TINGGI",
+      "PASAR AWAM BANDAR TENGGARA",
+      "PASAR AWAM TAMAN KOTA JAYA"
+    ],
+    "supermarkets": [
+      "OREN SUPERSTORE, BDR TENGGARA",
+      "KIP MART KOTA TINGGI",
+      "D'MART KOTA TINGGI",
+      "ECONSAVE KOTA TINGGI",
+      "PASARAYA JOMPA GROCER",
+      "PASARAYA BEYOND"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-gemas",
+    "key": "Negeri Sembilan::Gemas",
+    "state": "Negeri Sembilan",
+    "district": "Gemas",
+    "label": "Gemas, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM GEMAS"
+    ],
+    "supermarkets": [
+      "PASARAYA G-MART"
+    ]
+  },
+  {
+    "id": "w-p-labuan-kawasan-bandar",
+    "key": "W.P. Labuan::Kawasan Bandar",
+    "state": "W.P. Labuan",
+    "district": "Kawasan Bandar",
+    "label": "Kawasan Bandar, W.P. Labuan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SENTRAL LABUAN"
+    ],
+    "supermarkets": [
+      "MILIMEWAH SUPERSTORE",
+      "UTAMA JAYA SUPERSTORE",
+      "LABUAN SUPERMARKET",
+      "D'ONE MART",
+      "BATARAS HYPERMARKET"
+    ]
+  },
+  {
+    "id": "kelantan-pasir-mas",
+    "key": "Kelantan::Pasir Mas",
+    "state": "Kelantan",
+    "district": "Pasir Mas",
+    "label": "Pasir Mas",
+    "lat": 6.0417,
+    "lon": 102.1417,
+    "wetMarkets": [
+      "PASAR BESAR BANDAR TASEK RAJA"
+    ],
+    "supermarkets": [
+      "PANTAI TIMUR SHOPPING CENTRE (RANTAU) SDN. BHD",
+      "PASARAYA PANTAI TIMUR SHOPPING CENTER",
+      "SALAMKU EXTRA TENDONG",
+      "PANTAI TIMOR MART LUBOK JONG",
+      "U ALL MART (PASIR MAS) SDN BHD",
+      "MYDIN PASIR MAS"
+    ]
+  },
+  {
+    "id": "sarawak-serian",
+    "key": "Sarawak::Serian",
+    "state": "Sarawak",
+    "district": "Serian",
+    "label": "Serian, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH SERIAN"
+    ],
+    "supermarkets": [
+      "H&L SIBURAN",
+      "H&L SERIAN",
+      "LEPAPA HYPERMARKET",
+      "BS SUPERMART SDN BHD TAPAH, SERIAN",
+      "EVERWIN CENTRE SDN BHD TARAT BRANCH",
+      "EVERWIN CENTRE SDN BHD - 17 MILES SIBURAN"
+    ]
+  },
+  {
+    "id": "sarawak-kuching",
+    "key": "Sarawak::Kuching",
+    "state": "Sarawak",
+    "district": "Kuching",
+    "label": "Kuching",
+    "lat": 1.5533,
+    "lon": 110.3592,
+    "wetMarkets": [
+      "MEDAN NIAGA SATOK",
+      "PASAR KOMUNITI STUTONG",
+      "PASAR BASAH KOTA SENTOSA"
+    ],
+    "supermarkets": [
+      "EVERRISE DEPARTMENTAL STORE SDN. BHD. (4TH MILE)",
+      "BOULEVARD HYPERMARKET (KUCHING) SDN BHD",
+      "EMART SUPERMARKET MATANG",
+      "H&L KUCHING SENTRAL",
+      "EMART (BATU KAWA) SDN. BHD.",
+      "MYDIN HYPERMARKET VISTA TUNKU"
+    ]
+  },
+  {
+    "id": "sabah-keningau",
+    "key": "Sabah::Keningau",
+    "state": "Sabah",
+    "district": "Keningau",
+    "label": "Keningau, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH AM KENINGAU"
+    ],
+    "supermarkets": [
+      "SERVAY JAYA SUPERMARKET",
+      "HIAP LEE SUPERMARKET",
+      "G*MART KENINGAU",
+      "BATARAS HYPERMARKET KENINGAU",
+      "CKS RETAIL SDN BHD",
+      "SABINDO S-MART SUPERMARKET"
+    ]
+  },
+  {
+    "id": "sabah-tambunan",
+    "key": "Sabah::Tambunan",
+    "state": "Sabah",
+    "district": "Tambunan",
+    "label": "Tambunan, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Tambunan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "SABINDO SUPERMARKET TAMBUNAN",
+      "GMART BORNEO RETAIL SDN BHD - TAMBUNAN",
+      "SERVAY JAYA SUPERMARKET"
+    ]
+  },
+  {
+    "id": "sabah-beaufort",
+    "key": "Sabah::Beaufort",
+    "state": "Sabah",
+    "district": "Beaufort",
+    "label": "Beaufort, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM BEAUFORT",
+      "PASAR BASAH & BUAH BEAUFORT"
+    ],
+    "supermarkets": [
+      "CNF HYPERMARKET SDN BHD",
+      "BESTAMART SUPERMARKET SDN BHD",
+      "SERVAY JAYA SUPERMARKET SDN. BHD.",
+      "SERVAY HYPERMARKET (SABAH) SDN BHD",
+      "BESTAMART SDN BHD"
+    ]
+  },
+  {
+    "id": "sabah-tenom",
+    "key": "Sabah::Tenom",
+    "state": "Sabah",
+    "district": "Tenom",
+    "label": "Tenom, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM TENOM"
+    ],
+    "supermarkets": [
+      "BESTAMART (TENOM)",
+      "G-MART (TENOM)"
+    ]
+  },
+  {
+    "id": "sabah-sipitang",
+    "key": "Sabah::Sipitang",
+    "state": "Sabah",
+    "district": "Sipitang",
+    "label": "Sipitang, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM SIPITANG"
+    ],
+    "supermarkets": [
+      "CHOON CHEONG DEPARTMENTAL STORE",
+      "BESTAMART SUPERMARKET",
+      "G-MART SUPERMARKET",
+      "SERVAY JAYA SDN BH"
+    ]
+  },
+  {
+    "id": "sabah-kuala-penyu",
+    "key": "Sabah::Kuala Penyu",
+    "state": "Sabah",
+    "district": "Kuala Penyu",
+    "label": "Kuala Penyu, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM KUALA PENYU"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Kuala Penyu)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-kuala-pilah",
+    "key": "Negeri Sembilan::Kuala Pilah",
+    "state": "Negeri Sembilan",
+    "district": "Kuala Pilah",
+    "label": "Kuala Pilah, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM KUALA PILAH",
+      "PASAR MINI RS MART"
+    ],
+    "supermarkets": [
+      "ECONSAVE CASH & CARRY SDN. BHD. KUALA PILAH",
+      "GIANT SUPERSTORE KUALA PILAH"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-bahau",
+    "key": "Negeri Sembilan::Bahau",
+    "state": "Negeri Sembilan",
+    "district": "Bahau",
+    "label": "Bahau, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM BAHAU",
+      "PASAR AWAM ROMPIN"
+    ],
+    "supermarkets": [
+      "UPWELL BAHAU",
+      "ECONSAVE CASH & CARRY (BH) SDN BHD. BAHAU",
+      "ZEMART BAHAU",
+      "NSK TRADING (BAHAU)"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-rompin",
+    "key": "Negeri Sembilan::Rompin",
+    "state": "Negeri Sembilan",
+    "district": "Rompin",
+    "label": "Rompin, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM ROMPIN"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Rompin)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "johor-muar",
+    "key": "Johor::Muar",
+    "state": "Johor",
+    "district": "Muar",
+    "label": "Muar",
+    "lat": 2.0442,
+    "lon": 102.5689,
+    "wetMarkets": [
+      "PASAR AWAM PAGOH",
+      "PASAR AWAM MAHARANI"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONSAVE MUAR",
+      "THE STORE MUAR",
+      "PASARAYA ASTAKA",
+      "FRESCO (MUAR) SDN BHD",
+      "PASARAYA TF VALUE MART MUAR",
+      "PASARAYA ECONSAVE BAKRI MUAR"
+    ]
+  },
+  {
+    "id": "johor-batu-pahat",
+    "key": "Johor::Batu Pahat",
+    "state": "Johor",
+    "district": "Batu Pahat",
+    "label": "Batu Pahat",
+    "lat": 1.8548,
+    "lon": 102.9325,
+    "wetMarkets": [
+      "PASAR AWAM BATU PAHAT",
+      "PASAR AWAM YONG PENG",
+      "PASAR AWAM SENGGARANG",
+      "PASAR AWAM PARIT SULONG"
+    ],
+    "supermarkets": [
+      "PASARAYA WELLWARD SDN BHD",
+      "PASARAYA HYPERMARKET AEON BIG",
+      "PASARAYA THE STORE (CAWANGAN JALAN RUGAYAH",
+      "PASARAYA ECONSAVE CASH & CARRY SDN BHD",
+      "HYPERMARKET PACIFIC",
+      "TARGET SUPERMARKET (BATU PAHAT) SDN BHD"
+    ]
+  },
+  {
+    "id": "sarawak-sri-aman",
+    "key": "Sarawak::Sri Aman",
+    "state": "Sarawak",
+    "district": "Sri Aman",
+    "label": "Sri Aman, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR TAMU SRI AMAN,SRI AMAN",
+      "PASAR TAMU BERSEPADU SRI AMAN"
+    ],
+    "supermarkets": [
+      "K&L FARMING INDUSTRIES SDN. BHD. (FAIR PRICE)",
+      "DOREMART SDN. BHD. SRI AMAN",
+      "LEPAPA HYPERMARKET",
+      "EVERWIN CENTRE SDN BHD",
+      "ALDI SUPERMARKET",
+      "FAMILY W"
+    ]
+  },
+  {
+    "id": "sabah-kudat",
+    "key": "Sabah::Kudat",
+    "state": "Sabah",
+    "district": "Kudat",
+    "label": "Kudat, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM KUDAT"
+    ],
+    "supermarkets": [
+      "MILIMEWA SUPERSTORE (KUDAT)",
+      "JAYA MURNI SUPERMARKET SDN BHD",
+      "SERVAY JAYA SUPERMARKET SDN BHD",
+      "BATARAS SUPERSTORE"
+    ]
+  },
+  {
+    "id": "perak-kuala-kangsar",
+    "key": "Perak::Kuala Kangsar",
+    "state": "Perak",
+    "district": "Kuala Kangsar",
+    "label": "Kuala Kangsar",
+    "lat": 4.7667,
+    "lon": 100.9333,
+    "wetMarkets": [
+      "PASAR AWAM (KUALA KANGSAR)",
+      "PASAR AWAM (PADANG RENGAS)",
+      "PASAR AWAM (PELADANG)",
+      "PASAR AWAM (SG SIPUT)"
+    ],
+    "supermarkets": [
+      "TF VALUE MART SG SIPUT",
+      "THE STORE (KUALA KANGSAR)",
+      "SEGI FRESH KUALA KANGSAR",
+      "TF VALUEMART KUALA KANGSAR",
+      "SEGI FRESH SUNGAI SIPUT",
+      "BINTANG FRESH KUALA KANGSAR"
+    ]
+  },
+  {
+    "id": "perak-muallim",
+    "key": "Perak::Muallim",
+    "state": "Perak",
+    "district": "Muallim",
+    "label": "Muallim (Tanjong Malim)",
+    "lat": 3.6833,
+    "lon": 101.5167,
+    "wetMarkets": [
+      "PASAR AWAM TANJUNG MALIM",
+      "PASAR AWAM SLIM RIVER"
+    ],
+    "supermarkets": [
+      "TF VALUE MART (TG MALIM)",
+      "ECONSAVE CASH & CARRY SDN. BHD. (SLIM RIVER)",
+      "PASARAYA SEGI FRESH"
+    ]
+  },
+  {
+    "id": "perak-batang-padang",
+    "key": "Perak::Batang Padang",
+    "state": "Perak",
+    "district": "Batang Padang",
+    "label": "Batang Padang (Tapah)",
+    "lat": 4.1833,
+    "lon": 101.2667,
+    "wetMarkets": [
+      "PASAR AWAM TAPAH",
+      "PASAR AWAM SUNGKAI",
+      "PASAR AWAM BIDOR"
+    ],
+    "supermarkets": [
+      "TF VALUE MART TAPAH",
+      "SEGI CASH & CARRY SUNGKAI",
+      "TF VALUE MART BIDOR",
+      "SEGI CASH & CARRY TAPAH"
+    ]
+  },
+  {
+    "id": "johor-segamat",
+    "key": "Johor::Segamat",
+    "state": "Johor",
+    "district": "Segamat",
+    "label": "Segamat, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR  AWAM SEGAMAT",
+      "PASAR AWAM LABIS"
+    ],
+    "supermarkets": [
+      "PASARAYA NIRWANA TAMAN YAYASAN",
+      "PASARAYA ECONSAVE SEGAMAT",
+      "PASARAYA BILLION",
+      "PASARAYA NIRWANA SEGAMAT",
+      "PASARAYA DENWAY",
+      "HWA THAI SUPERMART"
+    ]
+  },
+  {
+    "id": "perak-hulu-perak",
+    "key": "Perak::Hulu Perak",
+    "state": "Perak",
+    "district": "Hulu Perak",
+    "label": "Hulu Perak (Gerik)",
+    "lat": 5.4333,
+    "lon": 101.1333,
+    "wetMarkets": [
+      "PASAR AWAM GERIK",
+      "PASAR AWAM LENGGONG",
+      "PASAR AWAM PENGKALAN HULU"
+    ],
+    "supermarkets": [
+      "PASARAYA FRESHMART",
+      "TF VALUE MART GERIK",
+      "FRESH MART (JLN TOH SYAHBAND) SDN BHD",
+      "FAMILY GROCER",
+      "SEGI FRESH GERIK",
+      "ECONSAVE GERIK"
+    ]
+  },
+  {
+    "id": "pahang-rompin",
+    "key": "Pahang::Rompin",
+    "state": "Pahang",
+    "district": "Rompin",
+    "label": "Rompin, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH ROMPIN"
+    ],
+    "supermarkets": [
+      "TUNAS MANJA ROMPIN SDN.BHD.",
+      "TUNAS MANJA SUPERMARKET (TG. GEMOK) SDN. BHD.",
+      "TUNAS MANJA (MUADZAM SHAH) SDN. BHD.",
+      "PASARAYA BS TANJONG GEMOK",
+      "PANTAI SELAMAT (MUADZAM SHAH) SDN. BHD.",
+      "PASARAYA BS KUALA ROMPIN SDN. BHD."
+    ]
+  },
+  {
+    "id": "kedah-pendang",
+    "key": "Kedah::Pendang",
+    "state": "Kedah",
+    "district": "Pendang",
+    "label": "Pendang, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH PENDANG",
+      "PASAR BASAH TANAH MERAH"
+    ],
+    "supermarkets": [
+      "PASARAYA PENDANG",
+      "PASARAYA KH (TANAH MERAH)",
+      "SK FRESH SUPERMARKET (TANAH MERAH, PENDANG)",
+      "PASARAYA ECONO TANAH MERAH, PENDANG"
+    ]
+  },
+  {
+    "id": "kedah-pokok-sena",
+    "key": "Kedah::Pokok Sena",
+    "state": "Kedah",
+    "district": "Pokok Sena",
+    "label": "Pokok Sena, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH POKOK SENA"
+    ],
+    "supermarkets": [
+      "EXCELL THREE SUPER CENTRE",
+      "SK FRESH SUPERMARKET (POKOK SENA)"
+    ]
+  },
+  {
+    "id": "perak-kerian",
+    "key": "Perak::Kerian",
+    "state": "Perak",
+    "district": "Kerian",
+    "label": "Kerian (Bagan Serai & Parit Buntar)",
+    "lat": 5.0167,
+    "lon": 100.5333,
+    "wetMarkets": [
+      "PASAR AWAM BAGAN SERAI",
+      "PASAR AWAM PARIT BUNTAR",
+      "PASAR AWAM KUALA KURAU",
+      "PASAR SEJAHTERA TANJUNG PIANDANG"
+    ],
+    "supermarkets": [
+      "ECONSAVE PARIT BUNTAR",
+      "BILLION PARIT BUNTAR",
+      "MYDIN PARIT BUNTAR HYPERMARKET",
+      "FOODCOURT MYDIN",
+      "ECONSAVE CASH & CARRY ( BS) SDN BHD",
+      "SEGI CASH & CARRY BAGAN SERAI"
+    ]
+  },
+  {
+    "id": "sarawak-kapit",
+    "key": "Sarawak::Kapit",
+    "state": "Sarawak",
+    "district": "Kapit",
+    "label": "Kapit, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KAPIT (MARKET TERESANG)",
+      "CCK FRESHMART SDN. BHD"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Kapit)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-belaga",
+    "key": "Sarawak::Belaga",
+    "state": "Sarawak",
+    "district": "Belaga",
+    "label": "Belaga, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Belaga",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Belaga)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-song",
+    "key": "Sarawak::Song",
+    "state": "Sarawak",
+    "district": "Song",
+    "label": "Song, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH SONG",
+      "CCK FRESH MART SDN BHD"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Song)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "kelantan-jeli",
+    "key": "Kelantan::Jeli",
+    "state": "Kelantan",
+    "district": "Jeli",
+    "label": "Jeli, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Jeli",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Jeli)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "melaka-alor-gajah",
+    "key": "Melaka::Alor Gajah",
+    "state": "Melaka",
+    "district": "Alor Gajah",
+    "label": "Alor Gajah",
+    "lat": 2.3833,
+    "lon": 102.2,
+    "wetMarkets": [
+      "PASAR BESAR MASJID TANAH",
+      "PASAR BESAR ALOR GAJAH",
+      "PASAR BESAR PULAU SEBANG"
+    ],
+    "supermarkets": [
+      "FAMILY STORE (MASJID TANAH)",
+      "PASARAYA MEGA",
+      "HYPERMARKET MYDIN PULAU SEBANG",
+      "PASARAYA E FAMILY STORE ENTERPRISE"
+    ]
+  },
+  {
+    "id": "kelantan-machang",
+    "key": "Kelantan::Machang",
+    "state": "Kelantan",
+    "district": "Machang",
+    "label": "Machang, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SEGAR LABOK",
+      "PASAR BESAR PULAI CHONDONG",
+      "PASAR BESAR MACHANG"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONJAYA",
+      "PASARAYA PANTAI TIMOR MACHANG"
+    ]
+  },
+  {
+    "id": "perak-hilir-perak",
+    "key": "Perak::Hilir Perak",
+    "state": "Perak",
+    "district": "Hilir Perak",
+    "label": "Hilir Perak (Teluk Intan)",
+    "lat": 4.0167,
+    "lon": 101.0167,
+    "wetMarkets": [
+      "PASAR AWAM TELUK INTAN",
+      "PASAR AWAM LANGKAP"
+    ],
+    "supermarkets": [
+      "THE STORE TELUK INTAN",
+      "TF VALUE MART JLN MAHARAJALELA",
+      "PASARAYA ECONSAVE LANGKAP",
+      "LOTUSS STORE TELUK INTAN",
+      "TF VALUE MART TAMAN MELOR",
+      "SEGI CASH & CARRY SDN BHD"
+    ]
+  },
+  {
+    "id": "sarawak-meradong",
+    "key": "Sarawak::Meradong",
+    "state": "Sarawak",
+    "district": "Meradong",
+    "label": "Meradong, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH BINTANGOR"
+    ],
+    "supermarkets": [
+      "GFRESH MART S/B",
+      "ECONSAVE CASH & CARRY (EM) SDN. BHD"
+    ]
+  },
+  {
+    "id": "sarawak-julau",
+    "key": "Sarawak::Julau",
+    "state": "Sarawak",
+    "district": "Julau",
+    "label": "Julau, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Julau",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Julau)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-sandakan",
+    "key": "Sabah::Sandakan",
+    "state": "Sabah",
+    "district": "Sandakan",
+    "label": "Sandakan",
+    "lat": 5.8402,
+    "lon": 118.1179,
+    "wetMarkets": [
+      "PASAR UMUM BANDAR SANDAKAN",
+      "PASAR BASAH SIBUGA BT 8"
+    ],
+    "supermarkets": [
+      "SERVAY HYPERMARKET SANDAKAN",
+      "PARKWELL DEPARTMENTAL STORE SANDAKAN",
+      "BATARAS HYPERMARKET SANDAKAN",
+      "MYDIN SEJATI HYPERMARKET",
+      "GENTINGMAS MALL SDN. BHD",
+      "CHAU SUI TECK (MAWAR) SDN. BHD"
+    ]
+  },
+  {
+    "id": "sarawak-sarikei",
+    "key": "Sarawak::Sarikei",
+    "state": "Sarawak",
+    "district": "Sarikei",
+    "label": "Sarikei, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SUNGAI RAJANG, SARIKEI",
+      "CENTRAL MARKET SARIKEI"
+    ],
+    "supermarkets": [
+      "EVERWIN ECONOMY MART",
+      "FRIENDLY SUPERMARKET",
+      "NAM LEONG DEPARTMENTAL STORE",
+      "SINYIN SUPERMARKET SDN BHD",
+      "PERNIAGAAN SENG S/B",
+      "KIM HOCK SUPERMARKET SARIKEI SDN BHD"
+    ]
+  },
+  {
+    "id": "sarawak-saratok",
+    "key": "Sarawak::Saratok",
+    "state": "Sarawak",
+    "district": "Saratok",
+    "label": "Saratok, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "MARKET MAJLIS DAERAH SARATOK"
+    ],
+    "supermarkets": [
+      "NAMLEONG DEPARTMENTAL STORE"
+    ]
+  },
+  {
+    "id": "sabah-kota-belud",
+    "key": "Sabah::Kota Belud",
+    "state": "Sabah",
+    "district": "Kota Belud",
+    "label": "Kota Belud, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KOTA BELUD"
+    ],
+    "supermarkets": [
+      "GUI BROTHERS",
+      "GMART KOTA BELUD",
+      "GOLDEN DRAGON CITY KOTA BELUD"
+    ]
+  },
+  {
+    "id": "pulau-pinang-barat-daya",
+    "key": "Pulau Pinang::Barat Daya",
+    "state": "Pulau Pinang",
+    "district": "Barat Daya",
+    "label": "Barat Daya (Bayan Lepas)",
+    "lat": 5.35,
+    "lon": 100.2333,
+    "wetMarkets": [
+      "PASAR BESAR SUNGAI ARA",
+      "KOMPLEKS PASAR BESAR BAYAN BARU",
+      "KOMPLEKS AWAM BALIK PULAU",
+      "PASAR TAMAN LIP SIN",
+      "PASAR KECIL BATU MAUNG",
+      "PASAR KECIL TAMAN SAHABAT"
+    ],
+    "supermarkets": [
+      "SUNSHINE SQUARE",
+      "GIANT HYPERMARKET BAYAN BARU",
+      "TESCO EXTRA SUNGAI DUA",
+      "FOOD COURT GIANT HYPERMARKET",
+      "JUSCO QUEENSBAY MALL",
+      "MYDIN HYPERMARKET BUKIT JAMBUL"
+    ]
+  },
+  {
+    "id": "pulau-pinang-timur-laut",
+    "key": "Pulau Pinang::Timur Laut",
+    "state": "Pulau Pinang",
+    "district": "Timur Laut",
+    "label": "Timur Laut (Georgetown)",
+    "lat": 5.4164,
+    "lon": 100.3327,
+    "wetMarkets": [
+      "PASAR JELUTONG",
+      "PASAR FETTES PARK",
+      "PASAR CHOWRASTA",
+      "PASAR PULAU TIKUS",
+      "PASAR TELUK BAHANG",
+      "PASAR JALAN PATANI"
+    ],
+    "supermarkets": [
+      "BANDAR BARU PULAU TIKUS",
+      "MERCATO GURNEY PLAZA",
+      "GIANT PENANG PLAZA",
+      "PASARAYA GAMA",
+      "TESCO JELUTONG PULAU PINANG",
+      "SUNSHINE FARLIM"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-johol",
+    "key": "Negeri Sembilan::Johol",
+    "state": "Negeri Sembilan",
+    "district": "Johol",
+    "label": "Johol, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM JOHOL",
+      "SKHMP BORONG- PASAR AWAM JOHOL"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Johol)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-tawau",
+    "key": "Sabah::Tawau",
+    "state": "Sabah",
+    "district": "Tawau",
+    "label": "Tawau, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR TANJUNG TAWAU",
+      "PASAR BESAR IKAN TAWAU",
+      "PASAR BATU 24"
+    ],
+    "supermarkets": [
+      "SERVAY HYPERMARKET BANDAR",
+      "MILIMEWA SUPERSTORE SDN BHD TAWAU",
+      "TAI YANG SUPERMARKET",
+      "GENTINGMAS MALL",
+      "BATARAS HYPERMARKET TAWAU",
+      "BATARAS HYPERMARKET JALAN APAS"
+    ]
+  },
+  {
+    "id": "perak-kampar",
+    "key": "Perak::Kampar",
+    "state": "Perak",
+    "district": "Kampar",
+    "label": "Kampar",
+    "lat": 4.3,
+    "lon": 101.15,
+    "wetMarkets": [
+      "PASAR KAMPAR"
+    ],
+    "supermarkets": [
+      "LOTUSS STORE KAMPAR",
+      "ECONSAVE KAMPAR"
+    ]
+  },
+  {
+    "id": "sabah-kota-kinabalu",
+    "key": "Sabah::Kota Kinabalu",
+    "state": "Sabah",
+    "district": "Kota Kinabalu",
+    "label": "Kota Kinabalu",
+    "lat": 5.9804,
+    "lon": 116.0735,
+    "wetMarkets": [
+      "PASAR BESAR KOTA KINABALU",
+      "PASAR AM MANGGATAL",
+      "PASAR INANAM"
+    ],
+    "supermarkets": [
+      "SERVAY HYPERMARKET LIKAS",
+      "CHUA KAH SENG HYPERMARKET PERMAI MANGGATAL",
+      "BATARAS SUPERSTORE",
+      "BATARAS HYPERMARKET GRAND MERDEKA",
+      "BATARAS HYPERMARKET KOLOMBONG INANAM",
+      "SERVAY HYPERMARKET (SABAH) SDN BHD (INANAM)"
+    ]
+  },
+  {
+    "id": "sabah-semporna",
+    "key": "Sabah::Semporna",
+    "state": "Sabah",
+    "district": "Semporna",
+    "label": "Semporna, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH UMUM SEMPORNA"
+    ],
+    "supermarkets": [
+      "MILIMEWA SUPERSTORE",
+      "G - MART SUPERMARKET (SAJ HEN FUNG)",
+      "PASARAYA G*MART BORNEO RETAIL SDN BHD",
+      "BATARAS HYPERMARKET SEMPORNA",
+      "SERVAY JAYA SEMPORNA",
+      "G-MART 2"
+    ]
+  },
+  {
+    "id": "terengganu-kuala-terengganu",
+    "key": "Terengganu::Kuala Terengganu",
+    "state": "Terengganu",
+    "district": "Kuala Terengganu",
+    "label": "Kuala Terengganu",
+    "lat": 5.3302,
+    "lon": 103.1408,
+    "wetMarkets": [
+      "PASAR PAYANG",
+      "PASAR BASAH MANIR",
+      "PASAR BUKIT BESAR",
+      "PASAR CHABANG 3",
+      "MY FARM OUTLET CHENDERING"
+    ],
+    "supermarkets": [
+      "SABASUN BANDAR KUALA TERENGGANU",
+      "MYDIN MALL",
+      "NIRWANA MAJU SDN BHD (432159-V)",
+      "GCH RETAIL (MALAYSIA) SDN. BHD.",
+      "EMPORIUM HOCK KEE SENG SDN BHD CAW.TANJUNG",
+      "MG COOPMART KUALA TERENGGANU"
+    ]
+  },
+  {
+    "id": "sabah-papar",
+    "key": "Sabah::Papar",
+    "state": "Sabah",
+    "district": "Papar",
+    "label": "Papar, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR IKAN & PASAR AM PAPAR"
+    ],
+    "supermarkets": [
+      "CHUA KAH SENG SUPERMARKET PAPAR",
+      "BATARAS SUPERSTORE PAPAR",
+      "G-MART BORNEO RETAIL SDN BHD",
+      "SERVAY HYPERMARKET (SABAH) SDN BHD BENONI"
+    ]
+  },
+  {
+    "id": "sabah-penampang",
+    "key": "Sabah::Penampang",
+    "state": "Sabah",
+    "district": "Penampang",
+    "label": "Penampang, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR DONGGONGON"
+    ],
+    "supermarkets": [
+      "CHUA KAH SENG SUPERMARKET PENAMPANG",
+      "SERVAY HYPERMARKET BANDAR BARU KOIDUPAN, PENAMPANG",
+      "BATARAS HYPERMARKET BUNDUSAN"
+    ]
+  },
+  {
+    "id": "sabah-putatan",
+    "key": "Sabah::Putatan",
+    "state": "Sabah",
+    "district": "Putatan",
+    "label": "Putatan, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR PETAGAS"
+    ],
+    "supermarkets": [
+      "SERVAY HYPERMARKET PARKWELL DEPARTMENTAL STORE PUTATAN",
+      "GOLDEN DRAGON CITY SUPERMARKET PUTATAN",
+      "GIANT HYPERMARKET PUTATAN",
+      "BATARAS HYPERMARKET PUTATAN RAILWAY",
+      "HAP HUAT SUPERMARKET PUTATAN"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-rembau",
+    "key": "Negeri Sembilan::Rembau",
+    "state": "Negeri Sembilan",
+    "district": "Rembau",
+    "label": "Rembau, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM REMBAU"
+    ],
+    "supermarkets": [
+      "B FAMILY MART SDN BHD",
+      "FRESCO N CONVENIENT RETAIL (REMBAU) SDN BHD"
+    ]
+  },
+  {
+    "id": "sabah-kota-marudu",
+    "key": "Sabah::Kota Marudu",
+    "state": "Sabah",
+    "district": "Kota Marudu",
+    "label": "Kota Marudu, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM KOTA MARUDU"
+    ],
+    "supermarkets": [
+      "MILIMEWA SUPERSTORE (KOTA MARUDU)",
+      "SERVAY JAYA HYPERMARKET",
+      "BATARAS SUPERSTORE (KOTA MARUDU)",
+      "CKS RETAIL SDN BHD",
+      "BATARAS FRESH MART (KOTA KINABALU)"
+    ]
+  },
+  {
+    "id": "sabah-kalabakan",
+    "key": "Sabah::Kalabakan",
+    "state": "Sabah",
+    "district": "Kalabakan",
+    "label": "Kalabakan, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SEMARAK"
+    ],
+    "supermarkets": [
+      "G-MART",
+      "STHAMIN SUPERMARKET",
+      "GEMILANG SUPERMARKET (TAWAU)",
+      "SERVAY JAYA SUPERMARKET SDN.BHD"
+    ]
+  },
+  {
+    "id": "kedah-langkawi",
+    "key": "Kedah::Langkawi",
+    "state": "Kedah",
+    "district": "Langkawi",
+    "label": "Langkawi",
+    "lat": 6.35,
+    "lon": 99.8,
+    "wetMarkets": [
+      "PASAR AWAM KUAH",
+      "PASAR AWAM AYER HANGAT",
+      "PASAR AWAM PADANG MATSIRAT"
+    ],
+    "supermarkets": [
+      "TEOW SOON HUAT DUTY FREE SDN. BHD.",
+      "BILLION DUTY-FREE (LANGKAWI) SDN. BHD."
+    ]
+  },
+  {
+    "id": "kedah-kubang-pasu",
+    "key": "Kedah::Kubang Pasu",
+    "state": "Kedah",
+    "district": "Kubang Pasu",
+    "label": "Kubang Pasu (Jitra)",
+    "lat": 6.3,
+    "lon": 100.4167,
+    "wetMarkets": [
+      "PASAR AWAM JITRA",
+      "PASAR TANI KEKAL CHANGLUN",
+      "PASAR AWAM KERPAN",
+      "PASAR AWAM KODIANG"
+    ],
+    "supermarkets": [
+      "PASARAYA C-MART(CHANGLUN) SDN BHD",
+      "PASARAYA KAWANG SDN BHD,",
+      "RMT SUPERMART SDN BHD",
+      "PASARAYA YAWATA SDN BHD",
+      "PASARAYA K-CERIA SDN BHD",
+      "PASARAYA C-MART (JITRA) SDN BHD"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-port-dickson",
+    "key": "Negeri Sembilan::Port Dickson",
+    "state": "Negeri Sembilan",
+    "district": "Port Dickson",
+    "label": "Port Dickson",
+    "lat": 2.5333,
+    "lon": 101.8,
+    "wetMarkets": [
+      "PASAR LUKUT",
+      "PASAR TELUK KEMANG",
+      "PASAR PASIR PANJANG",
+      "PASAR LINGGI",
+      "PASAR PORT DICKSON",
+      "PASAR AWAM PORT DICKSON"
+    ],
+    "supermarkets": [
+      "THE STORE PORT DICKSON",
+      "BILLION PORT DICKSON",
+      "MESRA FAMILY STORE",
+      "TF VALUE MART PORT DICKSON",
+      "FAMILY STORE SUNGGALA",
+      "ECONSAVE PORT DICKSON"
+    ]
+  },
+  {
+    "id": "sarawak-lundu",
+    "key": "Sarawak::Lundu",
+    "state": "Sarawak",
+    "district": "Lundu",
+    "label": "Lundu, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Lundu",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Lundu)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-pitas",
+    "key": "Sabah::Pitas",
+    "state": "Sabah",
+    "district": "Pitas",
+    "label": "Pitas, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM PITAS"
+    ],
+    "supermarkets": [
+      "G-MART BORNEO RETAIL SDN BHD",
+      "CKS RETAIL  SDN BHD (PITAS)"
+    ]
+  },
+  {
+    "id": "melaka-jasin",
+    "key": "Melaka::Jasin",
+    "state": "Melaka",
+    "district": "Jasin",
+    "label": "Jasin, Melaka",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR JASIN",
+      "PASAR BESAR MERLIMAU"
+    ],
+    "supermarkets": [
+      "FRESCO MERLIMAU",
+      "FAMILY STORE (JASIN)",
+      "MEGAMART SDN BHD",
+      "FRESCO JASIN",
+      "JASIN POINT",
+      "PASARAYA ECONSAVE JASIN"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-titiwangsa",
+    "key": "W.P. Kuala Lumpur::Titiwangsa",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Titiwangsa",
+    "label": "Titiwangsa, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR KERAMAT",
+      "PASAR CHOW KIT"
+    ],
+    "supermarkets": [
+      "WAN LEE HENG CASH & CARRY",
+      "PASARAYA STAR GROCER ( DESA PANDAN )",
+      "HOCK CHOON SUPERMARKET",
+      "MERCATO ( GREAT EASTERN )",
+      "JAYA GROCER ( INTERMARK MALL )",
+      "PASARAYA AJ BEST ( CHOW KIT )"
+    ]
+  },
+  {
+    "id": "sabah-lahad-datu",
+    "key": "Sabah::Lahad Datu",
+    "state": "Sabah",
+    "district": "Lahad Datu",
+    "label": "Lahad Datu, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR RAKYAT LAHAD DATU"
+    ],
+    "supermarkets": [
+      "RAMAI RAMAI SDN BHD",
+      "DYNAJAYA HOLDINGS BERHAD",
+      "SERVAY HYPERMARKET (S) S/B LAHAD DATU",
+      "ECONSAVE CASH & CARRY (LD) SDN. BHD",
+      "RAMAI RAMAI SDN BHD (IPEAK)",
+      "STHAMIN SUPERMARKET"
+    ]
+  },
+  {
+    "id": "sarawak-limbang",
+    "key": "Sarawak::Limbang",
+    "state": "Sarawak",
+    "district": "Limbang",
+    "label": "Limbang, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SEJAHTERA",
+      "TAMU CINA LIMBANG"
+    ],
+    "supermarkets": [
+      "CHOON CHEONG DEPARTMENT STORE SDN BHD",
+      "THE PLACE HYPERMARKET SDN BHD",
+      "MK HYPERMART SDN BHD"
+    ]
+  },
+  {
+    "id": "terengganu-kuala-nerus",
+    "key": "Terengganu::Kuala Nerus",
+    "state": "Terengganu",
+    "district": "Kuala Nerus",
+    "label": "Kuala Nerus (Gong Badak)",
+    "lat": 5.39,
+    "lon": 103.09,
+    "wetMarkets": [
+      "PASAR BASAH BATU 6",
+      "PASAR BUKIT TUNGGAL",
+      "PASAR TELUK KETAPANG"
+    ],
+    "supermarkets": [
+      "SABASUN WAKAF TEMBESU",
+      "TUNAS MANJA SUPERMARKET (GONG BADAK) SDN. BHD.",
+      "PASARAYA XIRI GONG DATOK",
+      "MYDIN WHOLESALE HYPERMARKET GONG BADAK",
+      "JOM MAKANG SABASUN",
+      "PXR Bukit Tunggal"
+    ]
+  },
+  {
+    "id": "sarawak-sibu",
+    "key": "Sarawak::Sibu",
+    "state": "Sarawak",
+    "district": "Sibu",
+    "label": "Sibu, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR SENTRAL SMC",
+      "PASAR BASAH SUARAH",
+      "PASAR BASAH JAYA LIHUA",
+      "PASAR BASAH TAMAN REJANG",
+      "PASAR BASAH SUNGAI MERAH",
+      "PASAR BASAH GRAND HEIGHT"
+    ],
+    "supermarkets": [
+      "SING KWONG (SALIM) SUPERMARKET",
+      "FARLEY SUPERMARKET SIBU",
+      "EVERWIN (JALAN PAHLAWAN)",
+      "SING KWONG (KIN ORIENT PLAZA) SUPERMARKET",
+      "DAESCO HYPERMARKET",
+      "GFRESH MART SDN BHD (PERMAI)"
+    ]
+  },
+  {
+    "id": "sarawak-lawas",
+    "key": "Sarawak::Lawas",
+    "state": "Sarawak",
+    "district": "Lawas",
+    "label": "Lawas, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "TAMU BESAR LAWAS"
+    ],
+    "supermarkets": [
+      "LAWAS SUPERMARKET & HARDWARE SDN BHD",
+      "HUI HUANG SUPERMARKET",
+      "RIMBA CENTRAL SDN. BHD. LEPAPA HYPERMARKET LAWAS",
+      "SERVAY EVERGREEN SDN BHD"
+    ]
+  },
+  {
+    "id": "johor-kluang",
+    "key": "Johor::Kluang",
+    "state": "Johor",
+    "district": "Kluang",
+    "label": "Kluang",
+    "lat": 2.0251,
+    "lon": 103.3328,
+    "wetMarkets": [
+      "PASAR AWAM KLUANG",
+      "PASAR AWAM SIMPANG RENGGAM",
+      "PASAR AWAM PALOH"
+    ],
+    "supermarkets": [
+      "SONGMART",
+      "TARGET CASH & CARRY",
+      "TARGET SUPERMARKET",
+      "ECONSAVE KLUANG",
+      "AEON BIG (KLUANG)",
+      "ECONSAVE SIMPANG RENGGAM"
+    ]
+  },
+  {
+    "id": "kedah-sik",
+    "key": "Kedah::Sik",
+    "state": "Kedah",
+    "district": "Sik",
+    "label": "Sik, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR PEKAN SIK",
+      "PASAR BASAH PEKAN BATU LIMA"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Sik)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "terengganu-setiu",
+    "key": "Terengganu::Setiu",
+    "state": "Terengganu",
+    "district": "Setiu",
+    "label": "Setiu",
+    "lat": 5.5333,
+    "lon": 102.7333,
+    "wetMarkets": [
+      "PASAR  BASAH PERMAISURI"
+    ],
+    "supermarkets": [
+      "ZUA PERMAI TRADING"
+    ]
+  },
+  {
+    "id": "kedah-kulim",
+    "key": "Kedah::Kulim",
+    "state": "Kedah",
+    "district": "Kulim",
+    "label": "Kulim",
+    "lat": 5.3667,
+    "lon": 100.55,
+    "wetMarkets": [
+      "PASAR AWAM PADANG SERAI",
+      "PASAR AWAM KULIM",
+      "PASAR AWAM SERDANG",
+      "PASAR AWAM LEMBAH IMPIANA"
+    ],
+    "supermarkets": [
+      "PASARAYA SHAAN SDN BHD",
+      "GIANT KULIM",
+      "TESCO KULIM",
+      "FOODCOURT GIANT",
+      "TF VALUE-MART KULIM",
+      "MYDIN KULIM HYPERMARKET"
+    ]
+  },
+  {
+    "id": "terengganu-besut",
+    "key": "Terengganu::Besut",
+    "state": "Terengganu",
+    "district": "Besut",
+    "label": "Besut (Jertih)",
+    "lat": 5.7667,
+    "lon": 102.55,
+    "wetMarkets": [
+      "PASAR BASAH KG RAJA",
+      "PASAR BASAH JERTEH",
+      "PASAR BASAH BESAR KUALA BESUT"
+    ],
+    "supermarkets": [
+      "SUPERMAS RETAIL SDN. BHD",
+      "PASARAYA ECONJAYA SDN. BHD.",
+      "PASARAYA PANTAI TIMOR JERTEH",
+      "PASARAYA PANTAI TIMUR (TEPI PASAR KUALA BESUT)",
+      "GIANT JERTEH MALL",
+      "MATT MART KG. RAJA"
+    ]
+  },
+  {
+    "id": "pahang-temerloh",
+    "key": "Pahang::Temerloh",
+    "state": "Pahang",
+    "district": "Temerloh",
+    "label": "Temerloh",
+    "lat": 3.45,
+    "lon": 102.4167,
+    "wetMarkets": [
+      "PASAR BESAR BANDAR TEMERLOH",
+      "PASAR BASAH MENTAKAB"
+    ],
+    "supermarkets": [
+      "PASARAYA TF VALUE MART MENTAKAB",
+      "PASARAYA DARUL MAKMUR",
+      "TUNAS MANJA TEMERLOH",
+      "THE STORE TEMERLOH",
+      "PASARAYA BS TEMERLOH SDN BHD",
+      "PASARAYA BS TEMERLOH SDN BHD (CAWANGAN MENTAKAB)"
+    ]
+  },
+  {
+    "id": "terengganu-dungun",
+    "key": "Terengganu::Dungun",
+    "state": "Terengganu",
+    "district": "Dungun",
+    "label": "Dungun",
+    "lat": 4.7667,
+    "lon": 103.4167,
+    "wetMarkets": [
+      "PASAR BESAR DUNGUN",
+      "PASAR BASAH PAKA (DUNGUN)"
+    ],
+    "supermarkets": [
+      "NIRWANA MAJU SDN BHD",
+      "TUNAS MANJA SUPERMARKET (DUNGUN) SDN. BHD.",
+      "PASARAYA SAMAMAJU (D) SDN. BHD.",
+      "SABASUN HYPERRUNCIT SDN. BHD."
+    ]
+  },
+  {
+    "id": "kedah-baling",
+    "key": "Kedah::Baling",
+    "state": "Kedah",
+    "district": "Baling",
+    "label": "Baling, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH (BALING)",
+      "PASAR BASAH (KUALA KETIL)"
+    ],
+    "supermarkets": [
+      "BILLION BALING",
+      "PASARAYA MUTIARA KK",
+      "ECONSAVE CASH AND CARRY (BLG) SDN. BHD."
+    ]
+  },
+  {
+    "id": "pahang-bera",
+    "key": "Pahang::Bera",
+    "state": "Pahang",
+    "district": "Bera",
+    "label": "Bera, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH TRIANG (BERA)",
+      "PASAR BASAH KEMAYAN"
+    ],
+    "supermarkets": [
+      "PASARAYA TF VALUE MART SDN BHD (BERA)",
+      "ECONSAVE CASH AND CARRY (TRI) SDN BHD",
+      "PASARAYA BS FRESH MART",
+      "PASARAYA MUKMIN MART",
+      "KOPERASI PEKEBUN KECIL BERA"
+    ]
+  },
+  {
+    "id": "selangor-klang",
+    "key": "Selangor::Klang",
+    "state": "Selangor",
+    "district": "Klang",
+    "label": "Klang",
+    "lat": 3.0438,
+    "lon": 101.4497,
+    "wetMarkets": [
+      "PASAR BESAR PELABUHAN KLANG",
+      "PASAR MERU KLANG",
+      "PASAR BASAH KAPAR"
+    ],
+    "supermarkets": [
+      "PASARAYA ECONSAVE KAPAR SDN BHD",
+      "AEON BIG KAPAR",
+      "TESCO SETIA ALAM",
+      "GIANT BUKIT TINGGI",
+      "TESCO BUKIT TINGGI",
+      "GIANT KLANG SENTRAL"
+    ]
+  },
+  {
+    "id": "pahang-jerantut",
+    "key": "Pahang::Jerantut",
+    "state": "Pahang",
+    "district": "Jerantut",
+    "label": "Jerantut, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR JERANTUT"
+    ],
+    "supermarkets": [
+      "PASARAYA TF VALUE MART JERANTUT",
+      "PASARAYA BS FRESH MART JERANTUT SDN BHD",
+      "TUNAS MANJA SUPERMARKET (JERANTUT) SDN BHD",
+      "PASARAYA ECONSAVE JERANTUT",
+      "PASARAYA DARUL MAKMUR JERANTUT",
+      "TUNAS MANJA SDN BHD (PETRON)"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-kepong",
+    "key": "W.P. Kuala Lumpur::Kepong",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Kepong",
+    "label": "Kepong, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Kepong",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "AEON ( METRO PRIMA )",
+      "AEON BIG ( KEPONG )",
+      "PASARAYA BUKIT INDAH ( TMN PUSAT KEPONG )",
+      "WAN LEE HENG CASH & CARRY ( KEPONG )",
+      "NSK TRADE CITY ( KEPONG )",
+      "PASARAYA TMG EXPRESS (FORTUNE AVENUE)"
+    ]
+  },
+  {
+    "id": "terengganu-hulu-terengganu",
+    "key": "Terengganu::Hulu Terengganu",
+    "state": "Terengganu",
+    "district": "Hulu Terengganu",
+    "label": "Hulu Terengganu (Kuala Berang)",
+    "lat": 5.0667,
+    "lon": 103.0167,
+    "wetMarkets": [
+      "PASAR BASAH KUALA BERANG",
+      "PASAR BASAH AJIL"
+    ],
+    "supermarkets": [
+      "PASARAYA XIRI KUALA BERANG SDN BHD",
+      "NIRWANA MAJU (KUALA BERANG) SDN. BHD.",
+      "SABASUN HYPERUNCIT AJIL"
+    ]
+  },
+  {
+    "id": "selangor-gombak",
+    "key": "Selangor::Gombak",
+    "state": "Selangor",
+    "district": "Gombak",
+    "label": "Gombak (Selayang, Rawang)",
+    "lat": 3.25,
+    "lon": 101.65,
+    "wetMarkets": [
+      "PASAR PAGI SELAYANG JAYA",
+      "PASAR SELAYANG BARU",
+      "PASAR PAGI SRI GOMBAK"
+    ],
+    "supermarkets": [
+      "GIANT BATU CAVES",
+      "QUALI FOODCOURT @ GIANT HYPERMARKET BATU CAVES",
+      "MYDIN SELAYANG",
+      "ECONSAVE BANDAR BARU SUNGAI BULOH",
+      "GIANT BUKIT ANTARABANGSA",
+      "GIANT TAMAN PERMATA"
+    ]
+  },
+  {
+    "id": "perak-perak-tengah",
+    "key": "Perak::Perak Tengah",
+    "state": "Perak",
+    "district": "Perak Tengah",
+    "label": "Perak Tengah (Seri Iskandar)",
+    "lat": 4.35,
+    "lon": 100.9667,
+    "wetMarkets": [
+      "PASAR AWAM PARIT"
+    ],
+    "supermarkets": [
+      "LOTUSS STORE SERI ISKANDAR",
+      "ECONSAVE SERI ISKANDAR",
+      "RESTORAN AL-BAYAN BILLION SERI ISKANDAR",
+      "SEGI CASH & CARRY PARIT"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-segambut",
+    "key": "W.P. Kuala Lumpur::Segambut",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Segambut",
+    "label": "Segambut, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR TAMAN TUN DR ISMAIL ( TTDI )",
+      "FOOD COURT ( PASAR BESAR TAMAN TUN DR ISMAIL )"
+    ],
+    "supermarkets": [
+      "AEON MAXVALU PRIME ( DESA PARK CITY )",
+      "MERCATO ( SOLARIS MONT KIARA )",
+      "MERCATO ( HARTAMAS )",
+      "LOTUS'S KEPONG",
+      "HERO MARKET ( TTDI )",
+      "JAYA GROCER ( VERVE MONT KIARA )"
+    ]
+  },
+  {
+    "id": "negeri-sembilan-jelebu",
+    "key": "Negeri Sembilan::Jelebu",
+    "state": "Negeri Sembilan",
+    "district": "Jelebu",
+    "label": "Jelebu, Negeri Sembilan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM KUALA KLAWANG.",
+      "PASAR KUALA KLAWANG"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Jelebu)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "pahang-maran",
+    "key": "Pahang::Maran",
+    "state": "Pahang",
+    "district": "Maran",
+    "label": "Maran, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH MARAN"
+    ],
+    "supermarkets": [
+      "U ALL MART SDN BHD",
+      "TUNAS MANJA SUPERMARKET (MARAN) SDN BHD",
+      "MYDIN MALL",
+      "PASARAYA ECONSAVE"
+    ]
+  },
+  {
+    "id": "selangor-kuala-selangor",
+    "key": "Selangor::Kuala Selangor",
+    "state": "Selangor",
+    "district": "Kuala Selangor",
+    "label": "Kuala Selangor",
+    "lat": 3.35,
+    "lon": 101.25,
+    "wetMarkets": [
+      "PASAR AWAM PASIR PENAMBANG",
+      "PASAR AWAM TANJUNG KARANG"
+    ],
+    "supermarkets": [
+      "TESCO KUALA SELANGOR",
+      "BEST FRESH MART",
+      "ECONSAVE KUALA SELANGOR",
+      "SEGI FRESH KUALA SELANGOR",
+      "BSK FRESHMART KUALA SELANGOR",
+      "SEGI FRESH TANJONG KARANG"
+    ]
+  },
+  {
+    "id": "selangor-sabak-bernam",
+    "key": "Selangor::Sabak Bernam",
+    "state": "Selangor",
+    "district": "Sabak Bernam",
+    "label": "Sabak Bernam",
+    "lat": 3.7667,
+    "lon": 100.9833,
+    "wetMarkets": [
+      "PASAR AWAM SG BESAR"
+    ],
+    "supermarkets": [
+      "TF VL MART",
+      "SEGI FRESH SUNGAI BESAR"
+    ]
+  },
+  {
+    "id": "sabah-ranau",
+    "key": "Sabah::Ranau",
+    "state": "Sabah",
+    "district": "Ranau",
+    "label": "Ranau, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR RANAU"
+    ],
+    "supermarkets": [
+      "SABINDO SUPERMARKET",
+      "GMART RANAU",
+      "BATARAS HYPERMARKET KUNDASANG"
+    ]
+  },
+  {
+    "id": "sarawak-kanowit",
+    "key": "Sarawak::Kanowit",
+    "state": "Sarawak",
+    "district": "Kanowit",
+    "label": "Kanowit, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Kanowit",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "PASARAYA IMART"
+    ]
+  },
+  {
+    "id": "sarawak-sibujaya",
+    "key": "Sarawak::Sibujaya",
+    "state": "Sarawak",
+    "district": "Sibujaya",
+    "label": "Sibujaya, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH SIBUJAYA"
+    ],
+    "supermarkets": [
+      "KIM HOCK SUPERMARKET",
+      "JUMBO GROCER",
+      "DOREMART SIBUJAYA"
+    ]
+  },
+  {
+    "id": "sabah-kunak",
+    "key": "Sabah::Kunak",
+    "state": "Sabah",
+    "district": "Kunak",
+    "label": "Kunak, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR UMUM KUNAK"
+    ],
+    "supermarkets": [
+      "PASARAYA SIONG HO",
+      "SERVAY JAYA KUNAK S/B",
+      "STHAMIN SUPERMARKET KUNAK",
+      "BATARAS SUPERSTORE KUNAK"
+    ]
+  },
+  {
+    "id": "selangor-hulu-langat",
+    "key": "Selangor::Hulu Langat",
+    "state": "Selangor",
+    "district": "Hulu Langat",
+    "label": "Hulu Langat (Kajang, Bangi, Ampang)",
+    "lat": 2.9927,
+    "lon": 101.7909,
+    "wetMarkets": [
+      "PASAR  BANGI",
+      "PASAR KAJANG",
+      "PASAR SEMENYIH",
+      "PASAR BORONG SELANGOR",
+      "PASAR SUNTEX"
+    ],
+    "supermarkets": [
+      "LOTUSS STORES",
+      "GIANT SERI KEMBANGAN",
+      "SUPER SEVEN CHERAS JAYA",
+      "ECONSAVE JALAN REKO",
+      "MYDIN TAMAN ANGGERIK",
+      "PASARAYA SEGI FRESH SEMENYIH"
+    ]
+  },
+  {
+    "id": "kedah-padang-terap",
+    "key": "Kedah::Padang Terap",
+    "state": "Kedah",
+    "district": "Padang Terap",
+    "label": "Padang Terap, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KUALA NERANG"
+    ],
+    "supermarkets": [
+      "PASARAYA K-CERIA (KUALA NERANG) SDN BHD"
+    ]
+  },
+  {
+    "id": "sarawak-tatau",
+    "key": "Sarawak::Tatau",
+    "state": "Sarawak",
+    "district": "Tatau",
+    "label": "Tatau, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR TAMU TATAU"
+    ],
+    "supermarkets": [
+      "MDS MART TATAU",
+      "SINYIN MART SDN. BHD.",
+      "MDS MART (TATAU) SDN BHD"
+    ]
+  },
+  {
+    "id": "selangor-rawang",
+    "key": "Selangor::Rawang",
+    "state": "Selangor",
+    "district": "Rawang",
+    "label": "Rawang, Selangor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR MODEN RAWANG"
+    ],
+    "supermarkets": [
+      "NSK HYPERMARKET RAWANG",
+      "MYDIN RAWANG",
+      "TESCO HYPERMARKET RAWANG"
+    ]
+  },
+  {
+    "id": "pulau-pinang-seberang-perai-tengah",
+    "key": "Pulau Pinang::Seberang Perai Tengah",
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Tengah",
+    "label": "Seberang Perai Tengah (Bukit Mertajam)",
+    "lat": 5.3667,
+    "lon": 100.45,
+    "wetMarkets": [
+      "PASAR AWAM SRI PENANTI",
+      "PASAR AWAM BERAPIT",
+      "PASAR AWAM CHAI LENG PARK",
+      "PASAR AWAM SEBERANG JAYA",
+      "PASAR AWAM BUKIT MERTAJAM",
+      "PASAR AWAM SAMA GAGAH"
+    ],
+    "supermarkets": [
+      "BILLION SHOPPING CENTRE (KOTA PERMAI) SDN BHD",
+      "WONDERFUL SUPER MART SHOP SDN BHD",
+      "BILLION SHOPPING CENTRE SEBERANG JAYA",
+      "TESCO EXTRA SEBERANG JAYA",
+      "TESCO BUKIT MERTAJAM",
+      "AEON BIG BUKIT TENGAH"
+    ]
+  },
+  {
+    "id": "pulau-pinang-seberang-perai-utara",
+    "key": "Pulau Pinang::Seberang Perai Utara",
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Utara",
+    "label": "Seberang Perai Utara (Butterworth)",
+    "lat": 5.5,
+    "lon": 100.4333,
+    "wetMarkets": [
+      "PASAR AWAM BAGAN AJAM",
+      "PASAR AWAM KEPALA BATAS",
+      "PASAR AWAM JETI LAMA",
+      "PASAR AWAM TASEK GELUGOR",
+      "PASAR AWAM SUNGAI DUA",
+      "PASAR AWAM PENAGA"
+    ],
+    "supermarkets": [
+      "ECONSAVE CASH & CARRY BUTTERWORTH",
+      "ECONSAVE CASH & CARRY RAJA UDA",
+      "MYDIN WHOLESALE HYPERMARKET BERTAM",
+      "LOTUS'S BERTAM PERDANA",
+      "LOTUS'S BAGAN AJAM",
+      "BILLION SHOPPING CENTRE"
+    ]
+  },
+  {
+    "id": "kedah-yan",
+    "key": "Kedah::Yan",
+    "state": "Kedah",
+    "district": "Yan",
+    "label": "Yan, Kedah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM SG YAN",
+      "PASAR AWAM GUAR CHEMPEDAK",
+      "PASAR KOPERASI GUAR CHEMPEDAK"
+    ],
+    "supermarkets": [
+      "LONGWAN GUAR CHEMPEDAK"
+    ]
+  },
+  {
+    "id": "sarawak-sebauh",
+    "key": "Sarawak::Sebauh",
+    "state": "Sarawak",
+    "district": "Sebauh",
+    "label": "Sebauh, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Sebauh",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Sebauh)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "pahang-kuantan",
+    "key": "Pahang::Kuantan",
+    "state": "Pahang",
+    "district": "Kuantan",
+    "label": "Kuantan",
+    "lat": 3.8077,
+    "lon": 103.326,
+    "wetMarkets": [
+      "PASAR BASAH BALOK",
+      "PASAR BASAH BESAR KUANTAN",
+      "PASAR BASAH KAMPUNG PERAMU",
+      "PASAR BASAH TAMAN TAS",
+      "PASAR BASAH BESAR JAYA GADING"
+    ],
+    "supermarkets": [
+      "PASARAYA TUNAS MANJA BESERAH",
+      "AEON BIG EAST COAST MALL",
+      "TUNAS MANJA SDN BHD (TRANSIT POINT)",
+      "PASARAYA JAYA GADING (BUKIT GOH)",
+      "GIANT KUANTAN",
+      "PASARAYA JAYA GADING (TANJUNG LUMPUR)"
+    ]
+  },
+  {
+    "id": "perak-manjung",
+    "key": "Perak::Manjung",
+    "state": "Perak",
+    "district": "Manjung",
+    "label": "Manjung (Sitiawan & Lumut)",
+    "lat": 4.2167,
+    "lon": 100.6667,
+    "wetMarkets": [
+      "PASAR AWAM AYER TAWAR",
+      "PASAR AWAM SERI MANJUNG",
+      "PASAR AWAM SITIAWAN",
+      "PASAR AWAM KG. KOH"
+    ],
+    "supermarkets": [
+      "ECONSAVE CASH & CARRY (MJ) SDN. BHD. (SETIAWAN)",
+      "LOTUSS STORE MANJUNG",
+      "AEON CO. (M) BHD SERI MANJUNG STORE",
+      "PASARAYA BILLION JALAN LUMUT",
+      "TF VALUE MART SRI MANJUNG",
+      "FOODCOURT ECONSAVE SERI ISKANDAR"
+    ]
+  },
+  {
+    "id": "sarawak-lubok-antu",
+    "key": "Sarawak::Lubok Antu",
+    "state": "Sarawak",
+    "district": "Lubok Antu",
+    "label": "Lubok Antu, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Lubok Antu",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Lubok Antu)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "pulau-pinang-seberang-perai-selatan",
+    "key": "Pulau Pinang::Seberang Perai Selatan",
+    "state": "Pulau Pinang",
+    "district": "Seberang Perai Selatan",
+    "label": "Seberang Perai Selatan (Nibong Tebal)",
+    "lat": 5.2,
+    "lon": 100.5,
+    "wetMarkets": [
+      "PASAR AWAM SG BAKAP",
+      "PASAR AWAM NIBONG TEBAL",
+      "PASAR AWAM TAMBUN INDAH"
+    ],
+    "supermarkets": [
+      "ECONSAVE CASH & CARRY (JAWI) SDN BHD",
+      "C-MART SDN BHD NIBONG TEBAL"
+    ]
+  },
+  {
+    "id": "pahang-lipis",
+    "key": "Pahang::Lipis",
+    "state": "Pahang",
+    "district": "Lipis",
+    "label": "Lipis, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR BUNGA CENGKIH",
+      "PASAR BASAH PADANG TENGKU"
+    ],
+    "supermarkets": [
+      "PASARAYA TF VALUE MART (KUALA LIPIS)",
+      "PASARAYA MEMPAGA FRESH BENTA",
+      "PASARAYA BS (PJ) SDN BHD"
+    ]
+  },
+  {
+    "id": "kedah-kuala-muda",
+    "key": "Kedah::Kuala Muda",
+    "state": "Kedah",
+    "district": "Kuala Muda",
+    "label": "Kuala Muda (Sungai Petani)",
+    "lat": 5.65,
+    "lon": 100.5,
+    "wetMarkets": [
+      "PASAR TAMAN RIA",
+      "PASAR TIKAM BATU",
+      "PASAR GURUN",
+      "PASAR BASAH MERBOK",
+      "PASAR AWAM JENIANG"
+    ],
+    "supermarkets": [
+      "THE STORE SUNGAI PETANI",
+      "ECONSAVE CASH & CARRY (TPJ) SDN BHD",
+      "GM RETAIL & WHOLESALE (SP) SDN. BHD. (G MART)",
+      "LOTUSS (TESCO STORES (M) SDN BHD)",
+      "LOTUSS (TESCO SG. PETANI SELATAN)",
+      "MYDIN SUNGAI PETANI"
+    ]
+  },
+  {
+    "id": "sarawak-bekenu",
+    "key": "Sarawak::Bekenu",
+    "state": "Sarawak",
+    "district": "Bekenu",
+    "label": "Bekenu, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "TAMU DAN PASAR BASAH BEKENU"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Bekenu)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-bandar-tun-razak",
+    "key": "W.P. Kuala Lumpur::Bandar Tun Razak",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Bandar Tun Razak",
+    "label": "Bandar Tun Razak, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR CHERAS",
+      "PASAR SUNGAI BESI"
+    ],
+    "supermarkets": [
+      "AEON BIG ( SRI PETALING )",
+      "HERO MARKET ( BANDAR SRI PERMAISURI )",
+      "PASARAYA TS MEGA ( CHERAS )",
+      "GIANT SUPERMARKET ( DESA PETALING )",
+      "PASARAYA SUPER SEVEN ( PLAZA ANGGERIK )",
+      "PASARAYA STAR GROCER ( TMN MULIA )"
+    ]
+  },
+  {
+    "id": "sarawak-miri",
+    "key": "Sarawak::Miri",
+    "state": "Sarawak",
+    "district": "Miri",
+    "label": "Miri",
+    "lat": 4.4148,
+    "lon": 114.0089,
+    "wetMarkets": [
+      "TAMU MUHIBBAH DAN PASAR BASAH MIRI",
+      "TAMU KROKOP",
+      "TAMU EMART"
+    ],
+    "supermarkets": [
+      "SERVAY HYPERMARKET",
+      "BOULEVARD HYPERMARKET",
+      "EMART SUPERMARKET",
+      "NAM LEONG SUPERMARKET",
+      "NG SIAN HAP SUPERMARKET",
+      "SIN LIANG SUPERMARKET"
+    ]
+  },
+  {
+    "id": "perak-bagan-datuk",
+    "key": "Perak::Bagan Datuk",
+    "state": "Perak",
+    "district": "Bagan Datuk",
+    "label": "Bagan Datuk",
+    "lat": 3.9833,
+    "lon": 100.7833,
+    "wetMarkets": [
+      "PASAR AWAM BAGAN DATUK",
+      "PASAR AWAM HUTAN MELINTANG"
+    ],
+    "supermarkets": [
+      "PASARAYA BILLION (HUTAN MELINTANG)",
+      "PASARAYA ECONSAVE HUTAN MELINTANG"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-wangsa-maju",
+    "key": "W.P. Kuala Lumpur::Wangsa Maju",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Wangsa Maju",
+    "label": "Wangsa Maju, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR JALAN GENTING KLANG"
+    ],
+    "supermarkets": [
+      "PASARAYA ONG TAI KIM ( WANGSA MAJU )",
+      "AEON ( WANGSA MAJU )",
+      "MY MYDIN ( DANAU SAUJANA )",
+      "ECONSAVE CASH AND CARRY ( SETAPAK CENTRAL )",
+      "THE STORE ( M3 MALL TMN MELATI )",
+      "SHUANG-LIM CASH & CARRY"
+    ]
+  },
+  {
+    "id": "pahang-pekan",
+    "key": "Pahang::Pekan",
+    "state": "Pahang",
+    "district": "Pekan",
+    "label": "Pekan, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR PEKAN"
+    ],
+    "supermarkets": [
+      "PASARAYA TUNAS MANJA SDN BHD PEKAN",
+      "PASARAYA PANTAI SELAMAT (PERAMU) SDN BHD",
+      "PASARAYA FRESH CHOICE PEKAN",
+      "BS FRESHMART PEKAN (PERAMU)",
+      "TUNAS MANJA SUPERMARKET (KETAPANG) SDN. BHD",
+      "TUNAS MANJA SDN.BHD. (CAW PERAMU PEKAN)"
+    ]
+  },
+  {
+    "id": "pahang-raub",
+    "key": "Pahang::Raub",
+    "state": "Pahang",
+    "district": "Raub",
+    "label": "Raub, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BESAR RAUB"
+    ],
+    "supermarkets": [
+      "TF VALUE MART RAUB",
+      "TUNAS MANJA RAUB",
+      "KUMPULAN PASARAYA PANTAI TIMUR SDN. BHD RAUB",
+      "BS FRESHMART RAUB",
+      "TMG EXPRESS 3000 SDN BHD (CAW RAUB) TAMAN SERI WAWASAN"
+    ]
+  },
+  {
+    "id": "pahang-bentong",
+    "key": "Pahang::Bentong",
+    "state": "Pahang",
+    "district": "Bentong",
+    "label": "Bentong, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH BENTONG",
+      "PASAR BASAH KARAK"
+    ],
+    "supermarkets": [
+      "TF VALUE MART SDN BHD BENTONG 1",
+      "PASARAYA TF VALUE MART BENTONG 2",
+      "PASARAYA TUNAS MANJA BENTONG",
+      "TMG EXPRESS 3000 SDN BHD (CAW BENTONG DESA DAMAI)",
+      "PASARAYA LYC FRESH SDN. BHD"
+    ]
+  },
+  {
+    "id": "sarawak-mukah",
+    "key": "Sarawak::Mukah",
+    "state": "Sarawak",
+    "district": "Mukah",
+    "label": "Mukah, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH MUKAH"
+    ],
+    "supermarkets": [
+      "GLORY (MUKAH) SUPERMARKET",
+      "MEDAN DEPARTMENTAL STORE SDN BHD (MEDAN MALL)",
+      "GAFU SUPERMARKET (MUKAH)",
+      "EVERWIN SUPERMARKET (MUKAH)",
+      "NAM LEONG DEPARMENT STORE (MUKAH)",
+      "KIM HOCK SUPERMARKET MUKAH"
+    ]
+  },
+  {
+    "id": "sarawak-dalat",
+    "key": "Sarawak::Dalat",
+    "state": "Sarawak",
+    "district": "Dalat",
+    "label": "Dalat, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KECIL DALAT"
+    ],
+    "supermarkets": [
+      "NAM LEONG (DALAT) SUPERMARKET"
+    ]
+  },
+  {
+    "id": "sarawak-batu-niah",
+    "key": "Sarawak::Batu Niah",
+    "state": "Sarawak",
+    "district": "Batu Niah",
+    "label": "Batu Niah, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Batu Niah",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Batu Niah)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-marudi",
+    "key": "Sarawak::Marudi",
+    "state": "Sarawak",
+    "district": "Marudi",
+    "label": "Marudi, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Marudi",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Marudi)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-kota-padawan",
+    "key": "Sarawak::Kota Padawan",
+    "state": "Sarawak",
+    "district": "Kota Padawan",
+    "label": "Kota Padawan, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR BASAH KOTA PADAWAN"
+    ],
+    "supermarkets": [
+      "EVERWIN CENTRE SDN. BHD. (11TH MILE)",
+      "H&L XTRA (KOTA PADAWAN MALL)",
+      "JUMBO GROCER 9TH MILE"
+    ]
+  },
+  {
+    "id": "selangor-kuala-langat",
+    "key": "Selangor::Kuala Langat",
+    "state": "Selangor",
+    "district": "Kuala Langat",
+    "label": "Kuala Langat (Banting)",
+    "lat": 2.8167,
+    "lon": 101.5,
+    "wetMarkets": [
+      "PASAR AWAM BANTING"
+    ],
+    "supermarkets": [
+      "ECONSAVE BANTING",
+      "MEGAH SUPERMARKET (BANTING)"
+    ]
+  },
+  {
+    "id": "terengganu-kemaman",
+    "key": "Terengganu::Kemaman",
+    "state": "Terengganu",
+    "district": "Kemaman",
+    "label": "Kemaman (Chukai)",
+    "lat": 4.2333,
+    "lon": 103.4167,
+    "wetMarkets": [
+      "PASAR BASAH CHUKAI",
+      "PASAR TANI KEKAL (KERTEH)"
+    ],
+    "supermarkets": [
+      "PASARAYA SAMAMAJU (BINJAI) SDN. BHD.",
+      "NIRWANA MAJU SDN.BHD (KEMAMAN)",
+      "TUNAS MANJA SUPERMARKET (KEMAMAN) S.B",
+      "PASARAYA TMC (MESRA MALL)",
+      "COLA AGENCY & TRADING S.B",
+      "PASARAYA BS (PJ) SDN. BHD (CAWANGAN KEMAMAN)"
+    ]
+  },
+  {
+    "id": "terengganu-marang",
+    "key": "Terengganu::Marang",
+    "state": "Terengganu",
+    "district": "Marang",
+    "label": "Marang",
+    "lat": 5.2,
+    "lon": 103.2,
+    "wetMarkets": [
+      "PASAR BUKIT PAYUNG",
+      "PASAR BESAR MARANG",
+      "PASAR WAKAF TAPAI"
+    ],
+    "supermarkets": [
+      "PASARAYA PXR WAKAF TAPAI"
+    ]
+  },
+  {
+    "id": "selangor-sepang",
+    "key": "Selangor::Sepang",
+    "state": "Selangor",
+    "district": "Sepang",
+    "label": "Sepang (Cyberjaya, KLIA)",
+    "lat": 2.8167,
+    "lon": 101.6833,
+    "wetMarkets": [
+      "PASAR AWAM DENGKIL",
+      "PASAR AWAM SUNGAI PELEK",
+      "PASAR AWAM SALAK"
+    ],
+    "supermarkets": [
+      "GRAND UNION (SUNGAI PELEK)",
+      "JAYA GROCER D`PULZE CYBERJAYA",
+      "ECONSAVE KIPMALL",
+      "PASARAYA MEGAH DENGKIL",
+      "ECONSAVE MART SALAK TINGGI",
+      "ECONSAVE MART TAMAN SEROJA"
+    ]
+  },
+  {
+    "id": "sarawak-engkelili",
+    "key": "Sarawak::Engkelili",
+    "state": "Sarawak",
+    "district": "Engkelili",
+    "label": "Engkelili, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Engkelili",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Engkelili)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "w-p-kuala-lumpur-bukit-bintang",
+    "key": "W.P. Kuala Lumpur::Bukit Bintang",
+    "state": "W.P. Kuala Lumpur",
+    "district": "Bukit Bintang",
+    "label": "Bukit Bintang, W.P. Kuala Lumpur",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Bukit Bintang",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "GIANT SUPERMARKET ( SUNGEI WANG )",
+      "COLD STORAGE ( KLCC )",
+      "SOGO ( KL )",
+      "MYDIN ( SINAR KOTA )",
+      "HERO MARKET ( BERJAYA TIMES SQUARE )",
+      "LULU HYPERMARKET"
+    ]
+  },
+  {
+    "id": "selangor-hulu-selangor",
+    "key": "Selangor::Hulu Selangor",
+    "state": "Selangor",
+    "district": "Hulu Selangor",
+    "label": "Hulu Selangor (Kuala Kubu Bharu)",
+    "lat": 3.55,
+    "lon": 101.65,
+    "wetMarkets": [
+      "PASAR AWAM KUALA KUBU BHARU",
+      "PASAR BUKIT SENTOSA",
+      "PASAR BATANG KALI",
+      "PASAR AWAM RASA (RASA MARKET)",
+      "PASAR PELADANG KUALA KUBU BHARU"
+    ],
+    "supermarkets": [
+      "PASARAYA GRAND UNION BUKIT BERUNTUNG",
+      "ECONSAVE CASH & CARRY SDN. BHD. (BATANG KALI)",
+      "QRS FRESH MART KKB",
+      "LOTUS'S STORES BUKIT BERUNTUNG",
+      "SEGI CASH & CARRY BUKIT SENTOSA",
+      "SEGI CASH & CARRY TAMAN TANJAK"
+    ]
+  },
+  {
+    "id": "sarawak-kota-samarahan",
+    "key": "Sarawak::Kota Samarahan",
+    "state": "Sarawak",
+    "district": "Kota Samarahan",
+    "label": "Kota Samarahan, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Kota Samarahan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "FARLEY KOTA SAMARAHAN",
+      "H&L AIMAN MALL",
+      "EMART SUMMERMALL",
+      "LEPAPA HYPERMARKET KOTA SAMARAHAN"
+    ]
+  },
+  {
+    "id": "johor-ledang",
+    "key": "Johor::Ledang",
+    "state": "Johor",
+    "district": "Ledang",
+    "label": "Ledang, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AWAM TANGKAK"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Ledang)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "kelantan-dabong",
+    "key": "Kelantan::Dabong",
+    "state": "Kelantan",
+    "district": "Dabong",
+    "label": "Dabong, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Dabong",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Dabong)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-betong",
+    "key": "Sarawak::Betong",
+    "state": "Sarawak",
+    "district": "Betong",
+    "label": "Betong, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR TAMU MAJLIS DAERAH BETONG"
+    ],
+    "supermarkets": [
+      "NAM LEONG DEPARTMENT STORE (BETONG) SDN BHD",
+      "MEDAN DEPARTMENTAL STORE SDN BHD",
+      "DOREMART SDN. BHD. BETONG",
+      "G-MART"
+    ]
+  },
+  {
+    "id": "sarawak-pakan",
+    "key": "Sarawak::Pakan",
+    "state": "Sarawak",
+    "district": "Pakan",
+    "label": "Pakan, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Pakan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Pakan)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-selangau",
+    "key": "Sarawak::Selangau",
+    "state": "Sarawak",
+    "district": "Selangau",
+    "label": "Selangau, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Selangau",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "INDAI MART",
+      "SIONG LEE COMPANY",
+      "TING'S TRADING",
+      "SYARIKAT STAPANG"
+    ]
+  },
+  {
+    "id": "pahang-cameron-highlands",
+    "key": "Pahang::Cameron Highlands",
+    "state": "Pahang",
+    "district": "Cameron Highlands",
+    "label": "Cameron Highlands, Pahang",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Cameron Highlands",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Cameron Highlands)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-kimanis",
+    "key": "Sabah::Kimanis",
+    "state": "Sabah",
+    "district": "Kimanis",
+    "label": "Kimanis, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "PASAR AM MEMBAKUT"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Kimanis)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-tanjung-manis",
+    "key": "Sarawak::Tanjung Manis",
+    "state": "Sarawak",
+    "district": "Tanjung Manis",
+    "label": "Tanjung Manis, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Tanjung Manis",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Tanjung Manis)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sarawak-balingian",
+    "key": "Sarawak::Balingian",
+    "state": "Sarawak",
+    "district": "Balingian",
+    "label": "Balingian, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Balingian",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Balingian)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "kelantan-lojing",
+    "key": "Kelantan::Lojing",
+    "state": "Kelantan",
+    "district": "Lojing",
+    "label": "Lojing, Kelantan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Lojing",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Lojing)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "johor-tangkak",
+    "key": "Johor::Tangkak",
+    "state": "Johor",
+    "district": "Tangkak",
+    "label": "Tangkak, Johor",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Tangkak",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "PASARAYA TF VALUE MART SDN BHD",
+      "PASARAYA ECONSAVE BUKIT GAMBIR",
+      "NSK TRADE CITY SDN BHD",
+      "PASARAYA MEGA, NAFAS MALL"
+    ]
+  },
+  {
+    "id": "perak-parit-buntar",
+    "key": "Perak::Parit Buntar",
+    "state": "Perak",
+    "district": "Parit Buntar",
+    "label": "Parit Buntar, Perak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Parit Buntar",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Parit Buntar)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "perak-gerik",
+    "key": "Perak::Gerik",
+    "state": "Perak",
+    "district": "Gerik",
+    "label": "Gerik, Perak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Gerik",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Gerik)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "perak-tapah",
+    "key": "Perak::Tapah",
+    "state": "Perak",
+    "district": "Tapah",
+    "label": "Tapah, Perak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Tapah",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Tapah)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-nabawan",
+    "key": "Sabah::Nabawan",
+    "state": "Sabah",
+    "district": "Nabawan",
+    "label": "Nabawan, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Nabawan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "LJ SUPERMARKET",
+      "G-MART SG SDN BHD",
+      "MESRA GROCER SDN BHD"
+    ]
+  },
+  {
+    "id": "w-p-putrajaya-cyberjaya",
+    "key": "W.P. Putrajaya::Cyberjaya",
+    "state": "W.P. Putrajaya",
+    "district": "Cyberjaya",
+    "label": "Cyberjaya, W.P. Putrajaya",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Cyberjaya",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "REDTICK SUPERMARKET (SHAFTBURY) SDN. BHD.",
+      "PASARAYA STAR GROCER CYBERSQUARE",
+      "VILLAGE GROCER (TAMARIND SQUARE) CYBERJAYA",
+      "KEN'S GROCER"
+    ]
+  },
+  {
+    "id": "sarawak-simunjan",
+    "key": "Sarawak::Simunjan",
+    "state": "Sarawak",
+    "district": "Simunjan",
+    "label": "Simunjan, Sarawak",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Simunjan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Simunjan)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "w-p-labuan-w-p-labuan",
+    "key": "W.P. Labuan::W.P Labuan",
+    "state": "W.P. Labuan",
+    "district": "W.P Labuan",
+    "label": "W.P Labuan, W.P. Labuan",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam W.P Labuan",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "SUNDRY MART"
+    ]
+  },
+  {
+    "id": "sabah-membakut",
+    "key": "Sabah::Membakut",
+    "state": "Sabah",
+    "district": "Membakut",
+    "label": "Membakut, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Membakut",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Membakut)",
+      "Econsave",
+      "Mydin"
+    ]
+  },
+  {
+    "id": "sabah-sook",
+    "key": "Sabah::Sook",
+    "state": "Sabah",
+    "district": "Sook",
+    "label": "Sook, Sabah",
+    "lat": 3.139,
+    "lon": 101.6869,
+    "wetMarkets": [
+      "Pasar Awam Sook",
+      "Pasar Basah Tempatan"
+    ],
+    "supermarkets": [
+      "Pasaraya Tempatan (Sook)",
+      "Econsave",
+      "Mydin"
+    ]
+  }
+]

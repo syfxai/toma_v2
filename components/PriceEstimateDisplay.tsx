@@ -8,16 +8,27 @@ import {
   ShoppingCart, 
   CheckCircle2, 
   MapPin, 
-  Sparkles,
-  ShoppingBag
+  Navigation,
+  RefreshCw
 } from 'lucide-react';
 
-export interface KpdnZone {
+export interface KpdnDistrictSummary {
   id: string;
-  name: string;
-  states?: string[];
-  supermarkets: string[];
+  state: string;
+  district: string;
+  label: string;
+}
+
+export interface KpdnActiveDistrict {
+  id: string;
+  key: string;
+  state: string;
+  district: string;
+  label: string;
+  lat: number;
+  lon: number;
   wetMarkets: string[];
+  supermarkets: string[];
 }
 
 export interface KpdnItem {
@@ -42,8 +53,8 @@ interface PriceEstimateResponse {
     lastUpdated: string;
     disclaimer: string;
   };
-  zones: KpdnZone[];
-  activeZone: KpdnZone;
+  districts: KpdnDistrictSummary[];
+  activeDistrict: KpdnActiveDistrict;
   matchedCount: number;
   estimatedCost: {
     min: number;
@@ -64,74 +75,120 @@ interface PriceEstimateDisplayProps {
   servings?: string;
 }
 
-const STORAGE_KEY_ZONE = 'toma_price_zone';
+const STORAGE_KEY_DISTRICT = 'toma_price_district_id';
+const STORAGE_KEY_COORDS = 'toma_price_user_coords';
 
 const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients, servings }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [locating, setLocating] = useState(false);
   const [priceData, setPriceData] = useState<PriceEstimateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
-  const [selectedZone, setSelectedZone] = useState<string>(() => {
+  const [locationNotice, setLocationNotice] = useState<string | null>(null);
+
+  // Read saved district id or coords
+  const [selectedDistrictId, setSelectedDistrictId] = useState<string>(() => {
     try {
-      return localStorage.getItem(STORAGE_KEY_ZONE) || 'national';
+      return localStorage.getItem(STORAGE_KEY_DISTRICT) || 'perak-kerian';
     } catch {
-      return 'national';
+      return 'perak-kerian';
     }
   });
 
-  const [activeTab, setActiveTab] = useState<'all' | 'wetMarket' | 'supermarket'>('all');
+  const [selectedState, setSelectedState] = useState<string>('Perak');
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchPrices = async (params: { districtId?: string; lat?: number; lon?: number }) => {
     if (!ingredients || ingredients.length === 0) return;
-
-    const fetchPrices = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch('/api/prices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ingredients, zone: selectedZone }),
-        });
-        if (!res.ok) throw new Error('Gagal memuatkan data harga');
-        const data: PriceEstimateResponse = await res.json();
-        if (isMounted) {
-          setPriceData(data);
-        }
-      } catch (err: any) {
-        if (isMounted) {
-          setError(err.message || 'Ralat sambungan harga');
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/prices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ingredients,
+          districtId: params.districtId,
+          lat: params.lat,
+          lon: params.lon,
+        }),
+      });
+      if (!res.ok) throw new Error('Gagal memuatkan data harga');
+      const data: PriceEstimateResponse = await res.json();
+      setPriceData(data);
+      if (data.activeDistrict) {
+        setSelectedDistrictId(data.activeDistrict.id);
+        setSelectedState(data.activeDistrict.state);
+        try {
+          localStorage.setItem(STORAGE_KEY_DISTRICT, data.activeDistrict.id);
+        } catch {
+          // ignore
         }
       }
-    };
-
-    fetchPrices();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [ingredients, selectedZone]);
-
-  const handleZoneChange = (newZoneId: string) => {
-    setSelectedZone(newZoneId);
-    try {
-      localStorage.setItem(STORAGE_KEY_ZONE, newZoneId);
-    } catch {
-      // ignore localStorage quota error
+    } catch (err: any) {
+      setError(err.message || 'Ralat sambungan harga');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    // Initial fetch based on saved district id or fallback
+    fetchPrices({ districtId: selectedDistrictId });
+  }, [ingredients]);
+
+  // Handle GPS Auto-Detect
+  const handleDetectLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationNotice('Pelayar anda tidak menyokong fungsi GPS.');
+      return;
+    }
+
+    setLocating(true);
+    setLocationNotice('Sedang mengesan lokasi GPS anda...');
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          localStorage.setItem(STORAGE_KEY_COORDS, JSON.stringify({ lat: latitude, lon: longitude }));
+        } catch {
+          // ignore
+        }
+        await fetchPrices({ lat: latitude, lon: longitude });
+        setLocating(false);
+        setLocationNotice('Lokasi setempat berjaya dikesan melalui GPS!');
+        setTimeout(() => setLocationNotice(null), 4000);
+      },
+      (err) => {
+        console.warn('Geolocation error:', err);
+        setLocating(false);
+        setLocationNotice('Izin lokasi ditolak atau tidak dapat dikesan. Sila pilih daerah secara manual.');
+        setTimeout(() => setLocationNotice(null), 5000);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  };
+
+  const handleStateChange = (newState: string) => {
+    setSelectedState(newState);
+    // Find first district in that state
+    const firstDistrict = priceData?.districts?.find(d => d.state === newState);
+    if (firstDistrict) {
+      setSelectedDistrictId(firstDistrict.id);
+      fetchPrices({ districtId: firstDistrict.id });
+    }
+  };
+
+  const handleDistrictChange = (newDistrictId: string) => {
+    setSelectedDistrictId(newDistrictId);
+    fetchPrices({ districtId: newDistrictId });
   };
 
   if (loading && !priceData) {
     return (
       <div className="mt-4 p-3 bg-emerald-50/40 rounded-xl border border-emerald-100/50 flex items-center justify-center gap-2 text-xs text-emerald-700 animate-pulse">
         <Tag className="w-4 h-4 animate-spin" />
-        <span>Menyemak anggaran harga ruji KPDN & Pasar Awam...</span>
+        <span>Menyemak harga pasaran premis setempat anda...</span>
       </div>
     );
   }
@@ -146,12 +203,17 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
     ? (priceData.estimatedCost.avg / numericServings).toFixed(2)
     : null;
 
-  const currentZone = priceData.activeZone || {
-    id: 'national',
-    name: 'Purata Nasional',
-    supermarkets: ['Econsave', 'Mydin', "Lotus's"],
-    wetMarkets: ['Pasar Awam Tempatan', 'Pasar Basah']
+  const activeDistrict = priceData.activeDistrict || {
+    label: 'Kerian (Bagan Serai & Parit Buntar)',
+    state: 'Perak',
+    district: 'Kerian',
+    wetMarkets: ['PASAR AWAM BAGAN SERAI', 'PASAR AWAM PARIT BUNTAR'],
+    supermarkets: ['SEGI CASH & CARRY BAGAN SERAI', 'ECONSAVE PARIT BUNTAR']
   };
+
+  // Group districts for state selector
+  const availableStates = Array.from(new Set(priceData.districts?.map(d => d.state) || [])).sort();
+  const districtsInCurrentState = priceData.districts?.filter(d => d.state === selectedState) || [];
 
   return (
     <div className="mt-4 border-t border-gray-200/60 pt-4">
@@ -184,9 +246,9 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
                   (~RM {perServingAvg} / porsi)
                 </span>
               )}
-              <span className="inline-flex items-center gap-1 text-[11px] text-teal-700 bg-teal-50 px-1.5 py-0.2 rounded border border-teal-200/50">
-                <MapPin className="w-2.5 h-2.5" />
-                {currentZone.name.split('(')[0].trim()}
+              <span className="inline-flex items-center gap-1 text-[11px] text-teal-800 bg-teal-50/90 font-medium px-2 py-0.5 rounded-md border border-teal-200/60">
+                <MapPin className="w-3 h-3 text-emerald-600" />
+                {activeDistrict.label || `${activeDistrict.district}, ${activeDistrict.state}`}
               </span>
             </p>
           </div>
@@ -215,77 +277,129 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
             transition={{ duration: 0.28, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="mt-3 p-4 sm:p-5 bg-white/70 backdrop-blur-md rounded-2xl border border-white/80 shadow-md ring-1 ring-black/5 space-y-4">
+            <div className="mt-3 p-4 sm:p-5 bg-white/75 backdrop-blur-md rounded-2xl border border-white/80 shadow-md ring-1 ring-black/5 space-y-4">
               
-              {/* Zone / Location Selector Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-xl bg-emerald-50/60 border border-emerald-100">
-                <div className="flex items-center gap-2 text-xs font-semibold text-emerald-900">
-                  <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>Pilih Lokasi / Zon Anda:</span>
-                </div>
-                <div className="relative">
-                  <select
-                    value={selectedZone}
-                    onChange={(e) => handleZoneChange(e.target.value)}
-                    className="w-full sm:w-auto text-xs font-medium bg-white text-gray-800 border border-emerald-200 rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm cursor-pointer appearance-none"
+              {/* Location Detection & District Picker Bar */}
+              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-50/80 to-teal-50/60 border border-emerald-100 space-y-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+                    <span className="text-xs font-bold text-gray-800">
+                      Lokasi Semasa: <span className="text-emerald-700">{activeDistrict.label}</span>
+                    </span>
+                  </div>
+
+                  {/* GPS Auto-detect Button */}
+                  <button
+                    type="button"
+                    onClick={handleDetectLocation}
+                    disabled={locating}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium shadow-sm transition-all disabled:opacity-50 cursor-pointer"
                   >
-                    {priceData.zones?.map((zone) => (
-                      <option key={zone.id} value={zone.id}>
-                        {zone.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2.5 top-2.5 pointer-events-none" />
+                    <Navigation className={`w-3.5 h-3.5 ${locating ? 'animate-spin' : ''}`} />
+                    <span>{locating ? 'Mengesan GPS...' : 'Kesan Lokasi Saya (GPS)'}</span>
+                  </button>
+                </div>
+
+                {locationNotice && (
+                  <p className="text-[11px] text-emerald-800 bg-emerald-100/70 p-1.5 rounded-md">
+                    {locationNotice}
+                  </p>
+                )}
+
+                {/* State & District Selectors */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-emerald-200/40 text-xs">
+                  <div>
+                    <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">
+                      Negeri
+                    </label>
+                    <select
+                      value={selectedState}
+                      onChange={(e) => handleStateChange(e.target.value)}
+                      className="w-full bg-white text-gray-800 border border-emerald-200 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      {availableStates.map((st) => (
+                        <option key={st} value={st}>
+                          {st}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">
+                      Daerah / Kawasan ({districtsInCurrentState.length} daerah)
+                    </label>
+                    <select
+                      value={selectedDistrictId}
+                      onChange={(e) => handleDistrictChange(e.target.value)}
+                      className="w-full bg-white text-gray-800 border border-emerald-200 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      {districtsInCurrentState.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.label || d.district}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              {/* Regional Premise Badges (Supermarket vs Pasar Awam) */}
+              {/* Local Wet Markets vs Local Supermarkets in the Active District */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                {/* Pasar Awam Box */}
-                <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 space-y-1">
-                  <div className="flex items-center justify-between font-bold text-amber-900">
+                {/* Local Pasar Awam */}
+                <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/70 space-y-1.5">
+                  <div className="flex items-center justify-between font-bold text-amber-950">
                     <span className="flex items-center gap-1.5">
-                      <span className="text-base">🥬</span> Pasar Awam / Basah
+                      <span className="text-base">🥬</span> Pasar Awam / Basah Setempat
                     </span>
                     {priceData.estimatedCost.wetMarketFormatted && (
-                      <span className="text-amber-800 font-extrabold text-sm">
+                      <span className="text-amber-900 font-black text-sm">
                         ~{priceData.estimatedCost.wetMarketFormatted}
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px] text-amber-800/90 leading-tight">
-                    Disyorkan untuk bahan segar (santan perah, ayam sembelih, ikan & ulam):
+                  <p className="text-[11px] text-amber-800 leading-tight">
+                    Premis rasmi KPDN untuk bahan segar di <strong>{activeDistrict.district}</strong>:
                   </p>
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {currentZone.wetMarkets.map((wm, idx) => (
-                      <span key={idx} className="bg-white/90 text-amber-900 border border-amber-200 px-2 py-0.5 rounded-md text-[10px] font-semibold">
-                        {wm}
-                      </span>
-                    ))}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {activeDistrict.wetMarkets && activeDistrict.wetMarkets.length > 0 ? (
+                      activeDistrict.wetMarkets.map((wm, idx) => (
+                        <span key={idx} className="bg-white/95 text-amber-950 border border-amber-200 px-2 py-0.5 rounded-md text-[10px] font-bold shadow-2xs">
+                          {wm}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[10px] text-gray-500">Pasar Awam {activeDistrict.district}</span>
+                    )}
                   </div>
                 </div>
 
-                {/* Pasaraya Box */}
-                <div className="p-3 rounded-xl bg-teal-50/70 border border-teal-200/70 space-y-1">
-                  <div className="flex items-center justify-between font-bold text-teal-900">
+                {/* Local Supermarkets */}
+                <div className="p-3.5 rounded-xl bg-teal-50/70 border border-teal-200/70 space-y-1.5">
+                  <div className="flex items-center justify-between font-bold text-teal-950">
                     <span className="flex items-center gap-1.5">
-                      <span className="text-base">🏪</span> Pasaraya / Hypermarket
+                      <span className="text-base">🏪</span> Pasaraya / Runcit Setempat
                     </span>
                     {priceData.estimatedCost.supermarketFormatted && (
-                      <span className="text-teal-800 font-extrabold text-sm">
+                      <span className="text-teal-900 font-black text-sm">
                         ~{priceData.estimatedCost.supermarketFormatted}
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px] text-teal-800/90 leading-tight">
-                    Disyorkan untuk barangan kering, telur, tepung & minyak masak:
+                  <p className="text-[11px] text-teal-800 leading-tight">
+                    Premis pasaraya & borong rasmi KPDN di <strong>{activeDistrict.district}</strong>:
                   </p>
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {currentZone.supermarkets.map((sm, idx) => (
-                      <span key={idx} className="bg-white/90 text-teal-900 border border-teal-200 px-2 py-0.5 rounded-md text-[10px] font-semibold">
-                        {sm}
-                      </span>
-                    ))}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {activeDistrict.supermarkets && activeDistrict.supermarkets.length > 0 ? (
+                      activeDistrict.supermarkets.map((sm, idx) => (
+                        <span key={idx} className="bg-white/95 text-teal-950 border border-teal-200 px-2 py-0.5 rounded-md text-[10px] font-bold shadow-2xs">
+                          {sm}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[10px] text-gray-500">Pasaraya {activeDistrict.district}</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -327,8 +441,8 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
                     <ShoppingCart className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Pecahan Bahan Ruji ({priceData.matchedCount} Bahan)</span>
                   </span>
-                  <span className="text-[10px] font-normal text-gray-400 lowercase">
-                    data rujukan KPDN
+                  <span className="text-[10px] font-normal text-gray-400">
+                    KPDN PriceCatcher ({activeDistrict.district})
                   </span>
                 </h4>
                 
@@ -354,20 +468,18 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
                           )}
                         </div>
 
-                        {/* Recommendation hints */}
+                        {/* Localized recommendation hint */}
                         <div className="flex items-center gap-1.5 mt-1 ml-5 text-[11px] text-gray-500 flex-wrap">
                           <Store className="w-3 h-3 text-teal-600" />
-                          <span>Pilihan peruncit:</span>
+                          <span>Pilihan setempat:</span>
                           {item.channel === 'wet_market' ? (
-                            <span className="text-amber-800 font-medium">
-                              {currentZone.wetMarkets[0] || 'Pasar Basah Tempatan'}
+                            <span className="text-amber-900 font-semibold">
+                              {activeDistrict.wetMarkets?.[0] || 'Pasar Basah Tempatan'}
                             </span>
                           ) : (
-                            item.cheapestRetailers.slice(0, 3).map((retailer, idx) => (
-                              <span key={idx} className="bg-gray-100 text-gray-700 px-1.5 py-0.2 rounded text-[10px] font-medium">
-                                {retailer}
-                              </span>
-                            ))
+                            <span className="text-teal-900 font-semibold">
+                              {activeDistrict.supermarkets?.[0] || 'Pasaraya Tempatan'}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -389,14 +501,14 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
               <div className="p-3 bg-amber-50/80 border border-amber-200/70 rounded-xl flex items-start gap-2.5 text-[11px] text-amber-900 leading-relaxed shadow-sm">
                 <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-amber-950 mb-0.5">Penafian Anggaran Kos:</p>
+                  <p className="font-semibold text-amber-950 mb-0.5">Penafian Anggaran Kos Setempat:</p>
                   <p className="text-amber-800">
                     {priceData.metadata.disclaimer || 
                       'Data harga barangan dapur dipetik daripada inisiatif terbuka KPDN PriceCatcher (data.gov.my) sebagai panduan anggaran kos masakan sahaja. Harga sebenar di premis mungkin berbeza mengikut lokasi, gred, atau tawaran promosi semasa peruncit.'
                     }
                   </p>
                   <p className="mt-1 text-[10px] text-amber-700 font-medium">
-                    Sumber: Terbuka data.gov.my (KPDN) • Dikemas kini suku tahunan • Tanpa sebarang caj.
+                    Sumber: Terbuka data.gov.my (KPDN) • Dilokasikan untuk daerah {activeDistrict.district}, {activeDistrict.state}.
                   </p>
                 </div>
               </div>
