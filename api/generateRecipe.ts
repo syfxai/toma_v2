@@ -19,9 +19,52 @@ const isModelUnavailableError = (error: any) =>
   error?.message?.toLowerCase?.().includes('not found') ||
   error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
+async function generateRecipeWithGroq(prompt: string): Promise<string> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY tidak disediakan untuk sandaran failover.');
+
+  const models = [
+    process.env.GROQ_CHAT_MODEL,
+    'qwen/qwen3.8-27b',
+    'openai/gpt-oss-120b',
+  ].filter(Boolean) as string[];
+
+  let lastErr = 'Groq fallback failed';
+  for (const model of models) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) return content;
+      } else {
+        const errData = await res.json().catch(() => null);
+        lastErr = errData?.error?.message || `HTTP ${res.status}`;
+      }
+    } catch (e: any) {
+      lastErr = e?.message || String(e);
+    }
+  }
+
+  throw new Error(`Sandaran Groq gagal: ${lastErr}`);
+}
+
 async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
   let lastError: any;
 
+  // 1. Try Gemini first (Primary)
   for (const model of GEMINI_MODELS) {
     try {
       return await ai.models.generateContent({
@@ -33,15 +76,19 @@ async function generateRecipeJson(ai: GoogleGenAI, prompt: string) {
       });
     } catch (error: any) {
       lastError = error;
-      console.error(`Gemini model ${model} failed:`, error?.message || error);
-
-      if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
-        throw error;
-      }
+      console.warn(`Gemini model ${model} gagal atau had limit. Mencuba sandaran...`, error?.message || error);
     }
   }
 
-  throw lastError;
+  // 2. Failover to Groq if Gemini hits quota/fails
+  console.log('Gemini tidak dapat menjana resepi. Melencongkan permintaan ke Groq secara automatik (Failover)...');
+  try {
+    const groqText = await generateRecipeWithGroq(prompt);
+    return { text: groqText, isFallback: true };
+  } catch (groqErr: any) {
+    console.error('Sandaran Groq juga gagal:', groqErr);
+    throw lastError || groqErr;
+  }
 }
 
 export default async function handler(req: any, res: any) {

@@ -1,3 +1,4 @@
+import { GoogleGenAI } from '@google/genai';
 import { getClientIp, checkRateLimit } from './lib/rateLimit';
 
 const GROQ_CHAT_MODELS = [
@@ -74,6 +75,30 @@ async function createGroqChatCompletion(body: any) {
   throw new Error(String(lastError));
 }
 
+async function createGeminiChatFallback(message: string, languageName?: string) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY is missing');
+  const ai = new GoogleGenAI({ apiKey });
+  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+  
+  const response = await ai.models.generateContent({
+    model,
+    config: {
+      systemInstruction: `You are Chef Toma, a friendly Malaysian cooking assistant.
+Tone: Very warm, kind, and natural. Speak like a helpful friend.
+Malay style: Clear, natural Bahasa Melayu.
+Format: 1-2 short sentences.
+Language: ${languageName || 'Bahasa Melayu'}.`
+    },
+    contents: message
+  });
+
+  return {
+    text: response.text?.trim() || "Hai! Boleh saya bantu anda dengan sebarang idea masakan hari ini? 😊",
+    functionCalls: []
+  };
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -102,31 +127,38 @@ export default async function handler(req: any, res: any) {
     const cleanHistory = Array.isArray(req.body?.history) ? req.body.history.slice(-10) : [];
     const languageName = req.body?.languageName;
 
-    const completion = await createGroqChatCompletion({
-      messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
-      temperature: 0.7,
-      max_completion_tokens: 300,
-      tool_choice: 'auto',
-      tools: [
-        {
-          type: 'function',
-          function: {
-            name: 'triggerRecipeApp',
-            description: 'Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.',
-            parameters: {
-              type: 'object',
-              properties: {
-                ingredients: {
-                  type: 'string',
-                  description: "The list of ingredients or the name of the dish to generate a recipe for, for example 'chicken, rice' or 'Nasi Lemak'.",
+    let completion: any = null;
+    try {
+      completion = await createGroqChatCompletion({
+        messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
+        temperature: 0.7,
+        max_completion_tokens: 300,
+        tool_choice: 'auto',
+        tools: [
+          {
+            type: 'function',
+            function: {
+              name: 'triggerRecipeApp',
+              description: 'Triggers the main recipe generator app with a list of ingredients or a dish name. Use this when the user explicitly asks to create, generate, or show a recipe card.',
+              parameters: {
+                type: 'object',
+                properties: {
+                  ingredients: {
+                    type: 'string',
+                    description: "The list of ingredients or the name of the dish to generate a recipe for, for example 'chicken, rice' or 'Nasi Lemak'.",
+                  },
                 },
+                required: ['ingredients'],
               },
-              required: ['ingredients'],
             },
           },
-        },
-      ],
-    });
+        ],
+      });
+    } catch (groqErr: any) {
+      console.warn("Groq chat gagal, beralih secara automatik ke sandaran Gemini:", groqErr?.message || groqErr);
+      const geminiFallback = await createGeminiChatFallback(cleanMessage, languageName);
+      return res.status(200).json(geminiFallback);
+    }
 
     const assistantMessage = completion?.choices?.[0]?.message || {};
     const functionCalls = (assistantMessage.tool_calls || [])
@@ -145,10 +177,12 @@ export default async function handler(req: any, res: any) {
         };
       });
 
-    const text = assistantMessage.content || "";
+    let text = assistantMessage.content || "";
 
     if (!text && functionCalls.length === 0) {
-      throw new Error("Maaf, Toma tidak dapat membalas sekarang.");
+      console.warn("Groq pulangkan teks kosong, beralih ke Gemini...");
+      const geminiFallback = await createGeminiChatFallback(cleanMessage, languageName);
+      return res.status(200).json(geminiFallback);
     }
 
     res.status(200).json({

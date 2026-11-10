@@ -17,9 +17,48 @@ const isFallbackableError = (error: any) =>
   error?.message?.toLowerCase?.().includes('not found') ||
   error?.message?.toLowerCase?.().includes('not supported for generatecontent');
 
+async function translateWithGroq(prompt: string): Promise<string> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY is not set');
+
+  const models = [
+    process.env.GROQ_CHAT_MODEL,
+    'qwen/qwen3.8-27b',
+    'openai/gpt-oss-120b',
+  ].filter(Boolean) as string[];
+
+  for (const model of models) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) return content;
+      }
+    } catch (e) {
+      console.error(`Groq translation fallback ${model} failed:`, e);
+    }
+  }
+
+  throw new Error('Groq translation fallback failed');
+}
+
 async function translateJson(ai: GoogleGenAI, prompt: string) {
   let lastError: any;
 
+  // 1. Try Gemini
   for (const model of GEMINI_MODELS) {
     try {
       return await ai.models.generateContent({
@@ -31,15 +70,18 @@ async function translateJson(ai: GoogleGenAI, prompt: string) {
       });
     } catch (error: any) {
       lastError = error;
-      console.error(`Gemini translation model ${model} failed:`, error?.message || error);
-
-      if (!isFallbackableError(error)) {
-        throw error;
-      }
+      console.warn(`Gemini translation model ${model} failed:`, error?.message || error);
     }
   }
 
-  throw lastError;
+  // 2. Failover to Groq
+  console.log('Gemini terjemahan gagal, beralih ke sandaran Groq...');
+  try {
+    const text = await translateWithGroq(prompt);
+    return { text };
+  } catch (err) {
+    throw lastError || err;
+  }
 }
 
 export default async function handler(req: any, res: any) {

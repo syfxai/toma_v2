@@ -102,6 +102,38 @@ async function createGroqChatCompletion(body: any) {
   throw new Error(String(lastError));
 }
 
+async function generateRecipeWithGroq(prompt: string): Promise<string> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY tidak disediakan untuk sandaran.');
+
+  for (const model of GROQ_CHAT_MODELS) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) return content;
+      }
+    } catch (e) {
+      console.warn(`Groq recipe fallback ${model} failed:`, e);
+    }
+  }
+
+  throw new Error('Groq recipe fallback failed');
+}
+
 async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemini model') {
   let lastError: any;
 
@@ -113,11 +145,7 @@ async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemi
       });
     } catch (error: any) {
       lastError = error;
-      console.error(`${label} ${model} failed:`, error?.message || error);
-
-      if (!isRateLimitError(error) && !isModelUnavailableError(error)) {
-        throw error;
-      }
+      console.warn(`${label} ${model} failed or rate limited:`, error?.message || error);
     }
   }
 
@@ -125,12 +153,44 @@ async function generateWithFallback(ai: GoogleGenAI, request: any, label = 'Gemi
 }
 
 async function generateJsonWithFallback(ai: GoogleGenAI, prompt: string) {
-  return generateWithFallback(ai, {
-        config: {
-          responseMimeType: 'application/json',
-        },
-        contents: prompt,
-      }, 'Gemini JSON model');
+  try {
+    return await generateWithFallback(ai, {
+      config: {
+        responseMimeType: 'application/json',
+      },
+      contents: prompt,
+    }, 'Gemini JSON model');
+  } catch (geminiError: any) {
+    console.warn('Gemini kuota tercapai atau ralat. Melencongkan ke sandaran Groq...', geminiError?.message || geminiError);
+    const groqText = await generateRecipeWithGroq(prompt);
+    return { text: groqText, isFallback: true };
+  }
+}
+
+async function generateGeminiChatFallback(ai: GoogleGenAI, message: string, languageName?: string) {
+  try {
+    const response = await ai.models.generateContent({
+      model: GEMINI_MODELS[0] || 'gemini-2.5-flash-lite',
+      config: {
+        systemInstruction: `You are Chef Toma, a friendly Malaysian cooking assistant.
+Tone: Very warm, kind, and natural. Speak like a helpful friend.
+Malay style: Clear, natural Bahasa Melayu.
+Format: 1-2 short sentences.
+Language: ${languageName || 'Bahasa Melayu'}.`
+      },
+      contents: message
+    });
+    return {
+      text: response.text?.trim() || "Hai! Boleh saya bantu anda dengan sebarang idea masakan hari ini? 😊",
+      functionCalls: []
+    };
+  } catch (err: any) {
+    console.error("Gemini chat fallback error:", err?.message || err);
+    return {
+      text: "Hai! Boleh saya bantu anda dengan sebarang idea masakan hari ini? 😊",
+      functionCalls: []
+    };
+  }
 }
 
 async function startServer() {
@@ -175,31 +235,39 @@ async function startServer() {
       const languageName = req.body?.languageName;
 
       const t0 = Date.now();
-      const completion = await createGroqChatCompletion({
-        messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
-        temperature: 0.7,
-        max_completion_tokens: 300,
-        tool_choice: 'auto',
-        tools: [
-          {
-            type: 'function',
-            function: {
-              name: 'triggerRecipeApp',
-              description: 'Triggers the main recipe generator app with a search query. Use this for ANY recipe request, chef name (e.g. Khairul Aming), or ingredient list.',
-              parameters: {
-                type: 'object',
-                properties: {
-                  ingredients: {
-                    type: 'string',
-                    description: "The search query, e.g. 'Khairul Aming', 'Ayam', or 'Nasi Lemak'.",
+      let completion: any = null;
+      try {
+        completion = await createGroqChatCompletion({
+          messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
+          temperature: 0.7,
+          max_completion_tokens: 300,
+          tool_choice: 'auto',
+          tools: [
+            {
+              type: 'function',
+              function: {
+                name: 'triggerRecipeApp',
+                description: 'Triggers the main recipe generator app with a search query. Use this for ANY recipe request, chef name (e.g. Khairul Aming), or ingredient list.',
+                parameters: {
+                  type: 'object',
+                  properties: {
+                    ingredients: {
+                      type: 'string',
+                      description: "The search query, e.g. 'Khairul Aming', 'Ayam', or 'Nasi Lemak'.",
+                    },
                   },
+                  required: ['ingredients'],
                 },
-                required: ['ingredients'],
               },
             },
-          },
-        ],
-      });
+          ],
+        });
+      } catch (groqError: any) {
+        console.warn("Groq chat gagal, melencongkan ke sandaran Gemini...", groqError?.message || groqError);
+        const geminiFallback = await generateGeminiChatFallback(ai, cleanMessage, languageName);
+        recordApiCall('chat', GEMINI_MODELS[0] || 'gemini-2.5-flash-lite', 200, Date.now() - t0);
+        return res.json(geminiFallback);
+      }
 
       const assistantMessage = completion?.choices?.[0]?.message || {};
       const functionCalls = (assistantMessage.tool_calls || [])
@@ -218,9 +286,17 @@ async function startServer() {
           };
         });
       
+      let text = assistantMessage.content || "";
+      if (!text && functionCalls.length === 0) {
+        console.warn("Groq pulangkan teks kosong, beralih ke sandaran Gemini...");
+        const geminiFallback = await generateGeminiChatFallback(ai, cleanMessage, languageName);
+        recordApiCall('chat', GEMINI_MODELS[0] || 'gemini-2.5-flash-lite', 200, Date.now() - t0);
+        return res.json(geminiFallback);
+      }
+
       recordApiCall('chat', GROQ_CHAT_MODELS[0], 200, Date.now() - t0);
       res.json({
-        text: assistantMessage.content || "",
+        text,
         functionCalls,
       });
     } catch (error: any) {
