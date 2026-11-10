@@ -91,9 +91,9 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
   // Read saved district id or coords
   const [selectedDistrictId, setSelectedDistrictId] = useState<string>(() => {
     try {
-      return localStorage.getItem(STORAGE_KEY_DISTRICT) || 'perak-kerian';
+      return localStorage.getItem(STORAGE_KEY_DISTRICT) || 'perak-bagan-serai';
     } catch {
-      return 'perak-kerian';
+      return 'perak-bagan-serai';
     }
   });
 
@@ -336,7 +336,7 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
                         setIsSearchOpen(true);
                       }}
                       onFocus={() => setIsSearchOpen(true)}
-                      placeholder="Cari bandar / daerah (Cth: Bagan Serai, Ipoh, Melaka, Gong Badak...)"
+                      placeholder="Cari bandar / pekan (Cth: Tanjung Rambutan, Sungai Siput, Bagan Serai, Ipoh...)"
                       className="w-full text-xs bg-transparent focus:outline-none text-gray-800 placeholder-gray-400 font-medium"
                     />
                     {searchQuery && (

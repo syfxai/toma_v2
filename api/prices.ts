@@ -123,8 +123,8 @@ export default async function handler(req: any, res: any) {
   }
 
   if (!activeDistrict && districts.length > 0) {
-    // Default to Kerian (Bagan Serai) or first district
-    activeDistrict = districts.find(d => d.id === 'perak-kerian') || districts[0];
+    // Default to Bagan Serai, Kerian or first locality
+    activeDistrict = districts.find(d => d.id === 'perak-bagan-serai') || districts.find(d => d.id === 'perak-kerian') || districts[0];
   }
 
   // District list summary for client dropdown selector
