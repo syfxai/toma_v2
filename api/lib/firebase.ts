@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 // Initialize Firebase for serverless environment
 const getDb = () => {
-  if (!process.env.FIREBASE_API_KEY) {
+  if (!process.env.FIREBASE_API_KEY && !process.env.VITE_FIREBASE_API_KEY) {
     console.warn("FIREBASE_API_KEY is missing!");
   }
   

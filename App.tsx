@@ -244,6 +244,7 @@ const App: React.FC = () => {
   const [generationCount, setGenerationCount] = useState<number | null>(null);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminInitialTab, setAdminInitialTab] = useState<'feedback' | 'survey' | 'apiStatus'>('apiStatus');
   const [history, setHistory] = useState<Recipe[]>([]);
   
   // Chat Widget State
@@ -269,6 +270,20 @@ const App: React.FC = () => {
       setDeferredPrompt(null);
     });
     return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#api-status' || window.location.hash === '#api') {
+        setAdminInitialTab('apiStatus');
+        setIsAdminOpen(true);
+      } else if (window.location.hash === '#admin') {
+        setIsAdminOpen(true);
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
   const installApp = async () => {
@@ -752,7 +767,10 @@ const App: React.FC = () => {
       )}
 
       {isAdminOpen && (
-        <AdminModal onClose={() => setIsAdminOpen(false)} />
+        <AdminModal 
+          onClose={() => setIsAdminOpen(false)} 
+          initialTab={adminInitialTab}
+        />
       )}
     </div>
   );

@@ -1,10 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
+import { recordApiCall } from "./lib/apiTracker";
 
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
   'gemini-2.5-flash-lite',
   'gemini-2.5-flash',
-  'gemini-flash-latest',
 ].filter(Boolean) as string[];
 
 const isFallbackableError = (error: any) =>
@@ -65,6 +65,7 @@ export default async function handler(req: any, res: any) {
   JSON to translate:
   ${JSON.stringify(content, null, 2)}`;
 
+    const t0 = Date.now();
     const response = await translateJson(ai, prompt);
 
     const jsonText = response.text?.trim() || '';
@@ -73,9 +74,11 @@ export default async function handler(req: any, res: any) {
       console.error("Empty response from Gemini API for translation");
       throw new Error("Gagal menterjemah kandungan.");
     }
+    recordApiCall('translate', GEMINI_MODELS[0], 200, Date.now() - t0);
     res.status(200).json(JSON.parse(jsonText));
   } catch (error: any) {
     console.error(`Error translating content:`, error);
+    recordApiCall('translate', GEMINI_MODELS[0] || 'gemini', 500, 0, error?.message);
     res.status(500).json({ error: "Failed to translate content. Please try again." });
   }
 }

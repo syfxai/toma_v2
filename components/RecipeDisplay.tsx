@@ -1,10 +1,12 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import type { Recipe, UiText } from '../types';
 import FileTextIcon from './icons/FileTextIcon';
 import ImageIcon from './icons/ImageIcon';
+import WhatsAppIcon from './icons/WhatsAppIcon';
+import CheckIcon from './icons/CheckIcon';
 import RecipeImageExport from './RecipeImageExport';
 import RecipeInfo from './RecipeInfo';
 import NutritionDisplay from './NutritionDisplay';
@@ -20,6 +22,40 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
   
   const [isSavingImage, setIsSavingImage] = useState(false);
   const [isSavingPdf, setIsSavingPdf] = useState(false);
+  const [checkedIngredients, setCheckedIngredients] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    setCheckedIngredients({});
+  }, [recipe.recipeName]);
+
+  const toggleIngredient = (index: number) => {
+    setCheckedIngredients(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
+  const resetCheckedIngredients = () => {
+    setCheckedIngredients({});
+  };
+
+  const totalIngredients = recipe.ingredients.length;
+  const checkedCount = Object.values(checkedIngredients).filter(Boolean).length;
+
+  const handleShareWhatsApp = () => {
+    const title = `🛒 *SENARAI BAHAN: ${recipe.recipeName.toUpperCase()}*\n_Disediakan oleh Toma AI_ 🍅\n\n`;
+    const details = `👥 *Porsi:* ${recipe.servings || '4 orang'}\n⏱️ *Masa Memasak:* ${recipe.totalTime || recipe.cookTime || '-'}\n\n`;
+    const ingredientsHeader = `*Bahan-Bahan Diperlukan:*\n`;
+    const ingredientsList = recipe.ingredients.map((item, idx) => {
+      const isChecked = checkedIngredients[idx];
+      return isChecked ? `✅ ~${item}~` : `▫️ ${item}`;
+    }).join('\n');
+    const footer = `\n\n👉 _Jana resipi halal anda di: https://toma.syfx.my_`;
+
+    const fullMessage = `${title}${details}${ingredientsHeader}${ingredientsList}${footer}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`;
+    window.open(url, '_blank');
+  };
 
   const formatRecipeAsText = (): string => {
     const title = `RECIPE: ${recipe.recipeName}\n\n`;
@@ -199,16 +235,70 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({ recipe, uiText }) => {
                 icon={<FileTextIcon className="w-4 h-4 md:w-5 md:h-5 text-emerald-700" />} 
                 text={isSavingPdf ? uiText.saveAsPdfSaving : uiText.saveAsPdf} 
               />
+              <ExportButton 
+                onClick={handleShareWhatsApp}
+                icon={<WhatsAppIcon className="w-4 h-4 md:w-5 md:h-5 text-emerald-600" />} 
+                text="Kongsi ke WhatsApp" 
+              />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="bg-emerald-50/50 p-5 md:p-6 rounded-xl border border-emerald-100/50">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4 border-b-2 border-emerald-300 pb-2 text-emerald-800">{uiText.recipeIngredients}</h3>
-            <ul className="list-disc list-inside space-y-2 md:space-y-3 text-gray-700 text-sm md:text-base">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
+            <div className="flex items-center justify-between mb-3 border-b-2 border-emerald-300 pb-2">
+              <h3 className="text-xl md:text-2xl font-semibold text-emerald-800">
+                {uiText.recipeIngredients}
+              </h3>
+              {checkedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={resetCheckedIngredients}
+                  className="text-xs text-emerald-700 hover:text-emerald-900 bg-emerald-100/70 hover:bg-emerald-200/80 px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer"
+                >
+                  Set Semula ({checkedCount}/{totalIngredients})
+                </button>
+              )}
+            </div>
+
+            {totalIngredients > 0 && (
+              <div className="mb-3 px-1">
+                <div className="flex justify-between text-xs text-gray-500 mb-1 font-medium">
+                  <span>Tandakan bahan yang siap/dibeli</span>
+                  <span className="text-emerald-700 font-semibold">{checkedCount}/{totalIngredients} siap</span>
+                </div>
+                <div className="w-full bg-gray-200/80 rounded-full h-1.5 overflow-hidden">
+                  <div 
+                    className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${(checkedCount / totalIngredients) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            <ul className="space-y-1.5 text-sm md:text-base">
+              {recipe.ingredients.map((ingredient, index) => {
+                const isChecked = !!checkedIngredients[index];
+                return (
+                  <li 
+                    key={index}
+                    onClick={() => toggleIngredient(index)}
+                    className={`flex items-start gap-2.5 p-2 rounded-lg cursor-pointer transition-all duration-150 select-none ${
+                      isChecked 
+                        ? 'bg-emerald-100/50 text-gray-400 line-through' 
+                        : 'hover:bg-white/80 text-gray-700'
+                    }`}
+                  >
+                    <span className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
+                      isChecked 
+                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm' 
+                        : 'border-gray-300 hover:border-emerald-500 bg-white'
+                    }`}>
+                      {isChecked && <CheckIcon className="w-3 h-3 stroke-[3]" />}
+                    </span>
+                    <span className="leading-snug">{ingredient}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           

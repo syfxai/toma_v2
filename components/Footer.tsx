@@ -48,6 +48,14 @@ const Footer: React.FC<FooterProps> = ({ uiText, onOpenFeedback, onOpenAdmin }) 
           <MailIcon className="w-4 h-4" />
           <span>{uiText.feedbackButton}</span>
         </button>
+        <button
+          onClick={onOpenAdmin}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white/80 backdrop-blur-sm border border-emerald-200/80 rounded-full shadow-sm text-xs font-medium text-emerald-800 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all cursor-pointer"
+          title="Pantau Status & Penggunaan API AI"
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Status API</span>
+        </button>
       </div>
     </footer>
   );

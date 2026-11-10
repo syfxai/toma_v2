@@ -1,17 +1,20 @@
 import React, { useState, useRef } from 'react';
 import type { FeedbackItem, SurveyItem } from '../types';
 import StarIcon from './icons/StarIcon';
+import ApiStatusDashboard from './ApiStatusDashboard';
+import { Activity } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 
 interface AdminModalProps {
   onClose: () => void;
+  initialTab?: 'feedback' | 'survey' | 'apiStatus';
 }
 
-const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
+const AdminModal: React.FC<AdminModalProps> = ({ onClose, initialTab = 'apiStatus' }) => {
   const [pin, setPin] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [activeAdminTab, setActiveAdminTab] = useState<'feedback' | 'survey'>('feedback');
+  const [activeAdminTab, setActiveAdminTab] = useState<'feedback' | 'survey' | 'apiStatus'>(initialTab);
   
   const [feedbackList, setFeedbackList] = useState<FeedbackItem[]>([]);
   const [surveyList, setSurveyList] = useState<SurveyItem[]>([]);
@@ -295,10 +298,21 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-gray-200 bg-white px-6">
+        <div className="flex border-b border-gray-200 bg-white px-6 gap-6">
+          <button
+            onClick={() => setActiveAdminTab('apiStatus')}
+            className={`py-3.5 text-sm font-semibold border-b-2 transition-colors flex items-center gap-2 cursor-pointer ${
+              activeAdminTab === 'apiStatus'
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-gray-400 hover:text-gray-600'
+            }`}
+          >
+            <Activity className="w-4 h-4 text-emerald-600" />
+            Status & Metrik API AI
+          </button>
           <button
             onClick={() => setActiveAdminTab('feedback')}
-            className={`py-3.5 text-sm font-semibold border-b-2 mr-8 transition-colors ${
+            className={`py-3.5 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               activeAdminTab === 'feedback'
                 ? 'border-emerald-600 text-emerald-600'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
@@ -308,7 +322,7 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
           </button>
           <button
             onClick={() => setActiveAdminTab('survey')}
-            className={`py-3.5 text-sm font-semibold border-b-2 transition-colors ${
+            className={`py-3.5 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
               activeAdminTab === 'survey'
                 ? 'border-emerald-600 text-emerald-600'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
@@ -327,6 +341,8 @@ const AdminModal: React.FC<AdminModalProps> = ({ onClose }) => {
               <p className="font-bold mb-2">Ralat</p>
               <p>{error}</p>
             </div>
+          ) : activeAdminTab === 'apiStatus' ? (
+            <ApiStatusDashboard pin={pin} />
           ) : activeAdminTab === 'feedback' ? (
             /* --- GENERAL FEEDBACK INBOX --- */
             feedbackList.length === 0 ? (

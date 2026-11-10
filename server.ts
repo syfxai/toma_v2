@@ -1,22 +1,23 @@
+import 'dotenv/config';
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from "@google/genai";
-import dotenv from 'dotenv';
 import adminDataHandler from './api/admin/data';
 import feedbackHandler from './api/feedback';
 import surveyHandler from './api/survey';
+import translateHandler from './api/translate';
+import apiStatusHandler from './api/admin/apiStatus';
+import { recordApiCall } from './api/lib/apiTracker';
 import { getClientIp, checkRateLimit } from './api/lib/rateLimit';
 
-dotenv.config();
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
   'gemini-2.5-flash-lite',
   'gemini-2.5-flash',
-  'gemini-flash-latest',
 ].filter(Boolean) as string[];
 
 const isRateLimitError = (error: any) =>
@@ -33,8 +34,8 @@ const isModelUnavailableError = (error: any) =>
 
 const GROQ_CHAT_MODELS = [
   process.env.GROQ_CHAT_MODEL,
-  'llama-3.3-70b-versatile',
-  'openai/gpt-oss-20b',
+  'qwen/qwen3.8-27b',
+  'openai/gpt-oss-120b',
 ].filter(Boolean) as string[];
 
 const isFallbackableGroqError = (status: number, message: string) =>
@@ -173,6 +174,7 @@ async function startServer() {
       const cleanHistory = Array.isArray(req.body?.history) ? req.body.history.slice(-10) : [];
       const languageName = req.body?.languageName;
 
+      const t0 = Date.now();
       const completion = await createGroqChatCompletion({
         messages: toGroqMessages(cleanHistory, cleanMessage, languageName),
         temperature: 0.7,
@@ -216,12 +218,14 @@ async function startServer() {
           };
         });
       
+      recordApiCall('chat', GROQ_CHAT_MODELS[0], 200, Date.now() - t0);
       res.json({
         text: assistantMessage.content || "",
         functionCalls,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
+      recordApiCall('chat', GROQ_CHAT_MODELS[0], 500, 0, error?.message || 'Chat error');
       res.status(500).json({ error: "Failed to process chat message." });
     }
   });
@@ -236,6 +240,7 @@ async function startServer() {
       });
     }
 
+    const t0 = Date.now();
     try {
       const rawIngredients = req.body?.ingredients;
       if (!rawIngredients || typeof rawIngredients !== 'string' || !rawIngredients.trim()) {
@@ -294,22 +299,27 @@ async function startServer() {
       const text = response.text || "";
       
       try {
-        res.json(JSON.parse(text));
+        const parsed = JSON.parse(text);
+        recordApiCall('generateRecipe', GEMINI_MODELS[0], 200, Date.now() - t0);
+        res.json(parsed);
       } catch (e) {
         const match = text.match(/\{[\s\S]*\}/);
         if (match) {
+          recordApiCall('generateRecipe', GEMINI_MODELS[0], 200, Date.now() - t0);
           res.json(JSON.parse(match[0]));
         } else {
           throw new Error("Failed to parse recipe data");
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Generate error:", error);
+      recordApiCall('generateRecipe', GEMINI_MODELS[0], 500, Date.now() - t0, error?.message || 'Generate error');
       res.status(500).json({ error: "Failed to generate recipe." });
     }
   });
 
   app.post('/api/transcribe', async (req, res) => {
+    const t0 = Date.now();
     try {
       const { audioBase64 } = req.body;
       const apiKey = process.env.GROQ_API_KEY;
@@ -330,22 +340,26 @@ async function startServer() {
       });
 
       const data = await groqResponse.json();
+      recordApiCall('transcribe', 'whisper-large-v3-turbo', 200, Date.now() - t0);
       res.json({ text: data.text });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Transcribe error:", error);
+      recordApiCall('transcribe', 'whisper-large-v3-turbo', 500, Date.now() - t0, error?.message || 'Transcribe error');
       res.status(500).json({ error: "Voice transcription failed." });
     }
   });
 
+  app.post('/api/translate', (req, res) => translateHandler(req, res));
+  app.all('/api/admin/api-status', (req, res) => apiStatusHandler(req, res));
   app.post('/api/admin/data', (req, res) => adminDataHandler(req, res));
   app.post('/api/feedback', (req, res) => feedbackHandler(req, res));
   app.post('/api/survey', (req, res) => surveyHandler(req, res));
 
   // Vite Integration
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'dist')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    app.use(express.static(path.join(rootDir, 'dist')));
+    app.use((req, res) => {
+      res.sendFile(path.join(rootDir, 'dist', 'index.html'));
     });
   } else {
     const vite = await createViteServer({
@@ -353,11 +367,13 @@ async function startServer() {
       appType: 'custom',
     });
     app.use(vite.middlewares);
-    app.get('*', async (req, res, next) => {
+    app.use(async (req, res, next) => {
       try {
         const url = req.originalUrl;
-        const html = await vite.transformIndexHtml(url, 'index.html');
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+        const indexPath = path.resolve(rootDir, 'index.html');
+        let template = fs.readFileSync(indexPath, 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
       } catch (e) {
         vite.ssrFixStacktrace(e as Error);
         next(e);

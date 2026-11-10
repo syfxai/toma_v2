@@ -2,8 +2,8 @@ import { getClientIp, checkRateLimit } from './lib/rateLimit';
 
 const GROQ_CHAT_MODELS = [
   process.env.GROQ_CHAT_MODEL,
-  'llama-3.3-70b-versatile',
-  'openai/gpt-oss-20b',
+  'qwen/qwen3.8-27b',
+  'openai/gpt-oss-120b',
 ].filter(Boolean) as string[];
 
 const isFallbackableGroqError = (status: number, message: string) =>

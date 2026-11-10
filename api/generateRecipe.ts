@@ -5,7 +5,6 @@ const GEMINI_MODELS = [
   process.env.GEMINI_MODEL,
   'gemini-2.5-flash-lite',
   'gemini-2.5-flash',
-  'gemini-flash-latest',
 ].filter(Boolean) as string[];
 
 const isRateLimitError = (error: any) =>
