@@ -254,23 +254,78 @@ const App: React.FC = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
-  // PWA Install Prompt State
+  // Mobile Standalone App Install State (Strictly Smartphones/Tablets only)
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+  const [showMobileInstall, setShowMobileInstall] = useState(false);
+  const [isIos, setIsIos] = useState(false);
+  const [showIosGuide, setShowIosGuide] = useState(false);
 
   useEffect(() => {
+    // 1. Check if running already in standalone mode
+    const isStandalone = 
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true ||
+      document.referrer.includes('android-app://');
+
+    if (isStandalone) {
+      return; // Already installed as standalone app, do not show any prompts
+    }
+
+    // 2. Check if mobile smartphone/tablet only
+    const ua = navigator.userAgent || '';
+    const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || (window.innerWidth <= 768 && 'ontouchstart' in window);
+    
+    if (!isMobileDevice) {
+      return; // Desktop/Laptop: do not show mobile install prompts
+    }
+
+    const dismissed = sessionStorage.getItem('toma_install_dismissed');
+    if (dismissed === 'true') {
+      return;
+    }
+
+    const isIosDevice = /iPhone|iPad|iPod/i.test(ua) && !(window as any).MSStream;
+    if (isIosDevice) {
+      setIsIos(true);
+      setShowMobileInstall(true);
+      return;
+    }
+
+    // Android & other mobile browsers
     const handler = (e: Event) => {
-      e.preventDefault(); // Prevent Chrome default mini-infobar
+      e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true);
+      setShowMobileInstall(true);
     };
+
     window.addEventListener('beforeinstallprompt', handler);
     window.addEventListener('appinstalled', () => {
-      setIsInstallable(false);
+      setShowMobileInstall(false);
       setDeferredPrompt(null);
     });
+
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
+
+  const handleInstallClick = async () => {
+    if (isIos) {
+      setShowIosGuide(true);
+      return;
+    }
+
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowMobileInstall(false);
+    }
+    setDeferredPrompt(null);
+  };
+
+  const handleDismissInstall = () => {
+    setShowMobileInstall(false);
+    sessionStorage.setItem('toma_install_dismissed', 'true');
+  };
 
   useEffect(() => {
     const handleHash = () => {
@@ -285,16 +340,6 @@ const App: React.FC = () => {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
-
-  const installApp = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setIsInstallable(false);
-    }
-    setDeferredPrompt(null);
-  };
   useEffect(() => {
     // Fetch initial count
     const fetchCount = async () => {
@@ -584,27 +629,73 @@ const App: React.FC = () => {
       {/* Animated Background */}
       <BackgroundDecorations />
 
-      {/* PWA Install Banner */}
-      {isInstallable && (
-        <div className="fixed top-0 left-0 right-0 z-50 p-3 bg-emerald-600 text-white flex items-center justify-between shadow-lg animate-fadeInUp">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🍅</span>
-            <p className="text-sm font-medium">{uiText.installMessage}</p>
+      {/* Mobile Standalone App Install Banner (Smartphones Only) */}
+      {showMobileInstall && (
+        <aside 
+          aria-label="Pemasangan Aplikasi"
+          className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto bg-slate-900/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-2xl border border-slate-700/60 animate-fadeInUp flex items-center justify-between gap-3"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md">
+              <span className="text-xl">🍅</span>
+            </div>
+            <div className="min-w-0">
+              <h4 className="text-xs font-bold text-white truncate">Pasang Aplikasi Toma</h4>
+              <p className="text-[11px] text-slate-300 truncate">Buka skrin penuh tanpa bar carian pelayar</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={installApp}
-              className="px-4 py-1.5 bg-white text-emerald-600 rounded-full text-sm font-bold hover:bg-emerald-50 transition-colors"
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={handleInstallClick}
+              className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-bold rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
-              {uiText.installButton}
+              Pasang
             </button>
-            <button 
-              onClick={() => setIsInstallable(false)}
-              className="p-1 hover:bg-emerald-700 rounded-full transition-colors"
+            <button
+              onClick={handleDismissInstall}
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+              title="Tutup"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
+            </button>
+          </div>
+        </aside>
+      )}
+
+      {/* iOS Standalone Add to Home Screen Modal Guide */}
+      {showIosGuide && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-end sm:items-center justify-center p-4 animate-fadeInUp">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 border border-gray-100 text-center">
+            <div className="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+              🍅
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900">Pasang Toma di iPhone / iPad</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Jadikan Toma aplikasi skrin penuh sebenar di skrin utama telefon anda
+              </p>
+            </div>
+            <div className="bg-emerald-50/70 p-4 rounded-2xl space-y-3 text-left text-xs text-gray-700 border border-emerald-100">
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0 text-[11px]">1</span>
+                <span>Tekan butang <strong>Kongsi (Share ⎋)</strong> pada bar menu Safari di bahagian bawah skrin.</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0 text-[11px]">2</span>
+                <span>Skrol menu ke bawah dan pilih <strong>"Tambah ke Skrin Utama" (Add to Home Screen ➕)</strong>.</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0 text-[11px]">3</span>
+                <span>Tekan <strong>Tambah (Add)</strong> di penjuru atas. Toma sedia dibuka sebagai aplikasi skrin penuh!</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowIosGuide(false)}
+              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-colors cursor-pointer"
+            >
+              Faham, Terima Kasih!
             </button>
           </div>
         </div>
