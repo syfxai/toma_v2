@@ -9,7 +9,9 @@ import {
   CheckCircle2, 
   MapPin, 
   Navigation,
-  RefreshCw
+  RefreshCw,
+  Search,
+  X
 } from 'lucide-react';
 
 export interface KpdnDistrictSummary {
@@ -96,6 +98,8 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
   });
 
   const [selectedState, setSelectedState] = useState<string>('Perak');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const fetchPrices = async (params: { districtId?: string; lat?: number; lon?: number }) => {
     if (!ingredients || ingredients.length === 0) return;
@@ -149,6 +153,7 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
+        console.log('GPS coordinates received:', latitude, longitude);
         try {
           localStorage.setItem(STORAGE_KEY_COORDS, JSON.stringify({ lat: latitude, lon: longitude }));
         } catch {
@@ -156,13 +161,13 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
         }
         await fetchPrices({ lat: latitude, lon: longitude });
         setLocating(false);
-        setLocationNotice('Lokasi setempat berjaya dikesan melalui GPS!');
-        setTimeout(() => setLocationNotice(null), 4000);
+        setLocationNotice(`GPS dikesan (${latitude.toFixed(2)}, ${longitude.toFixed(2)}). Menyesuaikan premis setempat terdekat.`);
+        setTimeout(() => setLocationNotice(null), 5000);
       },
       (err) => {
         console.warn('Geolocation error:', err);
         setLocating(false);
-        setLocationNotice('Izin lokasi ditolak atau tidak dapat dikesan. Sila pilih daerah secara manual.');
+        setLocationNotice('Izin lokasi tidak dapat dikesan. Sila taip nama bandar anda di bawah.');
         setTimeout(() => setLocationNotice(null), 5000);
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -214,6 +219,18 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
   // Group districts for state selector
   const availableStates = Array.from(new Set(priceData.districts?.map(d => d.state) || [])).sort();
   const districtsInCurrentState = priceData.districts?.filter(d => d.state === selectedState) || [];
+
+  // Filtered districts for instant town search
+  const filteredDistricts = searchQuery.trim()
+    ? priceData.districts?.filter((d) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          d.label.toLowerCase().includes(q) ||
+          d.district.toLowerCase().includes(q) ||
+          d.state.toLowerCase().includes(q)
+        );
+      }).slice(0, 10) || []
+    : [];
 
   return (
     <div className="mt-4 border-t border-gray-200/60 pt-4">
@@ -302,10 +319,68 @@ const PriceEstimateDisplay: React.FC<PriceEstimateDisplayProps> = ({ ingredients
                 </div>
 
                 {locationNotice && (
-                  <p className="text-[11px] text-emerald-800 bg-emerald-100/70 p-1.5 rounded-md">
+                  <p className="text-[11px] text-emerald-800 bg-emerald-100/70 p-2 rounded-md font-medium">
                     {locationNotice}
                   </p>
                 )}
+
+                {/* Instant Search Bar for Town / District */}
+                <div className="relative pt-1">
+                  <div className="flex items-center gap-2 bg-white border border-emerald-300 rounded-xl px-3 py-1.5 shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500">
+                    <Search className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setIsSearchOpen(true);
+                      }}
+                      onFocus={() => setIsSearchOpen(true)}
+                      placeholder="Cari bandar / daerah (Cth: Bagan Serai, Ipoh, Melaka, Gong Badak...)"
+                      className="w-full text-xs bg-transparent focus:outline-none text-gray-800 placeholder-gray-400 font-medium"
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchQuery('');
+                          setIsSearchOpen(false);
+                        }}
+                        className="text-gray-400 hover:text-gray-600 p-0.5 cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Autocomplete Dropdown List */}
+                  {isSearchOpen && filteredDistricts.length > 0 && (
+                    <div className="absolute z-30 left-0 right-0 mt-1 bg-white border border-emerald-200 rounded-xl shadow-xl overflow-hidden divide-y divide-gray-100 max-h-56 overflow-y-auto">
+                      {filteredDistricts.map((d) => (
+                        <button
+                          key={d.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedDistrictId(d.id);
+                            setSelectedState(d.state);
+                            setSearchQuery('');
+                            setIsSearchOpen(false);
+                            fetchPrices({ districtId: d.id });
+                          }}
+                          className="w-full px-3.5 py-2.5 text-left text-xs hover:bg-emerald-50 flex items-center justify-between transition-colors cursor-pointer"
+                        >
+                          <div>
+                            <span className="font-bold text-gray-800">{d.label || d.district}</span>
+                            <span className="text-gray-400 ml-1.5 text-[11px] font-normal">({d.state})</span>
+                          </div>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-semibold">
+                            Pilih
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 {/* State & District Selectors */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-emerald-200/40 text-xs">
